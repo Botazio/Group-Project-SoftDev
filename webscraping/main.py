@@ -16,7 +16,7 @@ from IPython.display import display
 import json
 
 # Opening JSON file
-f = open('passwords.json',)
+f = open('webscraping\passwords.json',)
 
 # returns JSON object as a dictionary
 data = json.load(f)
