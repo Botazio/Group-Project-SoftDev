@@ -49,7 +49,7 @@ def write_to_db(text):
                 station.get("available_bike_stands"), station.get("last_update"))
         engine.execute(
             "insert into availability (number, available_bikes, available_bikes_stands, last_update) values(%s,%s,%s,%s)", vals)
-        with open(r'static_data.csv', mode='a') as csv_file:
+        with open(r'dinamic_data.csv', mode='a') as csv_file:
             fieldnames = ['number', 'available_bikes',
                           'available_bikes_stands', 'last_update']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
