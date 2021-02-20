@@ -17,7 +17,7 @@ import json
 import csv
 
 # Opening JSON file
-f = open(r'webscraping\passwords.json',)
+f = open(r'passwords.json',)
 
 # returns JSON object as a dictionary
 data = json.load(f)
@@ -38,7 +38,7 @@ STATIONS_URL = data["api.url"]  # and the JCDecaux endpoint
 APIKEY = data["api.key"]
 
 engine = create_engine(
-    "mysql+mysqldb://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
+    "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
 
 # Inject the dinamic info into the database and a csv file
@@ -49,7 +49,7 @@ def write_to_db(text):
                 station.get("available_bike_stands"), station.get("last_update"))
         engine.execute(
             "insert into availability (number, available_bikes, available_bikes_stands, last_update) values(%s,%s,%s,%s)", vals)
-        with open(r'webscraping\static_data.csv', mode='a') as csv_file:
+        with open(r'static_data.csv', mode='a') as csv_file:
             fieldnames = ['number', 'available_bikes',
                           'available_bikes_stands', 'last_update']
             writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
