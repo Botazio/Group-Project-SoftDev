@@ -2,7 +2,7 @@ from setuptools import setup
 
 setup(name="systeminfo",
       version="0.1",
-      description="COMP30830 Software Project,
+      description="COMP30830 Software Project",
       url="",
       author="Alvaro, Ellie, Mark",
       author_email="ellen.breen@ucdconnect.ie",
