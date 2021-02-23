@@ -72,7 +72,7 @@ def main():
         except:
             # if there is any problem, print the traceback
             print(traceback.format_exc())
-
+            time.sleep(2*60)
     return
 
 
