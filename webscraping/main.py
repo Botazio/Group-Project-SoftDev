@@ -10,6 +10,7 @@ import simplejson as json
 import requests
 import json
 import csv
+import time
 from datetime import datetime
 
 # Opening JSON file
@@ -60,7 +61,7 @@ def write_to_db(text):
                                  'available_bikes_stands': vals[2], 'last_update': vals[3]})
             checker = True
         except:
-            print("not today")
+            print("Row already exist")
             continue
 
     if checker:
