@@ -77,10 +77,13 @@ except Exception as e:
 
 sql = """
 CREATE TABLE IF NOT EXISTS weather (
-temp INTEGER,
-main VARCHAR(256),
 description VARCHAR(256),
-icon VARCHAR(256)
+icon VARCHAR(256),
+temp INTEGER,
+temp_min INTEGER,
+temp_max INTEGER,
+humidity INTEGER,
+dt DATETIME
 );
 """
 try:
