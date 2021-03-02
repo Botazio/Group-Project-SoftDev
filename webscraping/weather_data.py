@@ -40,27 +40,45 @@ engine = create_engine(
     "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
 def weather_to_db(text):
+    checker = False
     weather = json.loads(text)
+    
+    vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
+            weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
+    try:
+        vals[6] = datetime.fromtimestamp(vals[6])
 
-    vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min']           , weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
-    vals[6] = datetime.fromtimestamp(vals[6])
+        engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
 
-    engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
+        with open(r'weather_data.csv', mode='a') as csv_file:
+                    fieldnames = ['description', 'icon',
+                              'temp', 'temp_min', 'temp_max', 'humidity', 'dt']
+                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
-    return
+                    writer.writerow({'description': vals[0], 'icon': vals[1],
+                                 'temp': vals[2], 'temp_min': vals[3], 'temp_max': vals[4], 'humidity': vals[5],
+                                 'dt': vals[6]})
+        checker = True
 
+    except:
+        print("Row already exist")
+        
 
+    if checker:
+        csv_file.close()
+    
+    
 def main():
     while True:
         try:
-            r = requests.get(complete_url)
+            r = requests.get(complete_url)            
             weather_to_db(r.text)
-
-            time.sleep(10*60)
+            
+            time.sleep(30*60)
         except:
-
+            
             print(traceback.format_exc())
-            time.sleep(10*60)
+            time.sleep(20*60)
     return
 
 if __name__ == '__main__':
