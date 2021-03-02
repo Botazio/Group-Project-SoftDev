@@ -57,11 +57,11 @@ def main():
             r = requests.get(complete_url)
             weather_to_db(r.text)
 
-            time.sleep(10*60)
+            time.sleep(60*60)
         except:
 
             print(traceback.format_exc())
-            time.sleep(2*60)
+            time.sleep(5*60)
     return
 
 if __name__ == '__main__':
