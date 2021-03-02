@@ -30,7 +30,7 @@ USER = data["database.user"]
 PASSWORD = data["database.password"]
 
 # info for the web-scraping
-city_name = "Dublin, IE"  #city for weather
+
 base_url = data["weatherAPI.url"]  # and the open weather endpoint
 api_key = data["weatherAPI.key"]
 
@@ -42,8 +42,7 @@ engine = create_engine(
 def weather_to_db(text):
     weather = json.loads(text)
 
-    vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
-            weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
+    vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min']           , weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
     vals[6] = datetime.fromtimestamp(vals[6])
 
     engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
@@ -57,11 +56,11 @@ def main():
             r = requests.get(complete_url)
             weather_to_db(r.text)
 
-            time.sleep(60*60)
+            time.sleep(10*60)
         except:
 
             print(traceback.format_exc())
-            time.sleep(5*60)
+            time.sleep(10*60)
     return
 
 if __name__ == '__main__':
