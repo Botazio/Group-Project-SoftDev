@@ -30,11 +30,11 @@ USER = data["database.user"]
 PASSWORD = data["database.password"]
 
 # info for the web-scraping
-city_name = "Dublin, IE"  # name of contract
-base_url = data["weatherAPI.url"]  # and the JCDecaux endpoint
+city_name = "Dublin, IE"  #city for weather
+base_url = data["weatherAPI.url"]  # and the open weather endpoint
 api_key = data["weatherAPI.key"]
 
-complete_url = base_url + "appid=" + api_key + "&q=" + city_name
+complete_url = base_url + "appid=" + api_key + "&q=Dublin, IE&units=metric"
 
 engine = create_engine(
     "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
