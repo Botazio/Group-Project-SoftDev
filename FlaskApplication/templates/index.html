@@ -1,0 +1,63 @@
+<!doctype html>
+
+<html lang="en">
+	<head>
+		  <meta charset="utf-8">
+
+		    <title>FlaskApp</title>
+		      <meta name="description" content="index.html">
+		        <meta name="author" content="mark">
+
+		
+			<link rel="stylesheet" href="{{url_for('static', filename='style.css') }}">
+
+
+	</head>
+
+	<body>
+		<p>DUBLIN BIKES</p>
+	
+		<div id='map'>
+			<script>
+			 let map;
+			
+			function initMap() {
+			  fetch("/stations").then(response => {
+				return response.json();
+			  }).then(data => {
+				console.log("data: ", data);
+			 
+			  map = new google.maps.Map(document.getElementById("map"), {
+				center: { lat: 53.349804, lng: -6.260310 },
+				zoom: 13,
+			  });
+
+			// The marker, positioned at Uluru
+			data.forEach(station => {  			
+			const marker = new google.maps.Marker({
+    		position: { lat: station.position_lat, lng: station.position_lng },
+
+    		map: map,
+ 			 });
+			  marker.addListener("click", () => {
+				const infowindow = new google.maps.InfoWindow({
+    				content: '<h1>' + station.name + '</h1><b><p>Total: ' + station.bike_stands + '</p></b>'
+  				});
+   				infowindow.open(map, marker);
+  			});
+
+
+		});
+
+	}).catch(err => {
+		console.log("OOPS", err);
+	})
+	
+}
+			 </script>
+			<script async
+			src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD80-o7Dp_KBO_yhAL9QuUtF7BQL-c5v54&callback=initMap">
+		</script>
+			</div>
+	</body>
+</html>
