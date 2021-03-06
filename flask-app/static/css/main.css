@@ -123,6 +123,11 @@ nav {
   width: 100%;
 }
 
+#directionsPanel {
+  height: 5vh;
+  width: 100%;
+}
+
 /*Fotter*/
 
 .container-footer {

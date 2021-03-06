@@ -68,6 +68,12 @@ def stations():
     return stations
 
 
+@ app.route('/availability')
+def availability():
+    availability = getData(engine).getAvailability()
+    return availability
+
+
 @ app.route('/predictions')
 def predictions():
     return "hello"
