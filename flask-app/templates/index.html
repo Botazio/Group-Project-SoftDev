@@ -10,37 +10,72 @@
    
 {% block body %}
 <div style="display: none;">
-   <div id="container-pac">
-      <input
-      id="origin-input"
-      class="controls"
-      type="text"
-      placeholder="Enter an origin location"
-      />
+   <div id="full-container">
+      <div id="container-pac">
+         <div id="upper-wrapper">
+            <img id="user-position" src="{{url_for('static', filename='fixtures/icon-position.png')}}" width='17', height='17' alt="User position"/>
+            <div id="origin-container">
+               <input
+                  id="origin-input"
+                  class="controls"
+                  type="text"
+                  placeholder="Enter an origin location"
+                  />
+            </div>
+         </div>
+         <div id="bottom-wrapper">
+            <img id="refresh-search" src="{{url_for('static', filename='fixtures/icon-refresh.png')}}" width='17', height='17' alt="Refresh directions"/>
+            <div id="destination-container">
+               <input
+               id="destination-input"
+               class="controls"
+               type="text"
+               placeholder="Enter a destination station"
+               />
+               <div id="search-direction">
+                  <img id="search-icon" src="{{url_for('static', filename='fixtures/icon-direction.png')}}" width='25', height='25' alt="Open directions"/>
+               </div>
+               <div id="pac-list" class="pac-items"></div>
+            </div>
+         </div>
 
-      <input
-      id="destination-input"
-      class="controls"
-      type="text"
-      placeholder="Enter a destination station"
-      />
+         <div id="mode-selector" class="controls">
+            <input
+               type="radio"
+               name="type"
+               id="changemode-walking"
+               checked="checked"
+            />
+            <label for="changemode-walking">Walking</label>
 
-      <div id="mode-selector" class="controls">
-      <input
-         type="radio"
-         name="type"
-         id="changemode-walking"
-         checked="checked"
-      />
-      <label for="changemode-walking">Walking</label>
+            <input type="radio" name="type" id="changemode-transit" />
+            <label for="changemode-transit">Transit</label>
 
-      <input type="radio" name="type" id="changemode-transit" />
-      <label for="changemode-transit">Transit</label>
+            <input type="radio" name="type" id="changemode-driving" />
+            <label for="changemode-driving">Driving</label>
+         </div>
+      </div>
 
-      <input type="radio" name="type" id="changemode-driving" />
-      <label for="changemode-driving">Driving</label>
+      <div id="station-extrainfo">
+         <div id="waiting-search">
+            <h2>Select a station to display info</h2>
+            <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-big.png')}}" width='300', height='260' alt="Waiting directions"/>
+         </div>
+         <div id="display-station-search"></div>
       </div>
    </div>
+
+   <div id="close-search">
+      <img src="{{url_for('static', filename='fixtures/icon-close.png')}}" width='12', height='12' alt="Close directions"/>
+   </div>
+
+   <div id="icon-banking-true">
+      <img src="{{url_for('static', filename='fixtures/icon-close.png')}}" width='12', height='12' alt="Close directions"/>      
+   </div>
+   <div id="icon-banking-false">
+      <img src="{{url_for('static', filename='fixtures/icon-close.png')}}" width='12', height='12' alt="Close directions"/>
+   </div>
+
 </div>
 <div id="map"></div>
 <div class="buttonbar"></div>
