@@ -37,7 +37,7 @@ engine = create_engine(
 
 
 def weather_to_db(text):
-    checker = True
+    checker = False
     weather = json.loads(text)
 
     vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
@@ -61,8 +61,8 @@ def weather_to_db(text):
                 print(e)
         checker = True
 
-    except:
-        print("Row already exist")
+    except Exception as e:
+        print(e)
 
     if checker:
         csv_file.close()
