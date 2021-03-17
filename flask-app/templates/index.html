@@ -75,7 +75,34 @@
    <div id="icon-banking-false">
       <img src="{{url_for('static', filename='fixtures/icon-close.png')}}" width='12', height='12' alt="Close directions"/>
    </div>
+</div>
 
+<div style="display: none;">
+   <div id="custom-controls-view">
+      <div class="custom-controls" id="focus-user-position">
+         <img src="{{url_for('static', filename='fixtures/icon-aim.png')}}" width='23', height='23' alt="Focus view user position"/>
+      </div>
+      <div class="custom-controls" id="focus-dublin-center">
+         <img src="{{url_for('static', filename='fixtures/icon-center-focus.png')}}" width='23', height='23' alt="Focus view Dublin center"/>
+      </div>
+   </div>
+</div>
+
+<div style="display: none;">
+   <div id="station-markers-info">
+      <div class="station-markers-button button-active" id="display-available-bikes">
+         <img src="{{url_for('static', filename='fixtures/icon-bike-blue.png')}}" width='24', height='24' alt="Blue bike"/>
+         <p>Available<br>Bikes</p>
+      </div>
+      <div class="station-markers-button" id="display-available-bikes-stands">
+         <img src="{{url_for('static', filename='fixtures/icon-parking.png')}}" width='20', height='20' alt="Icon parking"/>
+         <p>Available<br>Stands</p>   
+      </div>
+      <div class="station-markers-button" id="display-bike-paths">
+         <img src="{{url_for('static', filename='fixtures/icon-bike-path.png')}}" width='24', height='24' alt="Icon bike paths"/>
+         <p>Bike<br>Paths</p>
+      </div>
+   </div>
 </div>
 <div id="map"></div>
 <div class="buttonbar"></div>

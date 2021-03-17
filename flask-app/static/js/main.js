@@ -1,3 +1,5 @@
+let markers = [];
+
 function initMap() {
     fetch("/stations").then(response => {
         return response.json();
@@ -5,7 +7,6 @@ function initMap() {
         fetch("static/js/styledmap.json").then(response => {
             return response.json();
         }).then(json => {
-            console.log(json);
             fetch("/availability").then(response => {
               return response.json();
             }).then(availability => {
@@ -21,8 +22,8 @@ function initMap() {
 
                 map.mapTypes.set("styled_map", styledMapType);
                 map.setMapTypeId("styled_map");
-
-                displayInfoWindows(data, map, availability);
+                
+                stationMarkersInfoButtons(data, map, availability);
                 new AutocompleteDirectionsHandler(map, data, availability);
             
             });
@@ -32,6 +33,91 @@ function initMap() {
     });
 }
 
+function compare(a, b) {
+  const stationNum1 = a.number;
+  const stationNum2 = b.number;
+
+  let comparison = 0;
+  if (stationNum1 > stationNum2) {
+    comparison = 1;
+  } else if (stationNum1 < stationNum2) {
+    comparison = -1;
+  }
+  return comparison;
+}
+
+function stationMarkersInfoButtons(data, map, availability) {
+  const stationMarkersInfo = document.getElementById('station-markers-info');
+  const displayAvailableBikes = document.getElementById('display-available-bikes');
+  const displayAvailableBikesStands = document.getElementById('display-available-bikes-stands');
+  const displayBikePaths = document.getElementById('display-bike-paths');
+  const bikeLayer = new google.maps.BicyclingLayer();
+
+  // Display elements in the map
+  stationMarkersInfo.appendChild(displayAvailableBikes);
+  stationMarkersInfo.appendChild(displayAvailableBikesStands);
+  stationMarkersInfo.appendChild(displayBikePaths);
+
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(stationMarkersInfo);
+
+  // Display markers
+  var markersInfo = 'available_bikes';
+  displayInfoWindows(data, map, availability, markersInfo);
+
+  displayAvailableBikes.addEventListener('click', () => {
+    displayAvailableBikes.classList.add('button-active');
+    if (displayAvailableBikesStands.classList.contains('button-active')) {
+      displayAvailableBikesStands.classList.remove('button-active');
+    }
+    if (displayBikePaths.classList.contains('button-active')) {
+      displayBikePaths.classList.remove('button-active');
+    }
+    markersInfo = 'available_bikes';
+    deleteMarkers();
+    displayInfoWindows(data, map, availability, markersInfo);
+    disableBikePaths(bikeLayer);
+  });
+
+  displayAvailableBikesStands.addEventListener('click', () => {
+    displayAvailableBikesStands.classList.add('button-active');
+    if (displayAvailableBikes.classList.contains('button-active')) {
+      displayAvailableBikes.classList.remove('button-active');
+      
+
+    }
+    if (displayBikePaths.classList.contains('button-active')) {
+      displayBikePaths.classList.remove('button-active');
+    }
+    markersInfo = 'available_bikes_stands';
+    deleteMarkers();
+    displayInfoWindows(data, map, availability, markersInfo);
+    disableBikePaths(bikeLayer);
+  });
+
+  displayBikePaths.addEventListener('click', () => {
+    displayBikePaths.classList.add('button-active');
+    if (displayAvailableBikes.classList.contains('button-active')) {
+      displayAvailableBikes.classList.remove('button-active');
+    }
+    if (displayAvailableBikesStands.classList.contains('button-active')) {
+      displayAvailableBikesStands.classList.remove('button-active');
+    }
+    deleteMarkers();
+    bikePaths(map, bikeLayer);
+  });
+}
+
+// Function to display the map paths
+function bikePaths(map, bikeLayer) {
+  bikeLayer.setMap(map);
+}
+
+// Disable bike paths
+function disableBikePaths(bikeLayer) {
+  bikeLayer.setMap(null);
+}
+
+// Class and functions for the search system
 class AutocompleteDirectionsHandler {
     constructor(map, data, availability) {
       this.map = map;
@@ -45,13 +131,21 @@ class AutocompleteDirectionsHandler {
         zIndex: 999,
         map: this.map,
       });
+      this.routeMarkers = [];
       this.originLat = 0;
       this.originLng = 0;
       this.destinationLat = 0;
       this.destinationLng = 0;
       this.travelMode = google.maps.TravelMode.WALKING;
       this.directionsService = new google.maps.DirectionsService();
-      this.directionsRenderer = new google.maps.DirectionsRenderer();
+      this.directionsRenderer = new google.maps.DirectionsRenderer({
+        suppressMarkers: true,
+        polylineOptions: {
+          strokeColor: "#1A73E8",
+          zIndex: 10000,
+          strokeWeight: "5",
+        }  
+      });
       this.directionsRenderer.setMap(map);
       const fullContainer = document.getElementById('full-container');
       const container = document.getElementById('container-pac');
@@ -65,6 +159,9 @@ class AutocompleteDirectionsHandler {
       const closeSearch = document.getElementById('close-search');
       const modeSelector = document.getElementById("mode-selector");
       const stationExtrainfo = document.getElementById("station-extrainfo");
+      const customControlsView = document.getElementById('custom-controls-view');
+      const focusDublinCenter = document.getElementById('focus-dublin-center');
+      const focusViewUser = document.getElementById("focus-user-position");
       const originAutocomplete = new google.maps.places.Autocomplete(originInput);
       // Specify just the place data fields that you need.
       originAutocomplete.setFields(["place_id", "geometry"]);
@@ -83,12 +180,15 @@ class AutocompleteDirectionsHandler {
         "changemode-driving",
         google.maps.TravelMode.DRIVING
       );
+
       // Add event listeners
       this.setupPlaceChangedListener(originAutocomplete);
       this.setupCloseListener("close-search");
       this.setupOpenListener("search-direction");
       this.setupRefreshSearchListener("refresh-search");
       this.setupUserPositionListener('user-position');
+      this.setupViewUserPositionListener("focus-user-position");
+      this.setupViewDublinListener('focus-dublin-center');
       
       // Display elements in the map
       originContainer.appendChild(originInput);
@@ -99,10 +199,15 @@ class AutocompleteDirectionsHandler {
       container.appendChild(modeSelector);
       container.appendChild(upperWrapper);
       container.appendChild(bottomWrapper);
-      fullContainer.appendChild(container);
+      fullContainer.appendChild(container);      
       fullContainer.appendChild(stationExtrainfo);
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(fullContainer);
       this.map.controls[google.maps.ControlPosition.TOP_LEFT].push(closeSearch);
+
+      // Display custom controls
+      customControlsView.appendChild(focusDublinCenter);
+      customControlsView.appendChild(focusViewUser);
+      this.map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(customControlsView);
     }
 
     // Sets a listener to open the search system
@@ -132,6 +237,7 @@ class AutocompleteDirectionsHandler {
       this.destinationLng = 0;
       if (this.directionsRenderer != null) {
         this.directionsRenderer.setDirections({routes: []});
+        this.removeRouteMarkers();
       }
     }
 
@@ -158,11 +264,42 @@ class AutocompleteDirectionsHandler {
       });
     }
 
+    // Sets a listener to display the view in the user position
+    setupViewUserPositionListener(id) {
+      const iconFocusView = document.getElementById(id);
+      iconFocusView.addEventListener('click', () => {
+        if (this.myloc.getPosition() != undefined) {
+          this.map.setCenter(this.myloc.getPosition());
+        }
+        else {
+          if (navigator.geolocation) {
+              navigator.geolocation.getCurrentPosition((pos) => {
+                var me = new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+                this.myloc.setPosition(me);
+                this.map.setCenter(this.myloc.getPosition());
+              });
+          }
+          else {
+            console.log("Unable to get user position");
+          }
+        }
+      });
+    }
+
+    // Sets a listener to display the view in Dublin center
+    setupViewDublinListener(id) {
+      const focusDublin = document.getElementById(id);
+      focusDublin.addEventListener('click', () => {
+        this.map.setCenter({lat: 53.349804, lng: -6.260310});
+      });
+    }
+
     // Sets a listener to open the search system
     setupOpenListener(id) {
       const openSearch = document.getElementById(id);
       const closeSearch = document.getElementById('close-search')
       const container = document.getElementById('container-pac');
+      const bottomWrapper = document.getElementById('bottom-wrapper');
       const upperWrapper = document.getElementById('upper-wrapper');
       const destinationInput= document.getElementById('destination-input');
       const destinationContainer= document.getElementById('destination-container');
@@ -173,6 +310,8 @@ class AutocompleteDirectionsHandler {
       openSearch.addEventListener("click", () => {
         container.style.backgroundColor = "rgb(0, 115, 152)";
         container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
+        container.style.justifyContent = "center";
+        bottomWrapper.style.marginTop = '0px';
         upperWrapper.style.display = "flex";
         upperWrapper.style.justifyContent = "center";
         upperWrapper.style.alignItems = "center";
@@ -193,6 +332,7 @@ class AutocompleteDirectionsHandler {
       const closeSearch = document.getElementById(id);
       const openSearch = document.getElementById('search-direction');
       const container = document.getElementById('container-pac');
+      const bottomWrapper = document.getElementById('bottom-wrapper');
       const upperWrapper = document.getElementById('upper-wrapper');
       const destinationInput= document.getElementById('destination-input');
       const destinationContainer= document.getElementById('destination-container');
@@ -204,6 +344,8 @@ class AutocompleteDirectionsHandler {
         this.refreshSearchEvent();
         container.style.backgroundColor = "transparent";
         container.style.boxShadow = "none";
+        container.style.justifyContent = "normal";
+        bottomWrapper.style.marginTop = '30px';
         upperWrapper.style.display = "none";
         modeSelector.style.display = "none";
         destinationInput.style.fontSize = "17px";
@@ -250,6 +392,7 @@ class AutocompleteDirectionsHandler {
         this.route();     
       }
     }
+    // Display route on the map
     route() {
       if (this.originLat == 0 || this.destinationLat == 0) {
         return;
@@ -264,13 +407,64 @@ class AutocompleteDirectionsHandler {
         (response, status) => {
           if (status === "OK") {
             me.directionsRenderer.setDirections(response);
+            var leg = response.routes[0].legs[0];
+            this.removeRouteMarkers();
+
+            if (this.travelMode == 'WALKING'){
+              this.makeRouteMarker(leg.start_location, icons.walking);
+            } else if (this.travelMode == 'TRANSIT') {
+              this.makeRouteMarker(leg.start_location, icons.transit);
+            } else if (this.travelMode == 'DRIVING') {
+              this.makeRouteMarker(leg.start_location, icons.driving);
+            }
+
+            this.makeRouteMarker(leg.end_location, icons.end);
+            console.log(this.travelMode);
           } else {
             window.alert("Directions request failed due to " + status);
           }
         }
       );
+      var icons = {
+        walking: new google.maps.MarkerImage(
+          // URL
+          'static/fixtures/icon-pedestrian-man.png',
+          // (width,height)
+          new google.maps.Size(32, 32)),
+        transit: new google.maps.MarkerImage(
+          // URL
+          'static/fixtures/icon-front-bus.png',
+          // (width,height)
+          new google.maps.Size(32, 32)),
+        driving: new google.maps.MarkerImage(
+          // URL
+          'static/fixtures/icon-front-car.png',
+          // (width,height)
+          new google.maps.Size(32, 32)),
+        end: null
+      };
     }
-  }
+
+    // Display the markers for the start and end of the route
+    makeRouteMarker(position, icon) {
+      const routeMarker = new google.maps.Marker({
+        position: position,
+        map: this.map,
+        icon: icon,
+        zIndex: 10000,
+      });
+      this.routeMarkers.push(routeMarker);
+    }
+
+    removeRouteMarkers() {
+      for (let i = 0; i < this.routeMarkers.length; i++) {
+        this.routeMarkers[i].setMap(null); 
+      }
+      this.routeMarkers = [];
+    }
+}
+
+
 
 function stationSearch(self, data, destinationInput, availability) {
   // Specify the add listeners for destination input
@@ -298,8 +492,12 @@ function stationSearch(self, data, destinationInput, availability) {
           if (station.address.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
             // Create a DIV element for each matching element:
             b = document.createElement("DIV");
+            b.style.display = "flex";
+            b.style.alignItems = "center";
+            // Insert the icon
+            b.innerHTML = '<img src="static/fixtures/icon-bike-red.png" style="padding: 5px" width="20" height="20" alt="Red bike"/>';
             // Make the matching letters bold:
-            b.innerHTML = "<strong>" + station.address.substr(0, val.length) + "</strong>";
+            b.innerHTML += "<strong>" + station.address.substr(0, val.length) + "</strong>";
             b.innerHTML += station.address.substr(val.length);
             // Insert a input field that will hold the current array item's value:
             b.innerHTML += "<input type='hidden' value='" + station.address + "'>";
@@ -330,7 +528,7 @@ function stationSearch(self, data, destinationInput, availability) {
       }
     });
 
-  // Execute a function presses a key on the keyboard:
+  // Execute a function presses a key on the keyboard
   google.maps.event.addDomListener(destinationInput, "keydown", function(e) {
       var x = document.getElementById("pac-list");
       if (x) x = x.getElementsByTagName("div");
@@ -356,6 +554,13 @@ function stationSearch(self, data, destinationInput, availability) {
           if (x) x[currentFocus].click();
           }
       }
+  });
+
+  // Execute a function when blur
+  google.maps.event.addDomListener(destinationInput, "blur", function(e) {
+    setTimeout(() => {
+      closeAllLists(destinationInput);
+    }, 100); 
   });
 }
 
@@ -420,59 +625,80 @@ function removeActive(x) {
   }
 }
   
-function displayInfoWindows(data, map, availability) {
-  var i = 0;
+// Functions and class for the markers
+function displayInfoWindows(data, map, availability, markersInfo) {
+  var x = 0;
   data.forEach(station => {
-      new myMarker(map, station, availability[i]);
-      i++;
-  });   
+    if (availability[x].number == station.number) {
+      const marker = new myMarker(map, station, availability[x], markersInfo);
+      markers.push(marker);
+      x++;
+    }
+    else {
+      for(var i = 0; i < availability.length; i++) {
+        if(availability[i].number == station.number) {      
+          const marker = new myMarker(map, station, availability[i], markersInfo);
+          markers.push(marker);
+          x++;
+          break;
+        }
+      }
+    }
+  }); 
 }
 
-function compare(a, b) {
-    const stationNum1 = a.number;
-    const stationNum2 = b.number;
-  
-    let comparison = 0;
-    if (stationNum1 > stationNum2) {
-      comparison = 1;
-    } else if (stationNum1 < stationNum2) {
-      comparison = -1;
-    }
-    return comparison;
+// Sets the map on all markers in the array.
+function setMapOnAll(map) {
+  for (let i = 0; i < markers.length; i++) {
+    markers[i].marker.setMap(map);
+  }
+}
+
+// Removes the markers from the map, but keeps them in the array.
+function clearMarkers() {
+  setMapOnAll(null);
+}
+
+// Deletes all markers in the array by removing references to them.
+function deleteMarkers() {
+  clearMarkers();
+  markers = [];
 }
 
 class myMarker {
-  constructor(map, station, availability) {
+  constructor(map, station, availability, markersInfo) {
     this.map = map;
-    this.icon = {
-      url: 'static/fixtures/location.svg',
-      size: new google.maps.Size(100, 100),
-      scaledSize: new google.maps.Size(100, 100),
-      anchor: new google.maps.Point(16, 16),
-      labelOrigin: new google.maps.Point(16, 16)
+    if (markersInfo == 'available_bikes') {
+      this.display_info = Number(availability.available_bikes);
+    }else if(markersInfo == 'available_bikes_stands') {
+      this.display_info = Number(availability.available_bikes_stands);
     }
-    this.svgMarker = {
-      path: "static/fixtures/location.svg",
-      fillColor: 'rgba(0, 115, 152, 1)',
-      fillOpacity: 1,
-      strokeWeight: 0.4,
-      rotation: 0,
-      scale: 0.08,
-      strokeColor: 'black',
-      labelOrigin: new google.maps.Point(24, -12),
-    };  
+    if (this.display_info < 6) {
+      this.iconURL = 'static/fixtures/icon-location-red.png';
+    }else if (this.display_info > 12){
+      this.iconURL = 'static/fixtures/icon-location-green.png';
+    }else {
+      this.iconURL = 'static/fixtures/icon-location-yellow.png';
+    }
+    this.icon = {
+      url: String(this.iconURL),
+      size: new google.maps.Size(34, 34),
+      scaledSize: new google.maps.Size(34, 34),
+      labelOrigin: new google.maps.Point(17, 13)
+    }  
     this.marker = new google.maps.Marker({
       position: {lat: station.position_lat, lng: station.position_lng},
       map: this.map,
       label: {
         className: 'labelMarker',
-        text: ''+ availability.available_bikes + '',
+        text: ''+ this.display_info + '',
+        fontSize: '12px',
+        fontFamily: 'Roboto, sans-serif',
       },
-      icon: this.svgMarker,
+      icon: this.icon,
     });
     this.station = station;
     this.availability = availability;
-
 
     var iconBanking = '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
     if (station.banking == 1) {
@@ -493,6 +719,7 @@ class myMarker {
     const infowindow = new google.maps.InfoWindow({
         content: contentStr,
     });
+    infowindow.setZIndex(100);
 
     this.marker.addListener('mouseover', () => {
         infowindow.open(map, this.marker);

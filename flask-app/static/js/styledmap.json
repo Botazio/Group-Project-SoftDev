@@ -78,9 +78,6 @@
     "elementType": "geometry",
     "stylers": [{
             "visibility": "on"
-        },
-        {
-            "color": "#ffffff"
         }
     ]
 },
@@ -135,9 +132,6 @@
     "elementType": "all",
     "stylers": [{
             "visibility": "simplified"
-        },
-        {
-            "color": "#ffffff"
         }
     ]
 },

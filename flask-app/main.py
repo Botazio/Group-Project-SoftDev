@@ -44,7 +44,7 @@ class getData():
     def getAvailability(self):
         try:
             df = pd.read_sql_query(
-                "SELECT * FROM availability as av ORDER BY av.id DESC LIMIT 109", self.engine)
+                "SELECT * FROM (SELECT * FROM dbikes.availability as av ORDER BY av.id  DESC LIMIT 1000 ) as whatever GROUP BY whatever.number;", self.engine)
             results = df.to_json(orient='records')
         except:
             return "Error: something wrong happened"
