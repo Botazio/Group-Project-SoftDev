@@ -1,8 +1,3 @@
-'''
-Created on 18 Feb 2021
-
-@author: alvaro
-'''
 import sqlalchemy as sqla
 from sqlalchemy import create_engine
 import traceback
