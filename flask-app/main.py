@@ -51,6 +51,16 @@ class getData():
 
         return results
 
+    def getWeather(self):
+        try:
+            df = pd.read_sql_query(
+                "SELECT * FROM dbikes.weather as av ORDER BY av.dt  DESC LIMIT 1;", self.engine)
+            results = df.to_json(orient='records')
+        except:
+            return "Error: something wrong happened"
+
+        return results
+
 
 @ app.route('/')
 def index():
@@ -60,18 +70,6 @@ def index():
 @ app.route('/home')
 def home():
     return "hello"
-
-
-@ app.route('/stations')
-def stations():
-    stations = getData(engine).getStations()
-    return stations
-
-
-@ app.route('/availability')
-def availability():
-    availability = getData(engine).getAvailability()
-    return availability
 
 
 @ app.route('/predictions')
@@ -87,6 +85,24 @@ def howItWorks():
 @ app.route('/about')
 def about():
     return "hello"
+
+
+@ app.route('/stations')
+def stations():
+    stations = getData(engine).getStations()
+    return stations
+
+
+@ app.route('/availability')
+def availability():
+    availability = getData(engine).getAvailability()
+    return availability
+
+
+@ app.route('/weather')
+def weather():
+    weather = getData(engine).getWeather()
+    return weather
 
 
 if __name__ == "__main__":

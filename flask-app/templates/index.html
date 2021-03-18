@@ -3,6 +3,7 @@
 
 
 {% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 <title>Dublin Bikes</title>
 <script type=text/javascript src="{{url_for('static', filename='js/main.js') }}"></script>
 {% endblock %}
@@ -61,7 +62,10 @@
             <h2>Select a station to display info</h2>
             <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-big.png')}}" width='300', height='260' alt="Waiting directions"/>
          </div>
-         <div id="display-station-search"></div>
+         <div id="display-container-info">
+            <div id="display-weather"></div>
+            <div id="display-station-search"></div> 
+         </div>
       </div>
    </div>
 

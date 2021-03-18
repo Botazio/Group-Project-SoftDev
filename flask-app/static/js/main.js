@@ -1,4 +1,5 @@
 let markers = [];
+let weatherPromise = fetchWeather();
 
 function initMap() {
     fetch("/stations").then(response => {
@@ -44,6 +45,15 @@ function compare(a, b) {
     comparison = -1;
   }
   return comparison;
+}
+
+// Function to fetch the weather data
+async function fetchWeather() {
+  return fetch("/weather").then(response => {
+    return response.json();
+  }).catch(err => {
+    console.log("OOPS!", err); 
+  });
 }
 
 function stationMarkersInfoButtons(data, map, availability) {
@@ -224,7 +234,9 @@ class AutocompleteDirectionsHandler {
       const destinationInput= document.getElementById('destination-input');
       const waitingSearch = document.getElementById('waiting-search');
       const displayStationSearch = document.getElementById("display-station-search");
+      const displayWeather = document.getElementById("display-weather");
       displayStationSearch.innerHTML = "";
+      displayWeather.innerHTML = "";
       waitingSearch.style.display = "flex";
       waitingSearch.style.flexDirection = "column";
       waitingSearch.style.justifyContent = "space-around";
@@ -306,12 +318,14 @@ class AutocompleteDirectionsHandler {
       const modeSelector = document.getElementById('mode-selector');
       const pacList = document.getElementById('pac-list');
       const stationExtrainfo = document.getElementById("station-extrainfo");
+      const fullContainer = document.getElementById("full-container");
       const refreshSearch = document.getElementById("refresh-search");
       openSearch.addEventListener("click", () => {
         container.style.backgroundColor = "rgb(0, 115, 152)";
         container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
         container.style.justifyContent = "center";
-        bottomWrapper.style.marginTop = '0px';
+        container.style.height = "275px";
+        fullContainer.style.marginTop = "0px";
         upperWrapper.style.display = "flex";
         upperWrapper.style.justifyContent = "center";
         upperWrapper.style.alignItems = "center";
@@ -323,7 +337,8 @@ class AutocompleteDirectionsHandler {
         pacList.style.width = "250px";
         openSearch.style.display = "none";
         closeSearch.style.display = "flex";
-        stationExtrainfo.style.visibility = "visible";
+        stationExtrainfo.style.display = "block";
+        fullContainer.style.height = "100%";
         refreshSearch.style.visibility = "visible";
       })
     }
@@ -339,13 +354,15 @@ class AutocompleteDirectionsHandler {
       const modeSelector = document.getElementById('mode-selector');
       const pacList = document.getElementById('pac-list');
       const stationExtrainfo = document.getElementById("station-extrainfo");
+      const fullContainer = document.getElementById("full-container");
       const refreshSearch = document.getElementById("refresh-search");
       closeSearch.addEventListener("click", () => {
         this.refreshSearchEvent();
         container.style.backgroundColor = "transparent";
         container.style.boxShadow = "none";
         container.style.justifyContent = "normal";
-        bottomWrapper.style.marginTop = '30px';
+        container.style.height = "auto";
+        fullContainer.style.marginTop = "30px";
         upperWrapper.style.display = "none";
         modeSelector.style.display = "none";
         destinationInput.style.fontSize = "17px";
@@ -354,7 +371,8 @@ class AutocompleteDirectionsHandler {
         destinationContainer.style.padding = "10px 11px 10px 13px";
         pacList.style.width = "275px";
         closeSearch.style.display = "none";
-        stationExtrainfo.style.visibility = "hidden";
+        stationExtrainfo.style.display = "none";
+        fullContainer.style.height = "auto";
         refreshSearch.style.visibility = "hidden";
         setTimeout(function() {
           openSearch.style.display = "inline";
@@ -510,6 +528,8 @@ function stationSearch(self, data, destinationInput, availability) {
                 if (station.address == destinationInput.value) {
                   // Close the list of pacd values or any other open lists of pacd values
                   closeAllLists(destinationInput);
+                  // Display the weather info under the search bar
+                  displayWeatherInfo('display-weather');
                   // Display the station info under the search bar 
                   displayStationSearch(station, availability[i]);
                   // Call function setupPlaceChangedListener to determine the route to the station
@@ -564,40 +584,6 @@ function stationSearch(self, data, destinationInput, availability) {
   });
 }
 
-// Sets a listener to open extra information about the station
-function displayStationSearch(station, availability) {
-  const container = document.getElementById('container-pac');
-  const stationExtrainfo = document.getElementById("station-extrainfo");
-  const closeSearch = document.getElementById('close-search');
-  const refreshSearch = document.getElementById("refresh-search");
-  const displayStationSearch = document.getElementById("display-station-search");
-  const waitingSearch = document.getElementById("waiting-search");
-  container.style.backgroundColor = "rgb(0, 115, 152)";
-  container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
-  stationExtrainfo.style.visibility = "visible";
-  closeSearch.style.display = "flex";
-  waitingSearch.style.display = "none";
-  refreshSearch.style.visibility = "visible";
-
-  var iconBanking = '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
-  if (station.banking == 1) {
-    iconBanking = '<img src="static/fixtures/icon-banking-true.png" width="24" height="24" alt="Banking true"/>';
-  }
-  const iconBike = '<img src="static/fixtures/icon-bike-blue.png" width="24" height="24" alt="Blue bike"/>';
-  const iconParking = '<img src="static/fixtures/icon-parking.png" width="20" height="20" alt="Icon parking"/>';
-  
-  const contentStr = 
-  '<div id="dinamic-station-info">' +
-  '<div class="infowindow-station-title"><p><b>' + station.name + '</b> nº ' + station.number + '</p></div>' + 
-  '<div class="station-infowindow">' +
-  '<div class="infowindow-subelements"><p>' + availability.available_bikes + '</p>' + iconBike + '</div>' +
-  '<div class="infowindow-subelements"><p>' + availability.available_bikes_stands + '</p>' + iconParking + '</div>' +
-  '<div class="infowindow-subelements">' + iconBanking + '</div>' +
-  '</div></div>';
-
-  displayStationSearch.innerHTML = contentStr;
-}
-
 function closeAllLists(input, elmnt) {
   /*close all pac lists in the document,
   except the one passed as an argument:*/
@@ -623,6 +609,74 @@ function removeActive(x) {
   for (var i = 0; i < x.length; i++) {
   x[i].classList.remove("pac-active");
   }
+}
+
+// Sets a function to open extra information about the station
+function displayStationSearch(station, availability) {
+  const container = document.getElementById('container-pac');
+  const stationExtrainfo = document.getElementById("station-extrainfo");
+  const fullContainer = document.getElementById("full-container");
+  const closeSearch = document.getElementById('close-search');
+  const refreshSearch = document.getElementById("refresh-search");
+  const displayStationSearch = document.getElementById("display-station-search");
+  const waitingSearch = document.getElementById("waiting-search");
+  container.style.backgroundColor = "rgb(0, 115, 152)";
+  container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
+  container.style.justifyContent = "center";
+  container.style.height = "275px";
+  fullContainer.style.marginTop = "0px";
+  stationExtrainfo.style.display = "block";
+  fullContainer.style.height = "100%";
+  closeSearch.style.display = "flex";
+  waitingSearch.style.display = "none";
+  refreshSearch.style.visibility = "visible";
+
+  var iconBanking = '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
+  if (station.banking == 1) {
+    iconBanking = '<img src="static/fixtures/icon-banking-true.png" width="24" height="24" alt="Banking true"/>';
+  }
+  const iconBike = '<img src="static/fixtures/icon-bike-blue.png" width="24" height="24" alt="Blue bike"/>';
+  const iconParking = '<img src="static/fixtures/icon-parking.png" width="20" height="20" alt="Icon parking"/>';
+  
+  const contentStr = 
+  '<div id="dinamic-station-info">' +
+  '<div class="infowindow-station-title"><p><b>' + station.name + '</b> nº ' + station.number + '</p></div>' + 
+  '<div class="station-infowindow">' +
+  '<div class="infowindow-subelements"><p>' + availability.available_bikes + '</p>' + iconBike + '</div>' +
+  '<div class="infowindow-subelements"><p>' + availability.available_bikes_stands + '</p>' + iconParking + '</div>' +
+  '<div class="infowindow-subelements">' + iconBanking + '</div>' +
+  '</div></div>';
+
+  displayStationSearch.innerHTML = contentStr; 
+}
+
+function displayWeatherInfo(id) {
+  const displayWeatherContainer = document.getElementById(id);
+
+
+  weatherPromise.then(weather => {
+    var dateObj = new Date();
+    var month = dateObj.getUTCMonth() + 1; //months from 1-12
+    var day = dateObj.getUTCDate();
+    newdate = month + "/" + day;
+    var weatherIcon = '<img src="http://openweathermap.org/img/wn/'  + weather[0].icon + '@2x.png" width="98" height="98" alt="Weather Icon"/>';
+
+    const contentStr = 
+    '<div id="weather-header"><div><p>Now</p></div>' +
+    '<div id="weather-description"><h2>' + weather[0].description + '</h2></div>' +
+    '<div><p>' + newdate + '</p></div></div>' +
+    '<div id="weather-info">' +
+    '<div id="weather-temp" class="weather-items"><h1>' + weather[0].temp + '</h1></div>' +
+    '<div id="weather-icon" class="weather-items">' + weatherIcon + '</div>' +
+    '<div id="weather-temp-min" class="weather-items"><p>Min<br>' + weather[0].temp_min + '</p></div>' +
+    '<div id="weather-temp-max" class="weather-items"><p>Max<br>' + weather[0].temp_max + '</p></div>' +
+    '<div id="weather-temp-humidity" class="weather-items"><p>Humidity<br>' + weather[0].humidity + '</p></div>' +
+    '</div>';
+    
+    displayWeatherContainer.innerHTML = contentStr;
+  }).catch(err => {
+    console.log("OOPS! Can't display weather", err);       
+  });
 }
   
 // Functions and class for the markers
@@ -735,6 +789,7 @@ class myMarker {
   setupMarkerEvents(station, availability) {
     const destinationInput= document.getElementById('destination-input');
     this.marker.addListener('click', () => {
+      displayWeatherInfo('display-weather');
       displayStationSearch(station, availability);
       destinationInput.value = station.address;
     });
