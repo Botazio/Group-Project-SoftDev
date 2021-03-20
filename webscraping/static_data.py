@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 import sqlalchemy as sqla
 from sqlalchemy import create_engine
@@ -9,6 +10,14 @@ import simplejson as json
 import requests
 import time
 from IPython.display import display
+=======
+import sqlalchemy as sqla
+from sqlalchemy import create_engine
+import simplejson as json
+import requests
+
+
+>>>>>>> alvaro
 # Opening JSON file
 f = open(r'passwords.json',)
 
@@ -30,6 +39,7 @@ NAME = "Dublin"  # name of contract
 STATIONS_URL = data["api.url"]  # and the JCDecaux endpoint
 APIKEY = data["api.key"]
 engine = create_engine(
+<<<<<<< HEAD
             "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 r= requests.get(STATIONS_URL, params={"apiKey":APIKEY, "contract":NAME})
 
@@ -43,4 +53,25 @@ def  station_to_db(text):
                                                                      station.get("status"))
              engine.execute("insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
       return
+=======
+    "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
+r = requests.get(STATIONS_URL, params={"apiKey": APIKEY, "contract": NAME})
+
+
+def station_to_db(text):
+    stations = json.loads(text)
+    for station in stations:
+
+        vals = (station.get("number"), station.get("address"), int(station.get("banking")), station.get("bike_stands"),
+                int(station.get("bonus")), station.get(
+                    "contract_name"), station.get("name"),
+                station.get("position").get(
+                    "lat"), station.get("position").get("lng"),
+                station.get("status"))
+        engine.execute(
+            "insert into station values(%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)", vals)
+    return
+
+
+>>>>>>> alvaro
 station_to_db(r.text)

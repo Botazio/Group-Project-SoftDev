@@ -1,6 +1,7 @@
 import sqlalchemy as sqla
 from sqlalchemy import create_engine
 import traceback
+<<<<<<< HEAD
 import glob
 import os
 from pprint import pprint
@@ -13,6 +14,16 @@ from datetime import datetime
 
 
 
+=======
+import simplejson as json
+import requests
+import json
+import csv
+import time
+from datetime import datetime
+
+
+>>>>>>> alvaro
 # Opening JSON file
 f = open(r'passwords.json',)
 
@@ -39,15 +50,24 @@ complete_url = base_url + "appid=" + api_key + "&q=Dublin, IE&units=metric"
 engine = create_engine(
     "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
+<<<<<<< HEAD
 def weather_to_db(text):
     checker = False
     weather = json.loads(text)
     
+=======
+
+def weather_to_db(text):
+    checker = False
+    weather = json.loads(text)
+
+>>>>>>> alvaro
     vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
             weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
     try:
         vals[6] = datetime.fromtimestamp(vals[6])
 
+<<<<<<< HEAD
         engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
 
         with open(r'weather_data.csv', mode='a') as csv_file:
@@ -77,9 +97,47 @@ def main():
             time.sleep(15*60)
         except:
             
+=======
+        engine.execute(
+            "insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
+
+        with open(r'weather_data.csv', mode='a') as csv_file:
+            fieldnames = ['description', 'icon', 'temp',
+                          'temp_min', 'temp_max', 'humidity', 'dt']
+            try:
+                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+                writer.writerow({'description': vals[0], 'icon': vals[1],
+                                 'temp': vals[2], 'temp_min': vals[3], 'temp_max': vals[4], 'humidity': vals[5],
+                                 'dt': vals[6]})
+            except Exception as e:
+                print(e)
+        checker = True
+
+    except Exception as e:
+        print(e)
+
+    if checker:
+        csv_file.close()
+
+
+def main():
+    while True:
+        try:
+            r = requests.get(complete_url)
+            weather_to_db(r.text)
+
+            time.sleep(15*60)
+        except:
+
+>>>>>>> alvaro
             print(traceback.format_exc())
             time.sleep(15*60)
     return
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> alvaro
 if __name__ == '__main__':
     main()

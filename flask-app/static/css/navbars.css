@@ -1,0 +1,151 @@
+/* Styles for the navigation bar*/
+nav {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  min-height: 10vh;
+  font-family: Quicksand, verdana, sans-serif;
+  border-bottom: 2px solid rgba(0, 115, 152, 1);
+  box-sizing: border-box;
+}
+
+.nav-links {
+  display: flex;
+  justify-content: space-around;
+  width: 40%;
+}
+
+.nav-links li {
+  list-style-type: none;
+}
+
+.nav-links a {
+  color: black;
+  text-decoration: none;
+  font-size: 16px;
+}
+
+.logo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo img {
+  margin: 5px;
+}
+
+.logo {
+  text-decoration: none;
+  color: black;
+}
+
+.burger {
+  display: none;
+  cursor: pointer;
+}
+
+.burger div {
+  width: 20px;
+  height: 3px;
+  background-color: black;
+  margin: 5px;
+  transition: all 0.3s ease;
+}
+
+.active {
+  border-bottom: solid black 2px;
+}
+
+@media screen and (max-width: 1024px) {
+  .nav-links {
+    width: 55%;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  body {
+    overflow-x: hidden;
+  }
+
+  .nav-links {
+    position: absolute;
+    z-index: 10000;
+    right: 0px;
+    height: 90vh;
+    top: 10vh;
+    margin: 0px;
+    background-color: rgba(0, 115, 152, 1);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    transform: translateX(100%);
+    transition: transform 0.5s ease-in;
+  }
+
+  .nav-links a {
+    color: white;
+  }
+
+  .burger {
+    display: block;
+  }
+}
+
+.nav-active {
+  transform: translateX(0%);
+}
+
+.toggle .line1 {
+  transform: rotate(-45deg) translate(-5px, 6px);
+}
+.toggle .line2 {
+  opacity: 0;
+}
+.toggle .line3 {
+  transform: rotate(45deg) translate(-5px, -6px);
+}
+
+/*Fotter*/
+.container-footer {
+  width: 100%;
+  height: 6vh;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  background-color: rgba(0, 115, 152, 1);
+  color: white;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+.rights {
+  margin: 0px 5px;
+}
+
+.footer-links {
+  display: flex;
+  justify-content: center;
+}
+
+.footer-links li {
+  list-style-type: none;
+}
+
+.footer-links a {
+  text-decoration: none;
+  color: white;
+  margin: 0px 4px;
+}
+
+@media screen and (max-width: 1024px) {
+  .footer-links {
+    display: none;
+  }
+
+  .rights {
+    font-size: 12px;
+  }
+}

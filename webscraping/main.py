@@ -55,8 +55,13 @@ def write_to_db(text):
                 writer.writerow({'number': vals[0], 'available_bikes': vals[1],
                                  'available_bikes_stands': vals[2], 'last_update': vals[3]})
             checker = True
+<<<<<<< HEAD
         except:
             print("Row already exist")
+=======
+        except Exception as e:
+            print(e)
+>>>>>>> alvaro
             continue
 
     if checker:
