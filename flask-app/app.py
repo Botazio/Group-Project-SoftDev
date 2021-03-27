@@ -67,11 +67,6 @@ def index():
     return render_template('index.html')
 
 
-@ app.route('/home')
-def home():
-    return "hello"
-
-
 @ app.route('/predictions')
 def predictions():
     return "hello"

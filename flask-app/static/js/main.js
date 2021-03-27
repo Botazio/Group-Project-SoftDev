@@ -1,39 +1,50 @@
 let markers = [];
 let weatherPromise = fetchWeather();
 
+// Function to fetch the weather data
+async function fetchWeather() {
+  return fetch("/weather").then(response => {
+    return response.json();
+  }).catch(err => {
+    console.log("OOPS!", err); 
+  });
+}
+
+// Function that starts the map and its components
 function initMap() {
     fetch("/stations").then(response => {
-        return response.json();
+      return response.json();
     }).then(data => {
-        fetch("static/js/styledmap.json").then(response => {
-            return response.json();
-        }).then(json => {
-            fetch("/availability").then(response => {
-              return response.json();
-            }).then(availability => {
-                availability.sort(compare);
-                const styledMapType = new google.maps.StyledMapType(json, { name: "Styled Map" });
-                const map = new google.maps.Map(document.getElementById("map"), {
-                    center: {lat: 53.349804, lng: -6.260310},
-                    zoom: 13,
-                    mapTypeControlOptions: {
-                        mapTypeIds: [""],
-                    },
-                });
-
-                map.mapTypes.set("styled_map", styledMapType);
-                map.setMapTypeId("styled_map");
-                
-                stationMarkersInfoButtons(data, map, availability);
-                new AutocompleteDirectionsHandler(map, data, availability);
-            
+      fetch("static/js/styledmap.json").then(response => {
+        return response.json();
+      }).then(json => {
+        fetch("/availability").then(response => {
+          return response.json();
+          }).then(availability => {
+            availability.sort(compare);
+            const styledMapType = new google.maps.StyledMapType(json, { name: "Styled Map" });
+            const map = new google.maps.Map(document.getElementById("map"), {
+                center: {lat: 53.349804, lng: -6.260310},
+                zoom: 13,
+                mapTypeControlOptions: {
+                    mapTypeIds: [""],
+                },
             });
-          });
+
+            map.mapTypes.set("styled_map", styledMapType);
+            map.setMapTypeId("styled_map");
+            
+            stationMarkersInfoButtons(data, map, availability);
+            new AutocompleteDirectionsHandler(map, data, availability);
+        
+        });
+      });
     }).catch(err => {
-        console.log("OOPS!", err);       
+      console.log("OOPS!", err);       
     });
 }
 
+// Function that orders the dinamic availability data 
 function compare(a, b) {
   const stationNum1 = a.number;
   const stationNum2 = b.number;
@@ -47,15 +58,7 @@ function compare(a, b) {
   return comparison;
 }
 
-// Function to fetch the weather data
-async function fetchWeather() {
-  return fetch("/weather").then(response => {
-    return response.json();
-  }).catch(err => {
-    console.log("OOPS!", err); 
-  });
-}
-
+// Function that displays the three top bottoms in the map
 function stationMarkersInfoButtons(data, map, availability) {
   const stationMarkersInfo = document.getElementById('station-markers-info');
   const displayAvailableBikes = document.getElementById('display-available-bikes');
@@ -72,7 +75,7 @@ function stationMarkersInfoButtons(data, map, availability) {
 
   // Display markers
   var markersInfo = 'available_bikes';
-  displayInfoWindows(data, map, availability, markersInfo);
+  displayMarkers(data, map, availability, markersInfo);
 
   displayAvailableBikes.addEventListener('click', () => {
     displayAvailableBikes.classList.add('button-active');
@@ -84,7 +87,7 @@ function stationMarkersInfoButtons(data, map, availability) {
     }
     markersInfo = 'available_bikes';
     deleteMarkers();
-    displayInfoWindows(data, map, availability, markersInfo);
+    displayMarkers(data, map, availability, markersInfo);
     disableBikePaths(bikeLayer);
   });
 
@@ -100,7 +103,7 @@ function stationMarkersInfoButtons(data, map, availability) {
     }
     markersInfo = 'available_bikes_stands';
     deleteMarkers();
-    displayInfoWindows(data, map, availability, markersInfo);
+    displayMarkers(data, map, availability, markersInfo);
     disableBikePaths(bikeLayer);
   });
 
@@ -482,8 +485,7 @@ class AutocompleteDirectionsHandler {
     }
 }
 
-
-
+// Function part of the search system. It provides the functionality to search for stations
 function stationSearch(self, data, destinationInput, availability) {
   // Specify the add listeners for destination input
   var currentFocus = -1;
@@ -584,6 +586,7 @@ function stationSearch(self, data, destinationInput, availability) {
   });
 }
 
+// Closes the list of possible stations
 function closeAllLists(input, elmnt) {
   /*close all pac lists in the document,
   except the one passed as an argument:*/
@@ -595,6 +598,7 @@ function closeAllLists(input, elmnt) {
   }
 }
 
+// Add an html class active to the selected element 
 function addActive(x, currentFocus) {
   /*a function to classify an item as "active":*/
   if (!x) return false;
@@ -604,6 +608,7 @@ function addActive(x, currentFocus) {
   x[currentFocus].classList.add("pac-active");
 }
 
+// Removes the html class active
 function removeActive(x) {
   /*a function to remove the "active" class from all pac items:*/
   for (var i = 0; i < x.length; i++) {
@@ -611,7 +616,7 @@ function removeActive(x) {
   }
 }
 
-// Sets a function to open extra information about the station
+// Sets a function to open extra information about the station in the lateral bar
 function displayStationSearch(station, availability) {
   const container = document.getElementById('container-pac');
   const stationExtrainfo = document.getElementById("station-extrainfo");
@@ -650,6 +655,7 @@ function displayStationSearch(station, availability) {
   displayStationSearch.innerHTML = contentStr; 
 }
 
+// Sets a function to display the current weather
 function displayWeatherInfo(id) {
   const displayWeatherContainer = document.getElementById(id);
 
@@ -679,8 +685,7 @@ function displayWeatherInfo(id) {
   });
 }
   
-// Functions and class for the markers
-function displayInfoWindows(data, map, availability, markersInfo) {
+function displayMarkers(data, map, availability, markersInfo) {
   var x = 0;
   data.forEach(station => {
     if (availability[x].number == station.number) {
@@ -719,6 +724,7 @@ function deleteMarkers() {
   markers = [];
 }
 
+// Class that creates a custom marker
 class myMarker {
   constructor(map, station, availability, markersInfo) {
     this.map = map;
