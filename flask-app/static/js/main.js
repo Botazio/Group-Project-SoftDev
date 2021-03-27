@@ -3,15 +3,27 @@ let weatherPromise = fetchWeather();
 
 // Function to fetch the weather data
 async function fetchWeather() {
-  return fetch("/weather").then(response => {
+  // Fetch weather forecast info
+  return fetch('https://api.openweathermap.org/data/2.5/onecall?lat=53.350140&lon=-6.266155&exclude=currently,minuetely,hourly&units=metric&appid=f092bb2fdf927ba79511674732a39c36')
+  .then(function (response) {
     return response.json();
   }).catch(err => {
-    console.log("OOPS!", err); 
+    console.log("OOPS!", err);
+  });
+}
+
+// Fucntion to fetch the occupancy during time
+async function fetchOccupancy(num) {
+  return fetch("/occupancy/"+ num).then(response => {
+    return response.json();
+  }).catch(err => {
+    console.log("OOPS!", err);
   });
 }
 
 // Function that starts the map and its components
 function initMap() {
+    google.charts.load('current', {'packages':['corechart']});
     fetch("/stations").then(response => {
       return response.json();
     }).then(data => {
@@ -238,8 +250,10 @@ class AutocompleteDirectionsHandler {
       const waitingSearch = document.getElementById('waiting-search');
       const displayStationSearch = document.getElementById("display-station-search");
       const displayWeather = document.getElementById("display-weather");
+      const displayOccupancy = document.getElementById("display-occupancy");
       displayStationSearch.innerHTML = "";
-      displayWeather.innerHTML = "";
+      displayWeather.style.display = "none";
+      displayOccupancy.style.display = 'none';
       waitingSearch.style.display = "flex";
       waitingSearch.style.flexDirection = "column";
       waitingSearch.style.justifyContent = "space-around";
@@ -314,7 +328,6 @@ class AutocompleteDirectionsHandler {
       const openSearch = document.getElementById(id);
       const closeSearch = document.getElementById('close-search')
       const container = document.getElementById('container-pac');
-      const bottomWrapper = document.getElementById('bottom-wrapper');
       const upperWrapper = document.getElementById('upper-wrapper');
       const destinationInput= document.getElementById('destination-input');
       const destinationContainer= document.getElementById('destination-container');
@@ -323,6 +336,7 @@ class AutocompleteDirectionsHandler {
       const stationExtrainfo = document.getElementById("station-extrainfo");
       const fullContainer = document.getElementById("full-container");
       const refreshSearch = document.getElementById("refresh-search");
+      const displayWeather = document.getElementById("display-weather");
       openSearch.addEventListener("click", () => {
         container.style.backgroundColor = "rgb(0, 115, 152)";
         container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
@@ -343,6 +357,7 @@ class AutocompleteDirectionsHandler {
         stationExtrainfo.style.display = "block";
         fullContainer.style.height = "100%";
         refreshSearch.style.visibility = "visible";
+        displayWeather.style.display = "block";
       })
     }
     // Sets a listener to close the search system
@@ -350,7 +365,6 @@ class AutocompleteDirectionsHandler {
       const closeSearch = document.getElementById(id);
       const openSearch = document.getElementById('search-direction');
       const container = document.getElementById('container-pac');
-      const bottomWrapper = document.getElementById('bottom-wrapper');
       const upperWrapper = document.getElementById('upper-wrapper');
       const destinationInput= document.getElementById('destination-input');
       const destinationContainer= document.getElementById('destination-container');
@@ -534,6 +548,8 @@ function stationSearch(self, data, destinationInput, availability) {
                   displayWeatherInfo('display-weather');
                   // Display the station info under the search bar 
                   displayStationSearch(station, availability[i]);
+                  // Display graphs under the search bar
+                  new displaySlidesGraphs(station.number); 
                   // Call function setupPlaceChangedListener to determine the route to the station
                   self.setupPlaceChangedListener(null, station.position_lat, station.position_lng);
                   break;
@@ -625,6 +641,7 @@ function displayStationSearch(station, availability) {
   const refreshSearch = document.getElementById("refresh-search");
   const displayStationSearch = document.getElementById("display-station-search");
   const waitingSearch = document.getElementById("waiting-search");
+  const displayOccupancy = document.getElementById("display-occupancy");
   container.style.backgroundColor = "rgb(0, 115, 152)";
   container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
   container.style.justifyContent = "center";
@@ -635,6 +652,8 @@ function displayStationSearch(station, availability) {
   closeSearch.style.display = "flex";
   waitingSearch.style.display = "none";
   refreshSearch.style.visibility = "visible";
+  displayOccupancy.style.display = "block";
+  
 
   var iconBanking = '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
   if (station.banking == 1) {
@@ -655,36 +674,194 @@ function displayStationSearch(station, availability) {
   displayStationSearch.innerHTML = contentStr; 
 }
 
-// Sets a function to display the current weather
+// Sets a function to display the forecast weather
 function displayWeatherInfo(id) {
   const displayWeatherContainer = document.getElementById(id);
+  // Clear any old data
+  displayWeatherContainer.innerHTML = "";
+  weatherPromise.then(data => {
+    // store daily info needed in variable
+    var dailyInfo = data['daily'];      
+    // create a data dictionary of dates and values corresponsing to the dates
+      var data=[];
+      var datelist=[];
+          //iterate through the info and store dates as keys and weather info as a nested dict
+          for (var i=0;i<dailyInfo.length;  i++ ){
+            var dateData = {
+              "Temp":dailyInfo[i].temp,
+              "Weather": dailyInfo[i].weather, 
+              "Wind":dailyInfo[i].wind_speed};
+              data.push({
+                key:dailyInfo[i].dt,
+                value: dateData});
+                datelist.push(dailyInfo[i].dt);
+          }
+      // variables to store day names and dates 
+        var dayName=[];
+        var date=[];
+        var formattedDates=[];
+        var contentStr = '';
+        //iterate through the dates and format them from unix timestamps to days and dates 
+        for (var i=0; i <datelist.length; i++){  
+          formattedDates = new Date(datelist[i]*1000);
+          dayName.push(formattedDates.toString().split(' ')[0]);
+          date.push(formattedDates.toString().substr(4,6));  
+         
+          //iterate through the data and display day, date, temp, description, icon and wind
+          var weatherIcon = '<img class="icons2" height = "50px" width = "50px" src="http://openweathermap.org/img/w/' + data[i].value['Weather'][0]['icon'] + '.png"/>';
+          //create the containers to display weather 
+          contentStr += '<div class="weather-slide fade"><div id="weather-header"><div><p>' + dayName[i] + '</p></div>' +
+          '<div id="weather-description"><p>' + data[i].value['Weather'][0]['description'] + '</p></div>' +
+          '<div><p>' + date[i] + '</p></div></div>' +
+          '<div id="weather-info">' +
+          '<div id="weather-temp" class="weather-items"><h1>' + data[i].value['Temp']['day'] + '</h1></div>' +
+          '<div id="weather-icon" class="weather-items">' + weatherIcon + '</div>' +
+          '<div id="weather-temp-min" class="weather-items"><p>Min<br>' + data[i].value['Temp']['max'] + '</p></div>' +
+          '<div id="weather-temp-max" class="weather-items"><p>Max<br>' + data[i].value['Temp']['min'] + '</p></div>' +
+          '<div id="weather-temp-humidity" class="weather-items"><p>Wind<br>' + data[i].value['Wind'] +  'mph</p></div>' +
+          '</div></div>';
+          
+      }
+      displayWeatherContainer.innerHTML = contentStr;
 
-
-  weatherPromise.then(weather => {
-    var dateObj = new Date();
-    var month = dateObj.getUTCMonth() + 1; //months from 1-12
-    var day = dateObj.getUTCDate();
-    newdate = month + "/" + day;
-    var weatherIcon = '<img src="http://openweathermap.org/img/wn/'  + weather[0].icon + '@2x.png" width="98" height="98" alt="Weather Icon"/>';
-
-    const contentStr = 
-    '<div id="weather-header"><div><p>Now</p></div>' +
-    '<div id="weather-description"><h2>' + weather[0].description + '</h2></div>' +
-    '<div><p>' + newdate + '</p></div></div>' +
-    '<div id="weather-info">' +
-    '<div id="weather-temp" class="weather-items"><h1>' + weather[0].temp + '</h1></div>' +
-    '<div id="weather-icon" class="weather-items">' + weatherIcon + '</div>' +
-    '<div id="weather-temp-min" class="weather-items"><p>Min<br>' + weather[0].temp_min + '</p></div>' +
-    '<div id="weather-temp-max" class="weather-items"><p>Max<br>' + weather[0].temp_max + '</p></div>' +
-    '<div id="weather-temp-humidity" class="weather-items"><p>Humidity<br>' + weather[0].humidity + '</p></div>' +
-    '</div>';
-    
-    displayWeatherContainer.innerHTML = contentStr;
+      showSlidesWeather(slideIndexWeather);
   }).catch(err => {
     console.log("OOPS! Can't display weather", err);       
   });
 }
-  
+
+var slideIndexWeather = 1;
+
+function plusSlidesWeather(n) {
+  showSlidesWeather(slideIndexWeather += n);
+}
+
+function currentSlideWeather(n) {
+  showSlidesWeather(slideIndexWeather = n);
+}
+
+function showSlidesWeather(n) {
+  var i;
+  var slides = document.getElementsByClassName("weather-slide");
+  if (n > slides.length) {slideIndexWeather = 1}    
+  if (n < 1) {slideIndexWeather = slides.length}
+  for (i = 0; i < slides.length; i++) {
+      slides[i].style.display = "none";  
+  }
+  slides[slideIndexWeather-1].style.display = "flex";
+  slides[slideIndexWeather-1].style.width = "90%";
+  slides[slideIndexWeather-1].style.flexDirection = "column"; 
+  slides[slideIndexWeather-1].style.alignItems = "center"; 
+  slides[slideIndexWeather-1].style.justifyContent = "center";
+}
+
+
+class displaySlidesGraphs {
+  constructor(station_num) {
+    this.slideIndex = 1;
+    this.station_num = station_num;
+    this.dataBikes;
+    this.dataStands;
+
+    // Setup event listeners
+    this.getOccupancyData('occupancy-bikes', 'ocuppancy-stands');
+  }
+
+
+  getOccupancyData() {
+    const prev = document.getElementsByClassName('prev')[0];
+    const next = document.getElementsByClassName('next')[0];
+
+    prev.addEventListener("click", () => {
+      this.plusSlides(-1);
+    });
+    next.addEventListener("click", () => {
+      this.plusSlides(1);
+    });
+
+    fetchOccupancy(this.station_num).then(jsonData => {
+      // Create our data table out of JSON data loaded from server.
+      // Create table for bikes occupancy
+      var dataBikes = new google.visualization.DataTable();
+      dataBikes.addColumn('date', 'Time');
+      dataBikes.addColumn('number', 'Average Bikes');
+      // Create table for bike stands
+      var dataStands = new google.visualization.DataTable();
+      dataStands.addColumn('date', 'Time');
+      dataStands.addColumn('number', 'Average Stands');
+
+      jsonData.forEach(el => {
+        var dateArray = el.date.split("-");
+        dataBikes.addRows([
+          [new Date(dateArray[0], dateArray[1], dateArray[2]), el.ocuppancy_bikes],
+        ]);
+        dataStands.addRows([
+          [new Date(dateArray[0], dateArray[1], dateArray[2]), el.ocuppancy_stands],
+        ]); 
+      });
+      this.dataBikes = dataBikes;
+      this.dataStands = dataStands;
+
+      this.showSlides(this.slideIndex);
+    }).catch(err => {
+      console.log("OOPS! Can't display occupancy", err);       
+    });
+  }
+
+  displayOccupancy(id) {
+    // Custom options
+    var options = {
+      curveType: 'function',
+      legend: { position: 'bottom' },
+      width: 400,
+      height: 200,
+      fontName: 'Sans-serif',
+      hAxis: {
+        format: 'MMMM',
+      },
+      titleTextStyle: {
+        fontSize: 15,
+        fontName: 'Roboto, sans-serif',
+      }
+    };
+
+    if (id == 'bikes') {
+      // Instantiate and draw our charts, passing in some options.
+      var chart = new google.visualization.LineChart(document.getElementById(id));
+      options.title = 'Average Bikes nº ' + this.station_num;
+      chart.draw(this.dataBikes, options);
+    }
+    else if (id == 'stands') {
+      // Instantiate and draw our charts, passing in some options.
+      var chart = new google.visualization.LineChart(document.getElementById(id));
+      options.title = 'Average Stands nº ' + this.station_num;
+      chart.draw(this.dataStands, options);
+    }
+    
+  }
+
+  plusSlides(n) {
+    this.showSlides(this.slideIndex += n);
+  }
+
+  showSlides(n) {
+    var i;
+    var slides = document.getElementsByClassName("myGraphs");
+    if (n > slides.length) {this.slideIndex = 1}    
+    if (n < 1) {this.slideIndex = slides.length}
+    for (i = 0; i < slides.length; i++) {
+        slides[i].style.display = "none";
+        this.displayOccupancy(slides[i].id);  
+        
+    }
+    slides[this.slideIndex-1].style.display = "block";
+    this.displayOccupancy(slides[this.slideIndex-1].id);
+
+  }
+
+}
+
+// Function to display the markers in the map  
 function displayMarkers(data, map, availability, markersInfo) {
   var x = 0;
   data.forEach(station => {
@@ -795,8 +972,9 @@ class myMarker {
   setupMarkerEvents(station, availability) {
     const destinationInput= document.getElementById('destination-input');
     this.marker.addListener('click', () => {
-      displayWeatherInfo('display-weather');
       displayStationSearch(station, availability);
+      displayWeatherInfo('weather-slides-container');
+      new displaySlidesGraphs(station.number);
       destinationInput.value = station.address;
     });
   }

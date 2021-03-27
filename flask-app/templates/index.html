@@ -63,8 +63,25 @@
             <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-big.png')}}" width='300', height='260' alt="Waiting directions"/>
          </div>
          <div id="display-container-info">
-            <div id="display-weather"></div>
-            <div id="display-station-search"></div> 
+            <div id="display-weather">
+               <a id="prev-weather" onclick="plusSlidesWeather(-1)">&#10094;</a>
+               <a id="next-weather" onclick="plusSlidesWeather(1)">&#10095;</a>
+               <div id="weather-slides-container"></div>
+            </div>
+            <div id="display-station-search"></div>
+            <div id="display-occupancy">
+               <div id="bikes" class="myGraphs fade">
+                 <div id="ocuppancy-bikes"></div>
+               </div>
+               
+               <div id="stands" class="myGraphs fade">
+                 <div id="ocuppancy-stands"></div>
+               </div>
+               
+               <a class="prev">&#10094;</a>
+               <a class="next">&#10095;</a>
+               
+               </div>
          </div>
       </div>
    </div>
