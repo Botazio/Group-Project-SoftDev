@@ -33,14 +33,21 @@ APIKEY = data["api.key"]
 engine = create_engine(
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
             "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
 =======
     "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
+<<<<<<< HEAD
 >>>>>>> alvaro
 =======
             "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
+>>>>>>> developer
+=======
+>>>>>>> be08b5eeb242697c2007873255404ac083930b21
 >>>>>>> developer
 
 

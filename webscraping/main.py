@@ -56,12 +56,17 @@ def write_to_db(text):
                                  'available_bikes_stands': vals[2], 'last_update': vals[3]})
             checker = True
 <<<<<<< HEAD
+<<<<<<< HEAD
         except:
             print("Row already exist")
 =======
         except Exception as e:
             print(e)
 >>>>>>> alvaro
+=======
+        except Exception as e:
+            print(e)
+>>>>>>> developer
             continue
 
     if checker:

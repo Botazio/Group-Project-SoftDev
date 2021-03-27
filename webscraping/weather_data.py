@@ -3,6 +3,9 @@ from sqlalchemy import create_engine
 import traceback
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 =======
 >>>>>>> developer
 import glob
@@ -18,6 +21,9 @@ from datetime import datetime
 
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 =======
 import simplejson as json
 import requests
@@ -27,8 +33,12 @@ import time
 from datetime import datetime
 
 
+<<<<<<< HEAD
 >>>>>>> alvaro
 =======
+>>>>>>> developer
+=======
+>>>>>>> be08b5eeb242697c2007873255404ac083930b21
 >>>>>>> developer
 # Opening JSON file
 f = open(r'passwords.json',)
@@ -58,6 +68,9 @@ engine = create_engine(
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 =======
 >>>>>>> developer
 def weather_to_db(text):
@@ -65,14 +78,21 @@ def weather_to_db(text):
     weather = json.loads(text)
     
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 =======
 
 def weather_to_db(text):
     checker = False
     weather = json.loads(text)
 
+<<<<<<< HEAD
 >>>>>>> alvaro
 =======
+>>>>>>> developer
+=======
+>>>>>>> be08b5eeb242697c2007873255404ac083930b21
 >>>>>>> developer
     vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
             weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
@@ -81,6 +101,9 @@ def weather_to_db(text):
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 =======
 >>>>>>> developer
         engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
@@ -113,6 +136,9 @@ def main():
         except:
             
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 =======
         engine.execute(
             "insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
@@ -146,8 +172,12 @@ def main():
             time.sleep(15*60)
         except:
 
+<<<<<<< HEAD
 >>>>>>> alvaro
 =======
+>>>>>>> developer
+=======
+>>>>>>> be08b5eeb242697c2007873255404ac083930b21
 >>>>>>> developer
             print(traceback.format_exc())
             time.sleep(15*60)
@@ -155,10 +185,16 @@ def main():
 
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> alvaro
 =======
+>>>>>>> developer
+=======
+=======
+
+>>>>>>> be08b5eeb242697c2007873255404ac083930b21
 >>>>>>> developer
 if __name__ == '__main__':
     main()
