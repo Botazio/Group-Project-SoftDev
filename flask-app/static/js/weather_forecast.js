@@ -49,7 +49,7 @@ function displayForecast(data){
               table+= "<th>"+ dayName[j] + "</th><tr><td>" + date[j] + "</td></tr><tr><td>"+ data[j].value['Temp']['day'] 
               + "&#8451;</td></tr><tr><td>" + data[j].value['Weather'][0]['description'] 
               + "</td></tr><tr><td><img class='icons2' height = '50px' width = '50px' src='http://openweathermap.org/img/w/" + data[j].value['Weather'][0]['icon']
-              +".png'/></td></tr><tr><td>" +  data[j].value['Wind'] +  "mph</td></tr>";
+              +".png'/></td></tr><tr><td>Wind:" +  data[j].value['Wind'] +  "mph</td></tr>";
           
           
         }
