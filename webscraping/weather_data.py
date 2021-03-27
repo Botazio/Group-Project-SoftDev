@@ -2,6 +2,9 @@ import sqlalchemy as sqla
 from sqlalchemy import create_engine
 import traceback
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 import glob
 import os
 from pprint import pprint
@@ -14,6 +17,7 @@ from datetime import datetime
 
 
 
+<<<<<<< HEAD
 =======
 import simplejson as json
 import requests
@@ -24,6 +28,8 @@ from datetime import datetime
 
 
 >>>>>>> alvaro
+=======
+>>>>>>> developer
 # Opening JSON file
 f = open(r'passwords.json',)
 
@@ -51,10 +57,14 @@ engine = create_engine(
     "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
 def weather_to_db(text):
     checker = False
     weather = json.loads(text)
     
+<<<<<<< HEAD
 =======
 
 def weather_to_db(text):
@@ -62,12 +72,17 @@ def weather_to_db(text):
     weather = json.loads(text)
 
 >>>>>>> alvaro
+=======
+>>>>>>> developer
     vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
             weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
     try:
         vals[6] = datetime.fromtimestamp(vals[6])
 
 <<<<<<< HEAD
+<<<<<<< HEAD
+=======
+>>>>>>> developer
         engine.execute("insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
 
         with open(r'weather_data.csv', mode='a') as csv_file:
@@ -97,6 +112,7 @@ def main():
             time.sleep(15*60)
         except:
             
+<<<<<<< HEAD
 =======
         engine.execute(
             "insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
@@ -131,13 +147,18 @@ def main():
         except:
 
 >>>>>>> alvaro
+=======
+>>>>>>> developer
             print(traceback.format_exc())
             time.sleep(15*60)
     return
 
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
 
 >>>>>>> alvaro
+=======
+>>>>>>> developer
 if __name__ == '__main__':
     main()

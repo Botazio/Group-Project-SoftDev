@@ -32,11 +32,16 @@ STATIONS_URL = data["api.url"]  # and the JCDecaux endpoint
 APIKEY = data["api.key"]
 engine = create_engine(
 <<<<<<< HEAD
+<<<<<<< HEAD
             "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
 =======
     "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 >>>>>>> alvaro
+=======
+            "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
+
+>>>>>>> developer
 
 
 sql = """
