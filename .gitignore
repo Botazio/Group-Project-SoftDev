@@ -4,7 +4,10 @@ webscraping/dinamic_data.csv
 webscraping/weather_data.csv
 webscraping/nohup.out
 <<<<<<< HEAD
+<<<<<<< HEAD
 flask-app/passwords.json
 =======
 >>>>>>> developer
+=======
+>>>>>>> alvaro
 flask-app/__pycache__
