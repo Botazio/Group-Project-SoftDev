@@ -3,5 +3,4 @@ workspace.code-workspace
 webscraping/dinamic_data.csv
 webscraping/weather_data.csv
 webscraping/nohup.out
-flask-app/passwords.json
 flask-app/__pycache__
