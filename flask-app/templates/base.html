@@ -5,13 +5,14 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
    <link rel="stylesheet" href="{{ url_for('static', filename='css/navbars.css') }}">
+   <script src="https://www.gstatic.com/charts/loader.js"></script>
    {% block head %}{% endblock %}
 </head>
 <body>
    <div class="content">
       <nav>
          <div>   
-            <a class="logo" href='/home'>
+            <a class="logo">
                <img src="{{url_for('static', filename='fixtures/icon-bike-red.png')}}" width='35', height='35'/>
                <img src="{{url_for('static', filename='fixtures/icon-bike-yellow.png')}}" width='35', height='35' />
                <img src="{{url_for('static', filename='fixtures/icon-bike-green.png')}}" width='35', height='35' />
@@ -35,7 +36,6 @@
          <div class="container-footer"> 
              <div class="rights">DBIKES | Copyright 2021 | All rights reserved</div>
              <ul class="footer-links">
-                 <li><a href='/home'>Home |</a></li>
                  <li><a href='/'>Map |</a></li>
                  <li><a href='/predictions'>Predictions |</a></li>
                  <li><a href='/how_it_works'>How it works |</a></li>
