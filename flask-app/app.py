@@ -44,7 +44,7 @@ class getData():
     def getAvailability(self):
         try:
             df = pd.read_sql_query(
-                "SELECT * FROM (SELECT * FROM dbikes.availability as av ORDER BY av.id  DESC LIMIT 1000 ) as whatever GROUP BY whatever.number;", self.engine)
+                "SELECT * FROM (SELECT * FROM dbbikes.availability as av ORDER BY av.last_update  DESC LIMIT 1000 ) as whatever GROUP BY whatever.number;", self.engine)
             results = df.to_json(orient='records')
         except:
             return "Error: something wrong happened"
@@ -54,7 +54,7 @@ class getData():
     def getWeather(self):
         try:
             df = pd.read_sql_query(
-                "SELECT * FROM dbikes.weather as av ORDER BY av.dt  DESC LIMIT 1;", self.engine)
+                "SELECT * FROM dbbikes.weather as av ORDER BY av.dt  DESC LIMIT 1;", self.engine)
             results = df.to_json(orient='records')
         except:
             return "Error: something wrong happened"
@@ -101,8 +101,8 @@ def weather():
 
 
 if __name__ == "__main__":
-<<<<<<< HEAD
+
     app.run(debug=True, port=5000, host='0.0.0.0')
-=======
-    app.run(debug=True)
->>>>>>> developer
+
+ 
+
