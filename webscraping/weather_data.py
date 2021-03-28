@@ -1,4 +1,4 @@
-mport sqlalchemy as sqla
+import sqlalchemy as sqla
 from sqlalchemy import create_engine
 import traceback
 import simplejson as json
@@ -7,8 +7,7 @@ import json
 import csv
 import time
 from datetime import datetime
-
-
+#weather scraper
 # Opening JSON file
 f = open(r'passwords.json',)
 
@@ -35,52 +34,72 @@ complete_url = base_url + "appid=" + api_key + "&q=Dublin, IE&units=metric"
 engine = create_engine(
             "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
-
 def weather_to_db(text):
         checker = False
-            weather = json.loads(text)
+        weather = json.loads(text)
 
-                vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
-                                    weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
-                    try:
-                                vals[6] = datetime.fromtimestamp(vals[6])
+        vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
+                weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
 
-                                        engine.execute(
-                                                            "insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
+        try:
+            vals[6] = datetime.fromtimestamp(vals[6])
 
-                                                with open(r'weather_data.csv', mode='a') as csv_file:
-                                                                fieldnames = ['description', 'icon', 'temp',
-                                                                                                  'temp_min', 'temp_max', 'humidity', 'dt']
-                                                                            try:
-                                                                                                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            engine.execute(
+                    "insert into weather values(%s,%s,%s,%s,%s,%s,%s)", vals)
+            with open(r'weather_data.csv', mode='a') as csv_file:
+                fieldnames = ['description', 'icon', 'temp','temp_min', 'temp_max', 'humidity', 'dt']
 
-                                                                                                                writer.writerow({'description': vals[0], 'icon': vals[1],
-                                                                                                                                                     'temp': vals[2], 'temp_min': vals[3], 'temp_max': vals[4], 'humidity': vals[5],
-                                                                                                                                                                                      'dt': vals[6]})
-                                                                                                                            except Exception as e:
-                                                                                                                                                print(e)
-                                                                                                                                                        checker = True
+                try:
+                    writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
 
-                                                                                                                                                            except Exception as e:
-                                                                                                                                                                        print(e)
+                    writer.writerow({'description': vals[0], 'icon': vals[1],'temp': vals[2], 'temp_min': vals[3], 'temp_max': vals[4], 'humidity': vals[5],'dt': vals[6]})
 
-                                                                                                                                                                            if checker:
-                                                                                                                                                                                        csv_file.close()
+                except Exception as e:
+                    print(e)
 
+            checker = True
 
-                                                                                                                                                                                        def main():
-                                                                                                                                                                                                while True:
-                                                                                                                                                                                                            try:
-                                                                                                                                                                                                                            r = requests.get(complete_url)
-                                                                                                                                                                                                                                        weather_to_db(r.text)
+        except Exception as e:
+                    print(e)
 
-                                                                                                                                                                                                                                                    time.sleep(15*60)
-                                                                                                                                                                                                                                                            except:
-
-                                                                                                                                                                                                                                                                            print(traceback.format_exc())
-                                                                                                                                                                                                                                                                                        time.sleep(15*60)
-                                                                                                                                                                                                                                                                                            return
+        if checker:
+            csv_file.close()
 
 
-                                                                                                                                                                                                                                                                                        if __name__ == '__main__':
-                                                                                                                                                                                                                                                                                                main()
+def main():
+    while True:
+        try:
+            r = requests.get(complete_url)
+            weather_to_db(r.text)
+
+            time.sleep(15*60)
+        except:
+
+            print(traceback.format.exc())
+            time.sleep(15*60)
+
+    return
+
+if __name__ == '__main__':
+    main()
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
