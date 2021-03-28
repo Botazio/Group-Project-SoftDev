@@ -1,0 +1,239 @@
+<!doctype html>
+
+<html lang="en">
+	<html lang="en">
+		<head>
+			<meta name="viewport" content="width=device-width, initial-scale=1">>
+					<meta name="author" content="mark">
+		<style>
+    
+            body {
+              background: url(/static/fixtures/mapback.jpg) no-repeat center fixed; 
+                background-size: cover;
+                }
+            .wrapper{
+                height: 100vh;
+                display: flex;
+                flex-direction: column;
+                box-sizing: border-box;
+                margin:20px;
+                padding:20px;
+            }
+
+            .jumbotron{
+            background-image: url('/static/fixtures/dbikes1.jpg');
+            height: 30vh;
+            background-size: cover;
+            background-position: center;
+            color: #ffffff;
+            border-radius: 0px;
+        }
+        .jumbotron h1 {
+            /* margin: 2px 0; */
+            /* font-size: 3px; */
+            /* line-height: 1.5; */
+        }
+        .intro {
+            /* padding-top: 16px; */
+        }
+            .parent,.parent1,.parent2, .main2{
+                box-sizing: border-box;
+                margin:40px;
+                padding:40px;
+            }
+
+            .header {
+             background: tomato;
+            }      
+            
+            .main2{
+                border: 10px solid transparent;
+            }
+
+            .main1 {
+                background-image: url('/static/fixtures/dbikes1.jpg'); 
+                background-size: cover; 
+                color: #125688;
+                height: 400px;
+            }
+
+            .main2,.main3,.main4,.main5 {
+                text-align: center;
+                text-decoration: underline;
+                
+            }
+            .parent,.parent1,.parent2{
+                border: 10px solid transparent;
+                display: flex;
+                /* flex-direction: row; */
+                padding-top: 30px; 
+                padding-bottom: 30px;
+                justify-content: space-evenly;
+                align-items: center stretch;
+                background-color: rgb(118, 175, 250);
+                
+            }
+            .child1, .sub1, .sub3{
+                width:200px;
+                height: fit-content;
+                flex-basis:content;
+                padding-left: 20px;
+                padding-right: 20px;
+                background: rgb(118, 175, 250);
+                box-shadow: .5rem 2px .5rem rgba(0,0,0.1);
+            }
+            .child2, .sub2{
+                width:200px;
+                height: fit-content;
+                padding-left: 20px;
+                padding-right: 20px;
+                background: rgb(118, 175, 250);
+                box-shadow: .5rem 2px .5rem rgba(0,0,0.1);
+
+            }
+            .child1:hover,.child2:hover,.child3:hover {
+                background-color: maroon;
+             color: white;}
+
+            .child3 {
+                width:200px;
+                height: fit-content;
+                padding-left: 20px;
+                padding-right: 20px;
+                background: rgb(118, 175, 250);
+                box-shadow: .5rem 2px .5rem rgba(0,0,0.1);}
+            
+                h3 {
+					margin: 0px 0px 10px 0px;
+					color: #de6581;
+                }
+                h1,p{
+                    color: white;
+                    text-align: center;
+                }
+		</style>
+	
+		</head>
+
+	<body>
+
+        <div class ="wrapper">
+            <header class="header"> Header </header>
+
+            <div class="jumbotron text-center">
+                <div class="intro">
+                    
+                    <h1 style="font-size: 80px;">About</h1>
+                
+                </div>
+        
+        
+            </div>
+
+            <!-- <div class="main1" style="background-image: url('/static/fixtures/dbikes1.jpg'); background-size: cover; color: #125688;height:380px;">
+                    <p></p>
+                    </div> -->
+            
+
+            <article class="main2" style="background-color: rgb(118, 175, 250);">
+
+                <h1>About Us</h1>
+                <h1>The Dublin Bike Scheme</h1>
+                <h3 style="color: white;"> Whether you are a regular cyclist or an occasional user, Dublin Bikes has a range of services available.
+                    <br><br> This self-service bike rental system is open to everyone from 14 years of age. 
+                    <br> Dublin Bikes enables you to travel through the city centre, commute between home and work and get out and about in Dublin.  </h3>
+                <h3 style="color: white;"> Whether you are a regular cyclist or an occasional user, Dublin Bikes has a range of services available. </h3>
+
+            </article>
+
+            <article class="main3">
+                <h2></h2>
+                <div class='parent2'>
+                    <h1>Our Subscriptions</h1>
+                    <div class = 'sub1'>
+                        <img src="/static/fixtures/bikenew1.jpg" alt="sub1" style="width:200px; height: 150px;">
+                        <hgroup>
+                            <h2> Subscription 1</h2>
+                            <h3> 3 Day Pass</h3>
+                        </hgroup>
+                        <p>For short term hire, a 3 Day Ticket will give you access to all the benefits of the NOW TV dublinbikes service. 
+                            Ideal for tourists and visitors as a way of getting around and exploring the city. The first 30 minutes of each journey is free.
+                             After this rental charges are applied.</p>
+                        </div>
+                        
+                    <div class = 'sub2'>
+                        <img src="/static/fixtures/cyclists2.jpg" alt="sub2" style="width:200px;">
+                        <hgroup>
+                            <h2> Subscription 2</h2>
+                            <h3> Annual Pass</h3>
+                        </hgroup>
+                        <p>With an Annual Subscription you can rent a bike 365 days a year for an annual fee of € 35.
+                             The first 30 minutes of each journey is free, after this rental charges apply.<br><br><br><br><br></p>
+                    </div>
+
+                    <div class = 'sub3'>
+
+                    <img src="/static/fixtures/cyclists3.jpg" alt="sub3" style="width:200px;">
+                    <hgroup>
+                        <h2> Subscription 3</h2>
+                        <h3> DublinBikes Per Hour</h3>
+                    </hgroup>
+                    <p>Dublin BIkes are available to rent by the hour. Bikes can be collected and return to any station with a empty space. 
+                        This service option is independent of your annual subscription and will charge users 1 euro per hour.<br><br><br><br></p></div>
+
+                    </div>
+                
+
+            </article>
+
+            <article class="main4">
+                <h2></h2>
+                <div class='parent'>
+                    <h1 style="text-align: center;">Meet the Team!</h1>
+                    <div class = 'child1'hover>  <p>Mark</p>
+                        <img src="/static/fixtures/mark4.jpg" alt="Mark" style="width:200px; border-radius: 50%;">
+                        <p>Hola! Me llamo Alavaro y soy de Madrid! I am currently working as as the CEO of Dublin bikes, leading a team of dzopeess here @Dublinbikes. I love flask and software engineering.
+                            Hovering over an employee's individual circle produces a zoomed-in effect, and clicking expands their headshot 
+                            with their name and social profiles. The splashy set up is a stylish alternative to the expected rows of team photos and names.</p></div>
+                        
+                    <div class = 'child2'><p>Ellie</p>
+                        <img src="/static/fixtures/ellie.jpg" alt="Ellie" style="width:200px; border-radius: 50%;">
+                        <p>Bones Bones Bones! I love everything bones. I have X-ray vision and love radiography! I am using my x-ray vision to identify new trends and insights here @Dublin Bikes.
+                            Hovering over an employee's individual circle produces a zoomed-in effect, and clicking expands their headshot 
+                            with their name and social profiles. The splashy set up is a stylish alternative to the expected rows of team photos and names.<br><br></p>
+                    </div>
+                    <div class = 'child3'><p>Alvaro</p><img src="/static/fixtures/alvaro.jpg" alt="Alvaro" style="width:200px; border-radius: 50%;">
+                        <p>Hola! Me llamo Alavaro y soy de Madrid! I am currently working as as the CEO of Dublin bikes, leading a team of dzopeess here @Dublinbikes. I love flask and software engineering.
+                            Hovering over an employee's individual circle produces a zoomed-in effect, and clicking expands their headshot 
+                            with their name and social profiles. The splashy set up is a stylish alternative to the expected rows of team photos and names.</p></div>
+                    </div>
+
+            </article>
+
+            <article class="main5">
+                <h2></h2>
+                <div class='parent1'>
+                    <h1 style="text-align: center;">Socials!</h1>
+                    <div class = 'child4'> <a href="https://www.instagram.com/?hl=en" target="_blank"> 
+                        <img src="/static/fixtures/instagram black.png" alt="insta" style="width:100px;"></a>
+                        </div>
+                        
+                    <div class = 'child5'>
+                        <a href="https://www.twitter.com/?hl=en" target="_blank"><img src="/static/fixtures/blacktwitter.png" alt="twitter" style="width:100px;"></a>
+                    </div>
+                    <div class = 'child6'><a href="https://www.facebook.com/" target="_blank">
+                        <img src="/static/fixtures/blackfacebook.png" alt="fb" style="width:100px;"></a>
+                     </div>
+                    </div>
+                </div>
+
+            </article>
+
+
+
+        </div>
+
+
+		  
+	</body>
+</html>

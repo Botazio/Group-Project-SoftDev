@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="{{ url_for('static', filename='css/navbars.css') }}">
+   {% block head %}{% endblock %}
+</head>
+
+<body>
+    <div class="content">
+       <nav>
+          <div>   
+             <a class="logo" href='/home'>
+                <img src="{{url_for('static', filename='fixtures/icon-bike-red.png')}}" width='35', height='35'/>
+                <img src="{{url_for('static', filename='fixtures/icon-bike-yellow.png')}}" width='35', height='35' />
+                <img src="{{url_for('static', filename='fixtures/icon-bike-green.png')}}" width='35', height='35' />
+                <h2>DBIKES</h2>
+             </a>
+          </div>
+          <ul class="nav-links">
+             <li><a href='/'>MAP</a></li>
+             <li><a href='/predictions'>PREDICTIONS</a></li>
+             <li><a href='/how_it_works'>HOW IT WORKS</a></li>
+             <li><a href='/about'>ABOUT</a></li>
+          </ul>
+          <div class="burger">
+             <div class="line1"></div>
+             <div class="line2"></div>
+             <div class="line3"></div>
+          </div>
+       </nav>
+       {% block body %}{% endblock %}
+       <footer>
+          <div class="container-footer"> 
+              <div class="rights">DBIKES | Copyright 2021 | All rights reserved</div>
+              <ul class="footer-links">
+                  <li><a href='/home'>Home |</a></li>
+                  <li><a href='/'>Map |</a></li>
+                  <li><a href='/predictions'>Predictions |</a></li>
+                  <li><a href='/how_it_works'>How it works |</a></li>
+                  <li><a href='/home'>About</a></li>
+              </ul>
+          </div>
+      </footer>
+    </div>
+    <script src="{{url_for('static', filename='js/navbarAnimation.js')}}"></script>
+ </body>
+ </html>

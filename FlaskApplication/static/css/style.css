@@ -1,0 +1,90 @@
+/* Always set the map height explicitly to define the size of the div
+       * element that contains the map. */
+	   #map {
+		height: 100%;
+	  }
+	  
+	  /* Optional: Makes the sample page fill the window. */
+	  html,
+	  body {
+		height: 100%;
+		margin: 0;
+		padding: 0;
+	  }
+
+	  #main1 {
+		height:10%;
+	}
+	
+	article {
+		clear: both;
+		overflow: auto;
+		width: 100%;}
+	
+	hgroup {
+		margin-top: 40px;}
+	figure {
+		float: left;
+		width: 250px;
+		height: 250px;
+		padding: 5px;
+		margin: 20px;
+		border: 1px solid #eeeeee;}
+	h1,h2,h3 {
+		font-weight: normal;}
+	h2 {
+		margin: 10px 0px 5 px 0px;
+		padding: 0px;}
+	h3 {
+		margin: 0px 0px 10px 0px;
+		color: #de6581;
+	}
+
+	.fa {
+padding: 20px;
+font-size: 30px;
+width: 50px;
+text-align: center;
+text-decoration: none;
+margin: 5px 2px;
+}
+
+.fa:hover {
+opacity: 0.7;
+}
+
+.fa {
+text-align: center;
+
+}
+
+.fa-facebook {
+background: #3B5998;
+color: white;
+/* margin-left:440px ; */
+}
+
+.fa-twitter {
+background: #55ACEE;
+color: white;
+margin-left: 50px;
+margin-right: 50px;
+}
+
+.fa-instagram {
+background: #125688;
+color: white;
+/* margin-right:250px ; */
+}
+
+section.socials, section.services,section.aboutus,.content{
+padding-bottom: 30px;
+padding-top: 30px ;
+border-style: solid;
+border-color: #125688;
+border-width: 10px;}
+
+.socialicon {
+margin-left:40% ;
+margin-right:30%;
+}
