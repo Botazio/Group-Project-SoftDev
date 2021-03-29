@@ -13,26 +13,18 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
-        *{
-            margin:0;
-            padding:0;
-            font-family: 'Source Serif Prof';
+*{
+    margin:0;
+    padding:0;
+    font-family: 'Source Serif Prof';
         }
-        .jumbotron{
-            background-image: url('/static/fixtures/dbikes1.jpg');
-            height: 30vh;
-            background-size: cover;
-            background-position: center;
-            color: #ffffff;
-            border-radius: 0px;
-        }
-        .jumbotron h1 {
-            /* margin: 2px 0; */
-            /* font-size: 3px; */
-            /* line-height: 1.5; */
-        }
-        .intro {
-            /* padding-top: 16px; */
+.jumbotron{
+    background-image: url('/static/fixtures/dbikes1.jpg');
+    height: 30vh;
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    border-radius: 0px;
         }
 
 div {
@@ -60,7 +52,7 @@ h3 {
   display: flex;
 }
 
-.left-half {
+.left-half, .right-half {
   background-color: rgb(118, 175, 250);
   flex: 1;
   padding: 16px;
@@ -68,17 +60,8 @@ h3 {
   
 }
 
-.right-half {
-  background-color: rgb(118, 175, 250);
-  flex: 1;
-  padding: 16px;
-  align-items: center;
-  
-}
-
 section{
     width:100%;
-    /* height:; */
     background-color: white;
     display:flex;
     align-items: center;
@@ -151,9 +134,7 @@ section{
 
     <div class="jumbotron text-center">
         <div class="intro">
-            
-            <h1>How It Works</h1>
-            <button type="button" class="btn btn-outline-light">How It Works</button>
+            <button type="button" class="btn btn-outline-light"><h1>How It Works</h1></button>
         </div>
 
 
