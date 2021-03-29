@@ -224,6 +224,7 @@
 #display-weather {
   font-family: Roboto, sans-serif;
   width: 100%;
+  margin-bottom: 20px;
 }
 
 #display-weather p {

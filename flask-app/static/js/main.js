@@ -642,6 +642,7 @@ function displayStationSearch(station, availability) {
   const displayStationSearch = document.getElementById("display-station-search");
   const waitingSearch = document.getElementById("waiting-search");
   const displayOccupancy = document.getElementById("display-occupancy");
+  const displayWeather = document.getElementById("display-weather");
   container.style.backgroundColor = "rgb(0, 115, 152)";
   container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
   container.style.justifyContent = "center";
@@ -653,6 +654,7 @@ function displayStationSearch(station, availability) {
   waitingSearch.style.display = "none";
   refreshSearch.style.visibility = "visible";
   displayOccupancy.style.display = "block";
+  displayWeather.style.display = "block";
   
 
   var iconBanking = '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
@@ -678,56 +680,59 @@ function displayStationSearch(station, availability) {
 function displayWeatherInfo(id) {
   const displayWeatherContainer = document.getElementById(id);
   // Clear any old data
-  displayWeatherContainer.innerHTML = "";
-  weatherPromise.then(data => {
-    // store daily info needed in variable
-    var dailyInfo = data['daily'];      
-    // create a data dictionary of dates and values corresponsing to the dates
-      var data=[];
-      var datelist=[];
-          //iterate through the info and store dates as keys and weather info as a nested dict
-          for (var i=0;i<dailyInfo.length;  i++ ){
-            var dateData = {
-              "Temp":dailyInfo[i].temp,
-              "Weather": dailyInfo[i].weather, 
-              "Wind":dailyInfo[i].wind_speed};
-              data.push({
-                key:dailyInfo[i].dt,
-                value: dateData});
-                datelist.push(dailyInfo[i].dt);
-          }
-      // variables to store day names and dates 
-        var dayName=[];
-        var date=[];
-        var formattedDates=[];
-        var contentStr = '';
-        //iterate through the dates and format them from unix timestamps to days and dates 
-        for (var i=0; i <datelist.length; i++){  
-          formattedDates = new Date(datelist[i]*1000);
-          dayName.push(formattedDates.toString().split(' ')[0]);
-          date.push(formattedDates.toString().substr(4,6));  
-         
-          //iterate through the data and display day, date, temp, description, icon and wind
-          var weatherIcon = '<img class="icons2" height = "50px" width = "50px" src="http://openweathermap.org/img/w/' + data[i].value['Weather'][0]['icon'] + '.png"/>';
-          //create the containers to display weather 
-          contentStr += '<div class="weather-slide fade"><div id="weather-header"><div><p>' + dayName[i] + '</p></div>' +
-          '<div id="weather-description"><p>' + data[i].value['Weather'][0]['description'] + '</p></div>' +
-          '<div><p>' + date[i] + '</p></div></div>' +
-          '<div id="weather-info">' +
-          '<div id="weather-temp" class="weather-items"><h1>' + data[i].value['Temp']['day'] + '</h1></div>' +
-          '<div id="weather-icon" class="weather-items">' + weatherIcon + '</div>' +
-          '<div id="weather-temp-min" class="weather-items"><p>Min<br>' + data[i].value['Temp']['max'] + '</p></div>' +
-          '<div id="weather-temp-max" class="weather-items"><p>Max<br>' + data[i].value['Temp']['min'] + '</p></div>' +
-          '<div id="weather-temp-humidity" class="weather-items"><p>Wind<br>' + data[i].value['Wind'] +  'mph</p></div>' +
-          '</div></div>';
+  if (displayWeatherContainer.innerHTML == "") {
+    weatherPromise.then(data => {
+      // store daily info needed in variable
+      var dailyInfo = data['daily'];      
+      // create a data dictionary of dates and values corresponsing to the dates
+        var data=[];
+        var datelist=[];
+            //iterate through the info and store dates as keys and weather info as a nested dict
+            for (var i=0;i<dailyInfo.length;  i++ ){
+              var dateData = {
+                "Temp":dailyInfo[i].temp,
+                "Weather": dailyInfo[i].weather, 
+                "Wind":dailyInfo[i].wind_speed};
+                data.push({
+                  key:dailyInfo[i].dt,
+                  value: dateData});
+                  datelist.push(dailyInfo[i].dt);
+            }
+        // variables to store day names and dates 
+          var dayName=[];
+          var date=[];
+          var formattedDates=[];
+          var contentStr = '';
+          //iterate through the dates and format them from unix timestamps to days and dates 
+          for (var i=0; i <datelist.length; i++){  
+            formattedDates = new Date(datelist[i]*1000);
+            dayName.push(formattedDates.toString().split(' ')[0]);
+            date.push(formattedDates.toString().substr(4,6));  
           
-      }
-      displayWeatherContainer.innerHTML = contentStr;
+            //iterate through the data and display day, date, temp, description, icon and wind
+            var weatherIcon = '<img class="icons2" height = "50px" width = "50px" src="http://openweathermap.org/img/w/' + data[i].value['Weather'][0]['icon'] + '.png"/>';
+            //create the containers to display weather 
+            contentStr += '<div class="weather-slide fade"><div id="weather-header"><div><p>' + dayName[i] + '</p></div>' +
+            '<div id="weather-description"><p>' + data[i].value['Weather'][0]['description'] + '</p></div>' +
+            '<div><p>' + date[i] + '</p></div></div>' +
+            '<div id="weather-info">' +
+            '<div id="weather-temp" class="weather-items"><h1>' + data[i].value['Temp']['day'] + 'ºC</h1></div>' +
+            '<div id="weather-icon" class="weather-items">' + weatherIcon + '</div>' +
+            '<div id="weather-temp-min" class="weather-items"><p>Min<br>' + data[i].value['Temp']['max'] + '</p></div>' +
+            '<div id="weather-temp-max" class="weather-items"><p>Max<br>' + data[i].value['Temp']['min'] + '</p></div>' +
+            '<div id="weather-temp-humidity" class="weather-items"><p>Wind<br>' + data[i].value['Wind'] +  'mph</p></div>' +
+            '</div></div>';
+            
+        }
+        displayWeatherContainer.innerHTML = contentStr;
 
-      showSlidesWeather(slideIndexWeather);
-  }).catch(err => {
-    console.log("OOPS! Can't display weather", err);       
-  });
+        showSlidesWeather(slideIndexWeather);
+    }).catch(err => {
+      console.log("OOPS! Can't display weather", err);       
+    });
+  } else {
+    showSlidesWeather(slideIndexWeather);
+  }
 }
 
 var slideIndexWeather = 1;
@@ -793,10 +798,10 @@ class displaySlidesGraphs {
       jsonData.forEach(el => {
         var dateArray = el.date.split("-");
         dataBikes.addRows([
-          [new Date(dateArray[0], dateArray[1], dateArray[2]), el.ocuppancy_bikes],
+          [new Date(dateArray[0], dateArray[1] - 1, dateArray[2]), el.ocuppancy_bikes],
         ]);
         dataStands.addRows([
-          [new Date(dateArray[0], dateArray[1], dateArray[2]), el.ocuppancy_stands],
+          [new Date(dateArray[0], dateArray[1] - 1, dateArray[2]), el.ocuppancy_stands],
         ]); 
       });
       this.dataBikes = dataBikes;
@@ -818,6 +823,9 @@ class displaySlidesGraphs {
       fontName: 'Sans-serif',
       hAxis: {
         format: 'MMMM',
+      },
+      hAxis: {
+        title: 'Month'
       },
       titleTextStyle: {
         fontSize: 15,
