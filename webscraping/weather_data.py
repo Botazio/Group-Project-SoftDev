@@ -35,8 +35,10 @@ engine = create_engine(
             "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
 
 def weather_to_db(text):
+        print(text)
         checker = False
         weather = json.loads(text)
+        print(weather)
 
         vals = [weather['weather'][0]['description'], weather['weather'][0]['icon'], weather['main']['temp'], weather['main']['temp_min'],
                 weather['main']['temp_max'], weather['main']['humidity'], weather['dt']]
