@@ -1,20 +1,12 @@
-'''
-Created on 18 Feb 2021
-
-@author: alvaro
-'''
 import sqlalchemy as sqla
 from sqlalchemy import create_engine
 import traceback
-import glob
-import os
-from pprint import pprint
 import simplejson as json
 import requests
-import time
-from IPython.display import display
 import json
 import csv
+import time
+from datetime import datetime
 
 # Opening JSON file
 f = open(r'passwords.json',)
@@ -43,20 +35,32 @@ engine = create_engine(
 
 # Inject the dinamic info into the database and a csv file
 def write_to_db(text):
+    # Variable to check when the csv file should be closed
+    checker = False
     stations = json.loads(text)
     for station in stations:
-        vals = (station.get("number"), station.get("available_bikes"),
-                station.get("available_bike_stands"), station.get("last_update"))
-        engine.execute(
-            "insert into availability (number, available_bikes, available_bikes_stands, last_update) values(%s,%s,%s,%s)", vals)
-        with open(r'dinamic_data.csv', mode='a') as csv_file:
-            fieldnames = ['number', 'available_bikes',
-                          'available_bikes_stands', 'last_update']
-            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+        vals = [station.get("number"), station.get("available_bikes"),
+                station.get("available_bike_stands"), station.get("last_update")]
 
-            writer.writerow({'number': vals[0], 'available_bikes': vals[1],
-                             'available_bikes_stands': vals[2], 'last_update': vals[3]})
-    csv_file.close()
+        # Checks if a row with that information already exists
+        try:
+            vals[3] = datetime.fromtimestamp(vals[3] / 1e3)
+            engine.execute(
+                "insert into availability (number, available_bikes, available_bikes_stands, last_update) values(%s,%s,%s,%s)", vals)
+            with open(r'dinamic_data.csv', mode='a') as csv_file:
+                fieldnames = ['number', 'available_bikes',
+                              'available_bikes_stands', 'last_update']
+                writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+
+                writer.writerow({'number': vals[0], 'available_bikes': vals[1],
+                                 'available_bikes_stands': vals[2], 'last_update': vals[3]})
+            checker = True
+        except Exception as e:
+            print(e)
+            continue
+
+    if checker:
+        csv_file.close()
     return
 
 
@@ -72,7 +76,7 @@ def main():
         except:
             # if there is any problem, print the traceback
             print(traceback.format_exc())
-
+            time.sleep(2*60)
     return
 
 

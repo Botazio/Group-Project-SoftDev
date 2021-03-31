@@ -30,7 +30,13 @@ PASSWORD = data["database.password"]
 NAME = "Dublin"  # name of contract
 STATIONS_URL = data["api.url"]  # and the JCDecaux endpoint
 APIKEY = data["api.key"]
+<<<<<<< HEAD
 engine = create_engine("mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
+=======
+engine = create_engine(
+    "mysql+pymysql://{}:{}@{}:{}/{}".format(USER, PASSWORD, URL, PORT, DB), echo=True)
+
+>>>>>>> developer
 
 sql = """
 CREATE DATABASE IF NOT EXISTS dbbikes;
@@ -51,6 +57,7 @@ position_lng REAL,
 status VARCHAR(256)
 );
 """
+<<<<<<< HEAD
 
 try:
         res = engine.execute("DROP TABLE IF EXISTS station")
@@ -72,6 +79,28 @@ except Exception as e:
                 print(res.fetchall())
         except Exception as e:
                 print(e)
+=======
+try:
+    res = engine.execute("DROP TABLE IF EXISTS station")
+    res = engine.execute(sql)
+    print(res.fetchall())
+except Exception as e:
+    print(e)
+
+sql = """
+CREATE TABLE IF NOT EXISTS availability (
+number INTEGER,
+available_bikes INTEGER,
+available_bikes_stands INTEGER,
+last_update INTEGER
+);
+"""
+try:
+    res = engine.execute(sql)
+    print(res.fetchall())
+except Exception as e:
+    print(e)
+>>>>>>> developer
 
 sql = """
 CREATE TABLE IF NOT EXISTS weather (
@@ -85,7 +114,14 @@ dt DATETIME
 );
 """
 try:
+<<<<<<< HEAD
         res = engine.execute(sql)
             print(res.fetchall())
 except Exception as e:
         print(e)
+=======
+    res = engine.execute(sql)
+    print(res.fetchall())
+except Exception as e:
+    print(e)
+>>>>>>> developer
