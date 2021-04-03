@@ -78,12 +78,11 @@ function stationMarkersInfoButtons(data, map, availability) {
   const displayBikePaths = document.getElementById('display-bike-paths');
   const bikeLayer = new google.maps.BicyclingLayer();
 
-  // Display elements in the map
+  // Append the elements to the container
   stationMarkersInfo.appendChild(displayAvailableBikes);
   stationMarkersInfo.appendChild(displayAvailableBikesStands);
   stationMarkersInfo.appendChild(displayBikePaths);
 
-  map.controls[google.maps.ControlPosition.TOP_CENTER].push(stationMarkersInfo);
 
   // Display markers
   var markersInfo = 'available_bikes';
@@ -130,6 +129,22 @@ function stationMarkersInfoButtons(data, map, availability) {
     deleteMarkers();
     bikePaths(map, bikeLayer);
   });
+
+  // Media query listener for responsiveness
+  var matchMedia = window.matchMedia("(max-width: 2024px)");  
+  
+  // Attach listener function on state changes
+  matchMedia.addEventListener("change", mediaQueryInfoButtons(map, stationMarkersInfo));
+}
+
+function mediaQueryInfoButtons(map, stationMarkersInfo) {
+  console.log(window.innerWidth);
+  if (matchMedia.matches) { // If media query matches
+    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(stationMarkersInfo);
+  } else {
+    console.log("hello");
+    map.controls[google.maps.ControlPosition.TOP_CENTER].push(stationMarkersInfo);
+  }
 }
 
 // Function to display the map paths
@@ -676,7 +691,7 @@ function displayStationSearch(station, availability) {
   displayStationSearch.innerHTML = contentStr; 
 }
 
-// Sets a function to display the forecast weather
+// Sets a function to fetch and display the forecast weather
 function displayWeatherInfo(id) {
   const displayWeatherContainer = document.getElementById(id);
   // Clear any old data
@@ -735,16 +750,20 @@ function displayWeatherInfo(id) {
   }
 }
 
+// Global variable to control which is the current slide
 var slideIndexWeather = 1;
 
+// Function that points to the prev or next slide
 function plusSlidesWeather(n) {
   showSlidesWeather(slideIndexWeather += n);
 }
 
+// Function that points to the current slide
 function currentSlideWeather(n) {
   showSlidesWeather(slideIndexWeather = n);
 }
 
+// Function that displays the already fetch weather
 function showSlidesWeather(n) {
   var i;
   var slides = document.getElementsByClassName("weather-slide");
@@ -760,7 +779,7 @@ function showSlidesWeather(n) {
   slides[slideIndexWeather-1].style.justifyContent = "center";
 }
 
-
+// Function to display the occupancy of bikes and stands using google charts api
 class displaySlidesGraphs {
   constructor(station_num) {
     this.slideIndex = 1;

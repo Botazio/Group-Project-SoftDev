@@ -81,7 +81,7 @@ def index():
 
 @ app.route('/predictions')
 def predictions():
-    return "hello"
+    return render_template('predictions.html')
 
 
 @ app.route('/how_it_works')

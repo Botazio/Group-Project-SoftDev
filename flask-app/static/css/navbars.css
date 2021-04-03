@@ -1,11 +1,12 @@
 @import url("https://fonts.googleapis.com/css2?family=Quicksand:wght@500&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Roboto&display=swap");
 
 /* Global styles */
 body {
   margin: 0;
   padding: 0px;
   box-sizing: border-box;
-  font-family: sans-serif;
+  font-family: Roboto, sans-serif;
 }
 
 /* Styles for the navigation bar*/
@@ -15,14 +16,25 @@ nav {
   align-items: center;
   min-height: 10vh;
   font-family: Quicksand, verdana, sans-serif;
-  border-bottom: 2px solid rgba(0, 115, 152, 1);
   box-sizing: border-box;
+}
+
+.nav-light-mode {
+  border-bottom: 2px solid rgba(0, 115, 152, 1);
+}
+
+.nav-dark-mode {
+  border-bottom: 2px solid black;
 }
 
 .nav-links {
   display: flex;
   justify-content: space-around;
   width: 40%;
+}
+
+.nav-links ul {
+  list-style-type: none;
 }
 
 .nav-links li {
@@ -74,24 +86,8 @@ nav {
 }
 
 @media screen and (max-width: 768px) {
-  body {
-    overflow-x: hidden;
-  }
-
   .nav-links {
-    position: absolute;
-    z-index: 10000;
-    right: 0px;
-    height: 90vh;
-    top: 10vh;
-    margin: 0px;
-    background-color: rgba(0, 115, 152, 1);
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    transform: translateX(100%);
-    transition: transform 0.5s ease-in;
+    display: none;
   }
 
   .nav-links a {
@@ -104,7 +100,18 @@ nav {
 }
 
 .nav-active {
-  transform: translateX(0%);
+  position: absolute;
+  z-index: 10000;
+  height: 90vh;
+  width: 100%;
+  top: 10vh;
+  margin: 0;
+  padding: 0;
+  background-color: rgba(0, 115, 152, 1);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.5s ease-in;
 }
 
 .toggle .line1 {
@@ -118,17 +125,24 @@ nav {
 }
 
 /*Fotter*/
-.container-footer {
+#container-footer {
   width: 100%;
-  height: 6vh;
+  min-height: 6vh;
   display: flex;
   flex-direction: row;
   justify-content: space-around;
   align-items: center;
-  background-color: rgba(0, 115, 152, 1);
   color: white;
   font-size: 14px;
   letter-spacing: 1px;
+}
+
+.footer-light-mode {
+  background-color: rgba(0, 115, 152, 1);
+}
+
+.footer-dark-mode {
+  background-color: rgba(120, 120, 120, 1);
 }
 
 .rights {
