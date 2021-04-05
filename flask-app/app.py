@@ -73,6 +73,18 @@ class getData():
 
         return results
 
+    def getOcuppancy(self, num):
+        try:
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as ocuppancy_bikes, 
+            avg(available_bikes_stands) as ocuppancy_stands FROM dbikes.availability 
+            WHERE number = { num } GROUP BY number, day(last_update) ORDER BY last_update ASC;"""
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except:
+            return "Error: something wrong happened"
+
+        return results
+
 
 @ app.route('/')
 def index():

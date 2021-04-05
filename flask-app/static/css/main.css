@@ -224,6 +224,10 @@
 #display-weather {
   font-family: Roboto, sans-serif;
   width: 100%;
+<<<<<<< HEAD
+=======
+  margin-bottom: 20px;
+>>>>>>> alvaro
 }
 
 #display-weather p {
