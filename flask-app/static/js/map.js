@@ -925,7 +925,7 @@ class displaySlidesGraphs {
   } else {
     showSlidesWeather(slideIndexWeather);
   }
-}
+
 
 // Global variable to control which is the current slide
 var slideIndexWeather = 1;
