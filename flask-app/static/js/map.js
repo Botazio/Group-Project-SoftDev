@@ -687,7 +687,7 @@ function displayStationSearch(station, availability) {
 function displayWeatherInfo(id) {
   const displayWeatherContainer = document.getElementById(id);
   // Clear any old data
-<<<<<<< HEAD
+
   displayWeatherContainer.innerHTML = "";
   weatherPromise.then(data => {
     // store daily info needed in variable
@@ -871,7 +871,7 @@ class displaySlidesGraphs {
 
 }
 
-=======
+
   if (displayWeatherContainer.innerHTML == "") {
     weatherPromise.then(data => {
       // store daily info needed in variable
@@ -1065,7 +1065,6 @@ class displaySlidesGraphs {
 
 }
 
->>>>>>> alvaro
 // Function to display the markers in the map  
 function displayMarkers(data, map, availability, markersInfo) {
   var x = 0;
