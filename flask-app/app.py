@@ -51,7 +51,7 @@ class getData():
 
         return results
 
-<<<<<<< HEAD
+
     def getWeather(self):
         try:
             df = pd.read_sql_query(
@@ -74,8 +74,8 @@ class getData():
 
         return results
 
-=======
->>>>>>> alvaro
+
+
     def getOcuppancy(self, num):
         try:
             sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as ocuppancy_bikes,

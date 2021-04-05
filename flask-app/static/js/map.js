@@ -643,10 +643,10 @@ function displayStationSearch(station, availability) {
   const displayStationSearch = document.getElementById("display-station-search");
   const waitingSearch = document.getElementById("waiting-search");
   const displayOccupancy = document.getElementById("display-occupancy");
-<<<<<<< HEAD
-=======
+
+
   const displayWeather = document.getElementById("display-weather");
->>>>>>> alvaro
+
   container.style.backgroundColor = "rgb(0, 115, 152)";
   container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
   container.style.justifyContent = "center";
@@ -658,10 +658,10 @@ function displayStationSearch(station, availability) {
   waitingSearch.style.display = "none";
   refreshSearch.style.visibility = "visible";
   displayOccupancy.style.display = "block";
-<<<<<<< HEAD
-=======
+
+
   displayWeather.style.display = "block";
->>>>>>> alvaro
+
   
 
   var iconBanking = '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
