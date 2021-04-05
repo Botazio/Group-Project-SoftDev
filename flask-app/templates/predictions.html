@@ -29,8 +29,15 @@
                </div>
 
                <div id="calendar-container">
-                  <div class="titles-controls">Select a day</div>
-                  <input type="date" id="calendar" name="prediction-day" min="2018-01-01" max="2022-12-31">
+                  <input type="time" id="hour" name="hour" >
+                  <input type="date" id="calendar" name="date" min="2018-01-01" max="2022-12-31">
+                  <div class="dropdown-info1">
+                     <img id="info-icon" src="{{url_for('static', filename='fixtures/icon-info.png')}}" width='17', height='17' alt="Information"/>
+                     <div class="dropdown-content dropdown-info1-content">
+                        <div>Mandatory to select a date and hour for predictions</div>
+                        <div>Hour and date is optional for historical data</div>
+                     </div>
+                  </div>
                </div>
          
          </div>
@@ -39,7 +46,7 @@
 
             <div class="control-buttons-wrapper-type1">
 
-               <div id="full-search-container" class="control-buttons-type1 active-button active-button-light">
+               <div id="station-container" class="control-buttons-type1 active-button active-button-light">
                   <div class="titles-controls">Search Station</div>
                   <img id="black-bike-icon" src="{{url_for('static', filename='fixtures/icon-bike-black.png')}}" width='20', height='20' alt="Black bike"/>
                </div>
@@ -53,13 +60,21 @@
 
             
             <div id="station-search-container">
-               <input
-                  id="station-input"
-                  class="controls-text-input"
-                  type="text"
-                  placeholder="Select a station"
-               />
-               <div id="pac-list" class="pac-items"></div>
+               <div>
+                  <input
+                     id="station-input"
+                     class="controls-text-input"
+                     type="text"
+                     placeholder="Select a station"
+                  />
+                  <div id="pac-list" class="pac-items"></div>
+               </div>
+               <div class="dropdown-info2">
+                  <img id="info-icon" src="{{url_for('static', filename='fixtures/icon-info.png')}}" width='17', height='17' alt="Information"/>
+                  <div class="dropdown-content dropdown-info2-content">
+                     <div>Mandatory to select a station</div>
+                  </div>
+               </div>
             </div>
          
          </div>
@@ -83,7 +98,7 @@
             <div id="layout-type-container" class="control-buttons-type2 layout-light">
                <div class="dropdown-layouts">
                   <div class="titles-controls">Layout Type</div>
-                  <div class="dropdown-layouts-content">
+                  <div class=" dropdown-content dropdown-layouts-content">
                      <div id="layout1">Layout 1</div>
                      <div id="layout2">Layout 2</div>
                      <div id="layout3">Layout 3</div>
@@ -107,7 +122,10 @@
    
    <div class="stats-containers light-mode-stats" id="container3"></div>
 
-   <div class="stats-containers light-mode-stats" id="container4"></div>
+   <div class="stats-containers light-mode-stats" id="container4">
+      <div id="container4-a"></div>
+      <div id="container4-b"></div>
+   </div>
 
 
    <div id="waiting-background" class="waiting-light-mode">
@@ -119,5 +137,6 @@
 {% endblock %}
 
 {% block scripts %}
-   <script src="{{url_for('static', filename='js/predictions.js')}}"></script>
+   <script src="{{url_for('static', filename='js/searchPredictions.js')}}"></script>
+   <script src="{{url_for('static', filename='js/settingsPredictions.js')}}"></script>
 {% endblock %}

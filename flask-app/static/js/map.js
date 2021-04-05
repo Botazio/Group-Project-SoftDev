@@ -130,21 +130,7 @@ function stationMarkersInfoButtons(data, map, availability) {
     bikePaths(map, bikeLayer);
   });
 
-  // Media query listener for responsiveness
-  var matchMedia = window.matchMedia("(max-width: 2024px)");  
-  
-  // Attach listener function on state changes
-  matchMedia.addEventListener("change", mediaQueryInfoButtons(map, stationMarkersInfo));
-}
-
-function mediaQueryInfoButtons(map, stationMarkersInfo) {
-  console.log(window.innerWidth);
-  if (matchMedia.matches) { // If media query matches
-    map.controls[google.maps.ControlPosition.RIGHT_TOP].push(stationMarkersInfo);
-  } else {
-    console.log("hello");
-    map.controls[google.maps.ControlPosition.TOP_CENTER].push(stationMarkersInfo);
-  }
+  map.controls[google.maps.ControlPosition.TOP_CENTER].push(stationMarkersInfo);
 }
 
 // Function to display the map paths
