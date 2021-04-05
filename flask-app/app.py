@@ -51,6 +51,7 @@ class getData():
 
         return results
 
+<<<<<<< HEAD
     def getWeather(self):
         try:
             df = pd.read_sql_query(
@@ -73,11 +74,13 @@ class getData():
 
         return results
 
+=======
+>>>>>>> alvaro
     def getOcuppancy(self, num):
         try:
-            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as ocuppancy_bikes, 
-            avg(available_bikes_stands) as ocuppancy_stands FROM dbikes.availability 
-            WHERE number = { num } GROUP BY number, day(last_update) ORDER BY last_update ASC;"""
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as ocuppancy_bikes,
+            avg(available_bikes_stands) as ocuppancy_stands FROM dbikes.availability
+            WHERE number = { num } GROUP BY number, date(last_update) ORDER BY last_update ASC;"""
             df = pd.read_sql_query(sql, self.engine)
             results = df.to_json(orient='records')
         except:
@@ -93,7 +96,7 @@ def index():
 
 @ app.route('/predictions')
 def predictions():
-    return "hello"
+    return render_template('predictions.html')
 
 
 @ app.route('/how_it_works')
@@ -116,12 +119,6 @@ def stations():
 def availability():
     availability = getData(engine).getAvailability()
     return availability
-
-
-@ app.route('/weather')
-def weather():
-    weather = getData(engine).getWeather()
-    return weather
 
 
 @ app.route('/occupancy/<int:station_id>')

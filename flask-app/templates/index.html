@@ -3,9 +3,9 @@
 
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
 <title>Dublin Bikes</title>
-<script type=text/javascript src="{{url_for('static', filename='js/main.js') }}"></script>
+<script type=text/javascript src="{{url_for('static', filename='js/map.js') }}"></script>
 {% endblock %}
 
    
@@ -60,7 +60,7 @@
       <div id="station-extrainfo">
          <div id="waiting-search">
             <h2>Select a station to display info</h2>
-            <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-big.png')}}" width='300', height='260' alt="Waiting directions"/>
+            <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-girl.png')}}" width='300', height='260' alt="Waiting directions"/>
          </div>
          <div id="display-container-info">
             <div id="display-weather">
@@ -127,6 +127,13 @@
 </div>
 <div id="map"></div>
 <div class="buttonbar"></div>
+<<<<<<< HEAD
 <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBiV5VRZjlUN0c_4H711yPp6hpvaZcqHjU&libraries=places&callback=initMap"></script>
+=======
+{% endblock %}
+
+{% block scripts %}
+<script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZqN010nmbXBL9DtEkK1WOynTDyvSzUKo&libraries=places&callback=initMap"></script>
+>>>>>>> alvaro
 {% endblock %}
 
