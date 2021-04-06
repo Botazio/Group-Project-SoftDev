@@ -3,21 +3,16 @@
     <meta charsets="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>How It Works</title>
-    <link rel="stylesheet" href="#">
-    <!-- <link rel="preconnect" href="https://fonts.gstatic.com"> -->
-    
+    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='/styles/how2.css')}}">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital@1&display=swap" rel="stylesheet">
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
     <style>
-*{
-    margin:0;
-    padding:0;
+        *{
     font-family: 'Source Serif Prof';
         }
+
 .jumbotron{
     background-image: url('/static/fixtures/dbikes1.jpg');
     height: 30vh;
@@ -26,12 +21,6 @@
     color: #ffffff;
     border-radius: 0px;
         }
-
-div {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
 
 .title{
     margin: 20px;
@@ -80,8 +69,6 @@ section{
     border-radius: 6.4px;
     margin-bottom: 1.6px;
     padding: 16px;
-    box-shadow: 8px 2px 8px rgba(0,0,0.1);
-
 }
 
 .accordion-link{
@@ -146,7 +133,7 @@ section{
 
         <section class='container'>
             
-            <div class='left-half'style="box-shadow: .5rem 2px .5rem rgba(0,0,0.1);">
+            <div class='left-half'>
                 <article>
 
                     <h1> Open App </h1>
@@ -174,7 +161,7 @@ section{
                 </article>
             </div>
 
-            <div class='right-half' style="box-shadow: .5rem 2px .5rem rgba(0,0,0.1);">
+            <div class='right-half'>
                 <article>
                     <h1> Find a station </h1>
                     <h3> The DublinBikes App is available for download on all iOS and Android devices.
@@ -185,7 +172,7 @@ section{
             </div>
         </section>
         <section class='container'>
-            <div class='left-half' style="box-shadow: .5rem 2px .5rem rgba(0,0,0.1);">
+            <div class='left-half'>
                 <article>
 
                     <h1> Select & Release </h1>
@@ -214,7 +201,7 @@ section{
                 </article>
             </div>
 
-            <div class='right-half' style="box-shadow: .5rem 2px .5rem rgba(0,0,0.1);">
+            <div class='right-half'>
                 <article>
                     <h1> Limited Availabilty </h1>
                     <h3> If the station you are looking at has no avaible bikes,
@@ -224,7 +211,7 @@ section{
             </div>
         </section>
         <section class='container'>
-            <div class='left-half' style="box-shadow: .5rem 2px .5rem rgba(0,0,0.1);">
+            <div class='left-half'>
                 <article>
 
                     <h1> Make Predictions </h1>
@@ -256,7 +243,6 @@ section{
                         <a class="accordion-link" href="#question1">
                             Are Dublin Bikes Available 24 Hours Per Day?
                             <ion-icon name="add-outline"></ion-icon>
-                            <!-- <ion-icon name="remove-outline"></ion-icon> -->
                         </a>
                         <div class="answer"><p>The DublinBikes App is available for download on all iOS and Android devices.
                             Once downloaded, users of the App will be able to sign up for short-term subscription packages,
@@ -268,7 +254,7 @@ section{
                         <a class="accordion-link" href="#question2">
                             Can I return my bike to any station?
                             <ion-icon name="add-outline"></ion-icon>
-                            <!-- <ion-icon name="remove-outline"></ion-icon> -->
+                          
                         </a>
                         <div class="answer">
                             <p>The DublinBikes App is available for download on all iOS and Android devices.
@@ -281,7 +267,7 @@ section{
                         <a class="accordion-link" href="#question3">
                             If I lose my bike am I liable?
                             <ion-icon name="add-outline"></ion-icon>
-                            <!-- <ion-icon name="remove-outline"></ion-icon> -->
+                           
                         </a>
                         <div class="answer">
                             <p>The DublinBikes App is available for download on all iOS and Android devices.
@@ -294,8 +280,6 @@ section{
                         <a class="accordion-link" href="#question4">
                             What payment options are accepted through the Dublin Bikes App?
                             <ion-icon name="add-outline"></ion-icon>
-                            <!-- <ion-icon class="ion-md-remove" name="remove-outline"></ion-icon> -->
-                            <!-- <i class="icon ion-md-remove"></i> -->
                         </a>
                         <div class="answer">
                             <p>The DublinBikes App is available for download on all iOS and Android devices.
@@ -313,8 +297,8 @@ section{
         </section>
 
 <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 
 </body>
 
