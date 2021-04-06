@@ -1,0 +1,103 @@
+/* *{
+    font-family: 'Source Serif Prof';
+        } */
+
+.jumbotron{
+    background-image: url('/static/fixtures/dbikes1.jpg');
+    height: 30vh;
+    background-size: cover;
+    background-position: center;
+    color: #ffffff;
+    border-radius: 0px;
+        }
+
+.title{
+    margin: 20px;
+    margin-bottom: 20px;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 0 0 12px 0;
+}
+
+h3 {
+    font-size:20px;
+}
+
+/* Pattern styles */
+.container {
+  display: flex;
+}
+
+.left-half, .right-half {
+  background-color: rgb(118, 175, 250);
+  flex: 1;
+  padding: 16px;
+  text-align: center;
+  
+}
+
+section{
+    width:100%;
+    background-color: white;
+    display:flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.container2{
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 24px;
+}
+
+.accordion-item{
+    background-color: rgb(118, 175, 250);
+    border-radius: 6.4px;
+    margin-bottom: 1.6px;
+    padding: 16px;
+}
+
+.accordion-link{
+    font-size: 25px;
+    color: rgb(255, 255, 255);
+    text-decoration: none;
+    background-color: rgb(118, 175, 250);
+    width:100%;
+    display: flex;
+    align-items:center;
+    justify-content: space-between;
+    padding: 16px 0;
+
+}
+.answer{
+    max-height: 0;
+    overflow: hidden;
+    position: relative;
+    background-color: #ffffff;
+    transition: max-height 650ms;
+    
+}
+
+.answer::before{
+    content: "";
+    position: absolute;
+    width:20px;
+    height: 90%;
+    background-color: #882732;
+    top: 50%;
+    left:0;
+    transform: translateY(-50%);
+}
+
+.answer p{
+    color: #000000;
+    font-size:22px;
+    padding:30px;
+}
+
+.accordion-item:target .answer{
+    max-height: 320px;
+}
