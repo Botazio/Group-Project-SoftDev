@@ -6,223 +6,159 @@
             <meta charsets="utf-8">
             <meta name="viewport" content="width=device-width, initial-scale=1">
             <title>About</title>
-            <link rel="stylesheet" href="#">
+            <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='/styles/style.css')}}">
             <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital@1&display=swap" rel="stylesheet">
             <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
             <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-            <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-            <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-		<style>
-    
-            body {
-              background: url(/static/fixtures/mapback.jpg) no-repeat center fixed;
-              background-size: cover;
-                }
-            .wrapper{
-                height: 100vh;
-                display: flex;
-                flex-direction: column;
-                box-sizing: border-box;
-                margin:20px;
-                padding:20px;
-            }
-
-            .jumbotron{
-            background-image: url('/static/fixtures/dbikes1.jpg');
-            height: 30vh;
-            background-size: cover;
-            background-position: center;
-            color: #ffffff;
-            border-radius: 0px;
-        }
-
-            .parent,.parent1,.parent2, .main2{
-                box-sizing: border-box;
-                margin:40px;
-                padding:40px;
-            }     
-            
-            .main2{
-                border: 10px solid transparent;
-            }
-
-            .main1 {
-                background-image: url('/static/fixtures/dbikes1.jpg'); 
-                background-size: cover; 
-                color: #125688;
-                height: 400px;
-            }
-
-            .main2,.main3,.main4,.main5 {
-                text-align: center;
-                
-            }
-            .parent,.parent1,.parent2{
-                border: 10px solid transparent;
-                display: flex;
-                /* flex-direction: row; */
-                padding-top: 30px; 
-                padding-bottom: 30px;
-                justify-content: space-evenly;
-                align-items: center stretch;
-                background-color: white;
-                /* background-color: rgb(118, 175, 250); */
-                
-            }
-            .child1,.child2,.child3, .sub1, .sub2, .sub3{
-                width:300px;
-                
-                align-items: stretch;
-                flex-basis:content;
-                padding-left: 20px;
-                padding-right: 20px;
-                background: rgb(118, 175, 250);
-                box-shadow: .5rem 2px .5rem rgba(0,0,0.1);
-            }
-
-            .child1:hover,.child2:hover,.child3:hover, .sub1:hover, .sub2:hover,.sub3:hover {
-                background-color: #de6581;
-                color: white;}
-            
-                h3,p {
-					margin: 0px 0px 10px 0px;
-					color: #de6581;
-                    font-size: 20px;
-                }
-                p{
-                    margin: 0px 0px 10px 0px;
-					color: black;
-                    font-size: 20px;}
-
-                h1 {
-                     font-size: 30px;
-                     margin: 0 0 12px 0;
-                        }
-                h2 {
-                     font-size: 25px;
-                     margin: 0 0 12px 0;
-                    }
-		</style>
-	
 		</head>
 
 	<body>
 
         <div class="jumbotron text-center">
-            <div class="intro">
 
+            <div class="intro">
                 <button type="button" class="btn btn-outline-light"><h1>OUR STORY</h1></button>
             </div>
-    
-    
+
         </div>
 
         <div class ="wrapper">
                     
-                    <h1 style="text-align: center;">About Us</h1>
-            <article class="main2" style="background-color:white;">
+            <h1 style="text-align: center;">About Us</h1>
+            <article class="main2">
 
-                
                 <h2>The Dublin Bike Scheme</h2>
-                <h3> Whether you are a regular cyclist or an occasional user, Dublin Bikes has a range of services available.
-                    <br><br> This self-service bike rental system is open to everyone from 14 years of age. 
-                    <br> Dublin Bikes enables you to travel through the city centre, commute between home and work and get out and about in Dublin.  </h3>
-                <h3> Whether you are a regular cyclist or an occasional user, Dublin Bikes has a range of services available. </h3>
+                <p> Whether you are a regular cyclist or an occasional user, Dublin Bikes has a range of services available.<br><br> 
+                    This self-service bike rental system is open to everyone from 14 years of age. <br> 
+                    Dublin Bikes enables you to travel through the city centre, commute between home and work and get out and about in Dublin.</p>
+                <p> Whether you are a regular cyclist or an occasional user, Dublin Bikes has a range of services available. </p>
 
             </article>
 
             <article class="main3">
+
                 <h1>Our Subscriptions</h1>
+
                 <div class='parent2'>
           
                     <div class = 'sub1'>
+
                         <img src="/static/fixtures/bikenew1.jpg" alt="sub1" style="width:200px; height: 150px;">
+
                         <hgroup>
                             <h2> Subscription 1</h2>
                             <h3 style="color: white;"> 3 Day Pass</h3>
                         </hgroup>
-                        <p>For short term hire, a 3 Day Ticket will give you access to all the benefits of the NOW TV dublinbikes service. 
-                            Ideal for tourists and visitors as a way of getting around and exploring the city. The first 30 minutes of each journey is free.
+
+                        <p>For short term hire, a 3 Day pass will afford you all the benefits of the dublinbikes service. 
+                            Ideal for tourists and visitors as a way of getting around and exploring the city.</p>
+                        <p>The first 30 minutes of each journey is free.
                              After this rental charges are applied.</p>
-                        </div>
+
+                    </div>
                         
                     <div class = 'sub2'>
+
                         <img src="/static/fixtures/cyclists2.jpg" alt="sub2" style="width:200px;">
+
                         <hgroup>
                             <h2> Subscription 2</h2>
                             <h3 style="color: white;"> Annual Pass</h3>
                         </hgroup>
-                        <p>With an Annual Subscription you can rent a bike 365 days a year for an annual fee of € 35.
-                             The first 30 minutes of each journey is free, after this rental charges apply.<br><br><br><br><br></p>
+
+                        <p>With an Annual Subscription you can rent a bike 365 days a year for an annual fee of €35. This is perfect for active cyclists, or those who are looking to brighten up their daily commute to the office!</p>
+                        <p>The first 30 minutes of each journey is free, after this rental charges apply.<br><br></p>
+
                     </div>
 
                     <div class = 'sub3'>
 
                     <img src="/static/fixtures/cyclists3.jpg" alt="sub3" style="width:200px;">
+
                     <hgroup>
                         <h2> Subscription 3</h2>
-                        <h3 style="color: white;"> DublinBikes Per Hour</h3>
+                        <h3 style="color: white;"> Per Hour</h3>
                     </hgroup>
-                    <p>Dublin BIkes are available to rent by the hour. Bikes can be collected and return to any station with a empty space. 
-                        This service option is independent of your annual subscription and will charge users 1 euro per hour.<br><br><br><br></p></div>
+
+                    <p>Dublin BIkes are available to rent by the hour. Bikes can be collected and return to any station with a empty space.</p>
+                    <p>This service option is independent of your annual subscription and will charge users 1 euro per hour.</p>
 
                     </div>
+
+                </div>
                 
 
             </article>
 
             <article class="main4">
+
                 <h1 style="text-align: center;">Meet the Team!</h1>
+
                 <div class='parent'>
                     
-                    <div class = 'child1'hover>  <p style="font-family:cursive; font-size: 30px;">Mark</p>
-                        <img src="/static/fixtures/mark4.jpg" alt="Mark" style="width:200px; border-radius: 50%;">
-                        <p>Hi! My name is Mark. I am currently working on trying to build front end UIs for Dublin Bikes. I love computerscience and all things KUWTK.
-                             
-                            <br><br>
-                            Hovering over an employee's individual circle produces a zoomed-in effect, and clicking expands their headshot 
-                            with their name and social profiles. The splashy set up is a stylish alternative to the expected rows of team photos and names.</p></div>
+                    <div class = 'child1'>  <p style="font-family:cursive; font-size: 30px;">Mark</p>
+
+                        <img src="/static/fixtures/mark4.jpg" alt="Mark" style="width:200px; border-radius: 50%;"><br><br>
+
+                        <p>Hi! My name is Mark. I joined the DublinBikes team in 2020. I come from a Science and Business background, 
+                            having worked internationally within FinTech across the US, Europe, and Asia.<br><br>
+                            I am currently working as part of a core team of 3, building out technology driven solutions for DublinBikes and our users.
+                            I have always had an interest in tech and sport, so being able to combine both passions here at DublinBikes is a dream come true!
+                        </p>
+
+                    </div>
                         
                     <div class = 'child2'><p style="font-family:cursive; font-size: 30px;">Ellie</p>
-                        <img src="/static/fixtures/ellie.jpg" alt="Ellie" style="width:200px; border-radius: 50%;">
-                        <p>Bones Bones Bones! I love everything bones. I have X-ray vision and love radiography! I am using my x-ray vision to identify new trends and insights here @Dublin Bikes.
-                            <br><br>
-                            Hovering over an employee's individual circle produces a zoomed-in effect, and clicking expands their headshot 
-                            with their name and social profiles. The splashy set up is a stylish alternative to the expected rows of team photos and names.<br><br></p>
+
+                        <img src="/static/fixtures/ellie.jpg" alt="Ellie" style="width:200px; border-radius: 50%;"><br><br>
+
+                        <p>Hi! My name is Ellie. I joined the DublinBikes technology enablement team in 2020. Preivously, I worked within the healthcare industry, working across Europe and Australia. I am passionate about helping others, and using technology to make better decisions and smarter predictions. <br><br>
+                            I am currently exploring machine learning algorithms and predictive modelling to provide advanced insights and drive user engagement.
+                        </p>
+
                     </div>
-                    <div class = 'child3'><p style="font-family:cursive; font-size: 30px;">Alvaro</p><img src="/static/fixtures/alvaro.jpg" alt="Alvaro" style="width:200px; border-radius: 50%;">
-                        <p>Hola! Me llamo Alavaro y soy de Madrid! I am currently working as as the CEO of Dublin bikes. I love flask and software engineering.
-                            <br><br>
-                            Hovering over an employee's individual circle produces a zoomed-in effect, and clicking expands their headshot 
-                            with their name and social profiles. The splashy set up is a stylish alternative to the expected rows of team photos and names.</p></div>
+
+                    <div class = 'child3'><p style="font-family:cursive; font-size: 30px;">Alvaro</p>
+                        
+                        <img src="/static/fixtures/alvaro.jpg" alt="Alvaro" style="width:200px; border-radius: 50%;"><br><br>
+
+                        <p>Hi! My name is Alvaro. Coming for an engineering background, I have always been passionate about technology, design, and providing customers with smarter solutions. I am currently based in Madrid, where I seen the expansive and popularity of similar biking schemes. <br><br>
+                            I am currently working as part of a core team of 3, building out technology driven solutions for DublinBikes and our users. No two days are the same-working on front end design or building complex database management systems, Dublinbikes has it all! 
+                        </p>
+                    
                     </div>
+
+                </div>
 
             </article>
 
             <article class="main5">
+
                 <h1>Socials!</h1>
+
                 <div class='parent1'>
                     
                     <div class = 'child4'> <a href="https://www.instagram.com/?hl=en" target="_blank"> 
+
                         <img src="/static/fixtures/instagram black.png" alt="insta" style="width:100px;"></a>
-                        </div>
+
+                    </div>
                         
                     <div class = 'child5'>
+
                         <a href="https://www.twitter.com/?hl=en" target="_blank"><img src="/static/fixtures/blacktwitter.png" alt="twitter" style="width:100px;"></a>
+
                     </div>
+
                     <div class = 'child6'><a href="https://www.facebook.com/" target="_blank">
+
                         <img src="/static/fixtures/blackfacebook.png" alt="fb" style="width:100px;"></a>
-                     </div>
+
                     </div>
                 </div>
 
             </article>
 
-
-
-        </div>
-
-
-		  
+        </div>		  
 	</body>
 </html>
