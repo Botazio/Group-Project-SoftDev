@@ -63,11 +63,38 @@ class getData():
 
         return results
 
+    def getDailyOcuppancy(self, num, date):
+        try:
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%d-%m-%Y-%H') as date, available_bikes,
+            available_bikes_stands FROM dbikes.availability
+            WHERE number = { num } and DATE_FORMAT(last_update,'%d-%m-%Y') = '{ date }'
+            GROUP BY DATE_FORMAT(last_update,'%d-%m-%Y-%H');"""
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
     def getHistoricalAvgOcuppancy(self, type):
         try:
             sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y')as date, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands FROM dbikes.availability
             GROUP BY number, year(last_update)
             ORDER BY { type } desc;"""
+
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    def getHistoricalWeather(self):
+        try:
+            sql = f"""SELECT description, icon, temp, temp_min, temp_max, humidity, DATE_FORMAT(dt,'%Y-%m-%d')as date 
+            FROM dbikes.weather
+            GROUP BY date(dt)
+            ORDER BY date ASC;"""
 
             df = pd.read_sql_query(sql, self.engine)
             results = df.to_json(orient='records')
@@ -97,6 +124,12 @@ def about():
     return "hello"
 
 
+@ app.route('/query/<int:num>/<int:temp>/<int:hour>/<string:description>/<string:day>')
+def query_prediction_model():
+    stations = getData(engine).getStations()
+    return stations
+
+
 @ app.route('/stations')
 def stations():
     stations = getData(engine).getStations()
@@ -115,11 +148,24 @@ def get_occupancy(station_id):
     return occupancy
 
 
+@ app.route('/daily_occupancy/<int:station_id>/<string:date>')
+def get_daily_occupancy(station_id, date):
+    print(date)
+    dailyOccupancy = getData(engine).getDailyOcuppancy(station_id, date)
+    return dailyOccupancy
+
+
 @ app.route('/historical_occupancy/<string:occupancy_type>')
 def get_historical_occupancy(occupancy_type):
     historical_occupancy = getData(
         engine).getHistoricalAvgOcuppancy(occupancy_type)
     return historical_occupancy
+
+
+@ app.route('/historical_weather')
+def get_historical_weather():
+    historical_weather = getData(engine).getHistoricalWeather()
+    return historical_weather
 
 
 if __name__ == "__main__":

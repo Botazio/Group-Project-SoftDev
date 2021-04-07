@@ -467,6 +467,9 @@ input[type="date"] {
   height: 100%;
   width: 100%;
   grid-area: area4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 #container4 {
@@ -562,28 +565,24 @@ input[type="date"] {
   font-size: 13px;
 }
 
-.station-rankings-lightmode 
-th {
+.station-rankings-lightmode th {
   padding: 5px;
   color: black;
 }
 
-.station-rankings-lightmode 
-td {
+.station-rankings-lightmode td {
   color: rgba(0, 115, 152, 1);
   font-weight: bold;
   text-align: center;
   padding: 5px;
 }
 
-.station-rankings-darkmode 
-th {
+.station-rankings-darkmode th {
   padding: 5px;
   color: white;
 }
 
-.station-rankings-darkmode 
-td {
+.station-rankings-darkmode td {
   color: rgba(38, 194, 129, 1);
   font-weight: bold;
   text-align: center;
@@ -721,7 +720,7 @@ td {
   }
 
   #container1 {
-    height: 300px;
+    height: 600px;
     width: 90%;
   }
 
@@ -789,6 +788,23 @@ td {
     width: 350px;
     height: 350px;
   }
+
+  #dinamic-station-info {
+    font-size: 14px;
+  }
+
+  .station-rankings {
+    margin: 0;
+  }
+
+  .station-rankings p {
+    font-size: 13px;
+    font-weight: bold;
+  }
+
+  .station-rankings table {
+    font-size: 12px;
+  }
 }
 
 @media screen and (max-width: 450px) {
@@ -827,7 +843,7 @@ td {
   }
 
   #container1 {
-    height: 250px;
+    height: 550px;
     width: 100%;
   }
 
