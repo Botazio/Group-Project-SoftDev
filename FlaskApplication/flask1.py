@@ -31,11 +31,7 @@ def stations():
 # def about():
 #     return render_template("about.html")
 
-@app.route("/nav")
-def navbar():
-    return render_template("navbar.html")
-
-@app.route("/aboutflex")
+@app.route("/about")
 def about1():
     return render_template("aboutflex.html")
 
@@ -43,9 +39,6 @@ def about1():
 def how2():
     return render_template("how2.html")
 
-@app.route("/how")
-def how():
-    return render_template("how.html")
 
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
