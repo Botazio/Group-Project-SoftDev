@@ -36,8 +36,8 @@ class getData():
         try:
             df = pd.read_sql_table('station', self.engine)
             results = df.to_json(orient='records')
-        except:
-            return "Error: something wrong happened"
+        except Exception as e:
+            return e
 
         return results
 
@@ -46,8 +46,8 @@ class getData():
             df = pd.read_sql_query(
                 "SELECT * FROM (SELECT * FROM dbikes.availability as av ORDER BY av.id  DESC LIMIT 1000 ) as whatever GROUP BY whatever.number;", self.engine)
             results = df.to_json(orient='records')
-        except:
-            return "Error: something wrong happened"
+        except Exception as e:
+            return e
 
         return results
 
@@ -58,8 +58,21 @@ class getData():
             WHERE number = { num } GROUP BY number, date(last_update) ORDER BY last_update ASC;"""
             df = pd.read_sql_query(sql, self.engine)
             results = df.to_json(orient='records')
-        except:
-            return "Error: something wrong happened"
+        except Exception as e:
+            return e
+
+        return results
+
+    def getHistoricalAvgOcuppancy(self, type):
+        try:
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y')as date, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands FROM dbikes.availability
+            GROUP BY number, year(last_update)
+            ORDER BY { type } desc;"""
+
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
 
         return results
 
@@ -100,6 +113,13 @@ def availability():
 def get_occupancy(station_id):
     occupancy = getData(engine).getOcuppancy(station_id)
     return occupancy
+
+
+@ app.route('/historical_occupancy/<string:occupancy_type>')
+def get_historical_occupancy(occupancy_type):
+    historical_occupancy = getData(
+        engine).getHistoricalAvgOcuppancy(occupancy_type)
+    return historical_occupancy
 
 
 if __name__ == "__main__":

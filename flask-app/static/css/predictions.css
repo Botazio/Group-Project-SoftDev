@@ -250,6 +250,62 @@ input[type="date"] {
   width: 170px;
 }
 
+.pac-items {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  cursor: pointer;
+  margin: 0px 20px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+  /*position the autocomplete items to be the same width as the container:*/
+  top: 100%;
+  left: 0;
+  right: 0;
+}
+
+.pac-items div {
+  width: 100%;
+  font-family: sans-serif;
+  font-size: 13px;
+  padding: 7px;
+  line-height: 30px;
+  cursor: pointer;
+  color: black;
+  background-color: #fff;
+  border-bottom: 1px solid #d4d4d4;
+}
+.pac-items div:hover {
+  /*when hovering an item:*/
+  background-color: #f7f7f7;
+}
+
+.pac-items img {
+  opacity: 0.3;
+}
+
+.pac-active {
+  /*when navigating through the items using the arrow keys:*/
+  background-color: #edf8ff !important;
+  color: #ffffff;
+}
+
+.pac-active img {
+  opacity: 0.8;
+}
+
+.pac-item {
+  cursor: pointer;
+  padding: 7px;
+}
+
+.pac-item span {
+  font-family: sans-serif;
+  font-size: 13px;
+}
+
 #search-button-container {
   display: flex;
   justify-content: center;
@@ -401,6 +457,9 @@ input[type="date"] {
 #container2 {
   height: 100%;
   width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   grid-area: area3;
 }
 
@@ -448,6 +507,87 @@ input[type="date"] {
 
 .waiting-dark-mode {
   color: white;
+}
+
+#dinamic-station-info {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  width: 300px;
+}
+
+.dinamic-station-info-darkmode {
+  color: white;
+}
+
+.dinamic-station-info-lightmode {
+  color: black;
+}
+
+#station-infowindow {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 70%;
+}
+
+.infowindow-subelement {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  width: 80px;
+}
+
+.station-rankings {
+  width: 95%;
+  height: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  margin: 5px;
+}
+
+.station-rankings-lightmode p {
+  color: black;
+}
+
+.station-rankings-darkmode p {
+  color: rgba(38, 194, 129, 1);
+}
+
+.station-rankings table {
+  font-size: 13px;
+}
+
+.station-rankings-lightmode 
+th {
+  padding: 5px;
+  color: black;
+}
+
+.station-rankings-lightmode 
+td {
+  color: rgba(0, 115, 152, 1);
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
+}
+
+.station-rankings-darkmode 
+th {
+  padding: 5px;
+  color: white;
+}
+
+.station-rankings-darkmode 
+td {
+  color: rgba(38, 194, 129, 1);
+  font-weight: bold;
+  text-align: center;
+  padding: 5px;
 }
 
 @media screen and (max-width: 1260px) {
