@@ -1,0 +1,185 @@
+/* CSS Styling About Page */
+* {
+  font-family: "Source Serif Prof";
+}
+
+.content {
+  height: auto;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  margin: 20px;
+  padding: 20px;
+}
+
+.jumbotron {
+  background-image: url("/static/fixtures/dbikes1.jpg");
+  height: 30vh;
+  background-size: cover;
+  background-position: center;
+  color: #ffffff;
+  border-radius: 0px;
+}
+
+.main1 {
+  background-image: url("/static/fixtures/dbikes1.jpg");
+  background-size: cover;
+  color: #125688;
+  height: 400px;
+}
+.main2 {
+  box-sizing: border-box;
+  margin: 40px;
+  padding: 40px;
+  border: 5px solid black;
+  background: rgb(118, 175, 250);
+}
+.main2,
+.main3,
+.main4,
+.main5 {
+  text-align: center;
+}
+
+.parent,
+.parent1,
+.parent2 {
+  box-sizing: border-box;
+  margin: 40px;
+  padding: 40px;
+  border: 5px solid black;
+  display: flex;
+  padding-top: 30px;
+  padding-bottom: 30px;
+  justify-content: space-evenly;
+  align-items: center stretch;
+}
+.child1,
+.child2,
+.child3,
+.sub1,
+.sub2,
+.sub3 {
+  width: 300px;
+  align-items: stretch;
+  flex-basis: content;
+  padding-left: 20px;
+  padding-right: 20px;
+  background: rgb(118, 175, 250);
+}
+
+.child1:hover,
+.child2:hover,
+.child3:hover,
+.sub1:hover,
+.sub2:hover,
+.sub3:hover {
+  background-color: #de6581;
+  color: white;
+}
+
+h3,
+p {
+  margin: 0px 0px 10px 0px;
+  color: black;
+  font-size: 20px;
+}
+p {
+  margin: 0px 0px 10px 0px;
+  color: black;
+  font-size: 20px;
+}
+
+h1 {
+  font-size: 30px;
+  margin: 0 0 12px 0;
+}
+h2 {
+  font-size: 25px;
+  margin: 0 0 12px 0;
+}
+
+/* How2 Styling */
+.title {
+  margin: 20px;
+  margin-bottom: 20px;
+}
+
+/* Pattern styles */
+.container {
+  display: flex;
+}
+
+.left-half,
+.right-half {
+  background-color: rgb(118, 175, 250);
+  flex: 1;
+  padding: 16px;
+  text-align: center;
+}
+
+section {
+  width: 100%;
+  background-color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.container2 {
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.accordion-item {
+  background-color: rgb(118, 175, 250);
+  border-radius: 6.4px;
+  margin-bottom: 1.6px;
+  padding: 16px;
+  box-shadow: 8px 2px 8px rgba(0, 0, 0.1);
+}
+
+.accordion-link {
+  font-size: 25px;
+  color: rgb(255, 255, 255);
+  text-decoration: none;
+  background-color: rgb(118, 175, 250);
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 16px 0;
+}
+.answer {
+  max-height: 0;
+  overflow: hidden;
+  position: relative;
+  background-color: #ffffff;
+  transition: max-height 650ms;
+}
+
+.answer::before {
+  content: "";
+  position: absolute;
+  width: 20px;
+  height: 90%;
+  background-color: #882732;
+  top: 50%;
+  left: 0;
+  transform: translateY(-50%);
+}
+
+.answer p {
+  color: #000000;
+  font-size: 22px;
+  padding: 30px;
+}
+
+.accordion-item:target .answer {
+  max-height: 320px;
+}

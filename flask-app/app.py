@@ -121,7 +121,7 @@ def howItWorks():
 
 @ app.route('/about')
 def about():
-    return "hello"
+    return render_template(('about.html'))
 
 
 @ app.route('/query/<int:num>/<int:temp>/<int:hour>/<string:description>/<string:day>')
