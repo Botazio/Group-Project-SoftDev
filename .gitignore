@@ -3,4 +3,7 @@ workspace.code-workspace
 webscraping/dinamic_data.csv
 webscraping/weather_data.csv
 webscraping/nohup.out
+<<<<<<< HEAD
 flask-app/__pycache__
+=======
+>>>>>>> alvaro

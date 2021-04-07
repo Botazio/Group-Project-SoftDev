@@ -10,7 +10,7 @@
 </head>
 <body>
    <div class="content">
-      <nav>
+      <nav id="nav-bar" class="nav-light-mode">
          <div>   
             <a class="logo">
                <img src="{{url_for('static', filename='fixtures/icon-bike-red.png')}}" width='35', height='35'/>
@@ -33,7 +33,7 @@
       </nav>
       {% block body %}{% endblock %}
       <footer>
-         <div class="container-footer"> 
+         <div id="container-footer" class="footer-light-mode"> 
              <div class="rights">DBIKES | Copyright 2021 | All rights reserved</div>
              <ul class="footer-links">
                  <li><a href='/'>Map |</a></li>
@@ -45,5 +45,6 @@
      </footer>
    </div>
    <script src="{{url_for('static', filename='js/navbarAnimation.js')}}"></script>
+   {% block scripts %}{% endblock %}
 </body>
 </html>
