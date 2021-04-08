@@ -1,6 +1,6 @@
 /* CSS Styling About Page */
-* {
-  font-family: "Source Serif Prof";
+body {
+  font-family: Roboto, sans-serif;
 }
 
 .content {
@@ -10,18 +10,33 @@
 .wrapper {
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
   box-sizing: border-box;
   margin: 20px;
   padding: 20px;
 }
 
 .jumbotron {
-  background-image: url("/static/fixtures/dbikes1.jpg");
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
+    url("/static/fixtures/dbikes1.jpg");
   height: 30vh;
   background-size: cover;
   background-position: center;
   color: #ffffff;
   border-radius: 0px;
+}
+
+.intro button {
+  background-color: transparent;
+  color: white;
+  border: 2px solid white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .main1 {
@@ -32,43 +47,66 @@
 }
 .main2 {
   box-sizing: border-box;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 70%;
   margin: 40px;
   padding: 40px;
   border: 5px solid black;
   background: rgb(118, 175, 250);
+  border-radius: 25px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
-.main2,
+
 .main3,
 .main4,
 .main5 {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 80%;
+}
+
+.main5 {
+  width: 60%;
+}
+
+.main5 img {
+  width: 100px;
+  height: 100px;
 }
 
 .parent,
 .parent1,
 .parent2 {
+  width: 100%;
   box-sizing: border-box;
   margin: 40px;
   padding: 40px;
   border: 5px solid black;
   display: flex;
-  padding-top: 30px;
-  padding-bottom: 30px;
   justify-content: space-evenly;
-  align-items: center stretch;
+  align-self: center;
 }
+
 .child1,
 .child2,
 .child3,
 .sub1,
 .sub2,
 .sub3 {
-  width: 300px;
-  align-items: stretch;
-  flex-basis: content;
+  width: 275px;
   padding-left: 20px;
   padding-right: 20px;
+  padding-bottom: 15px;
   background: rgb(118, 175, 250);
+  border-radius: 25px;
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
 }
 
 .child1:hover,
@@ -81,25 +119,153 @@
   color: white;
 }
 
-h3,
-p {
-  margin: 0px 0px 10px 0px;
-  color: black;
-  font-size: 20px;
+hgroup {
+  margin-top: 5px;
 }
-p {
+
+h3 {
   margin: 0px 0px 10px 0px;
   color: black;
   font-size: 20px;
 }
 
+p {
+  margin: 0px 0px 10px 0px;
+  color: black;
+  font-size: 15px;
+}
+
 h1 {
   font-size: 30px;
-  margin: 0 0 12px 0;
 }
 h2 {
-  font-size: 25px;
+  font-size: 20px;
   margin: 0 0 12px 0;
+}
+
+#container-footer {
+  background-color: rgb(118, 175, 250);
+  color: black;
+}
+
+.footer-links a {
+  color: black;
+}
+
+@media screen and (max-width: 1450px) {
+  .main3,
+  .main4,
+  .main5 {
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+}
+
+@media screen and (max-width: 1150px) {
+  .wrapper {
+    padding: 0px;
+  }
+
+  .child1,
+  .child2,
+  .child3,
+  .sub1,
+  .sub2,
+  .sub3 {
+    width: 250px;
+  }
+
+  .parent,
+  .parent1,
+  .parent2 {
+    margin: 0px;
+    padding: 0px;
+    border: none;
+  }
+
+  h3 {
+    color: black;
+    font-size: 15px;
+  }
+
+  p {
+    color: black;
+    font-size: 13px;
+  }
+
+  h1 {
+    font-size: 25px;
+  }
+
+  h2 {
+    font-size: 15px;
+  }
+}
+
+@media screen and (max-width: 950px) {
+  .main2 {
+    width: auto;
+    margin: 0;
+  }
+
+  .parent,
+  .parent2 {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .child1,
+  .child2,
+  .child3,
+  .sub1,
+  .sub2,
+  .sub3 {
+    width: 350px;
+    margin: 10px;
+  }
+}
+
+@media screen and (max-width: 450px) {
+  .wrapper {
+    margin: 0px;
+  }
+
+  .main2 {
+    border-radius: 0px;
+    border: 0px;
+    margin: 0px;
+  }
+
+  .main5 {
+    margin-bottom: 10px;
+  }
+
+  .main5 img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .child1,
+  .child2,
+  .child3,
+  .sub1,
+  .sub2,
+  .sub3 {
+    width: 100%;
+    border-radius: 0px;
+    margin: 10px 0px;
+    padding: 10px 0px;
+  }
+
+  p {
+    margin: 10px;
+  }
 }
 
 /* How2 Styling */
