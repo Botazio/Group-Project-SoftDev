@@ -59,12 +59,13 @@ function animationButtons() {
     if (predictionsButton.classList.contains("active-button") == true) {
       return;
     } else {
+      fullSearchButton.style.display = "none";
       historicalButton.classList.remove("active-button");
       predictionsButton.classList.add("active-button");
       date.value = "";
       date.min = today;
       date.max = "2030-01-01";
-      hour.min = nextHalfHour;
+      hour.min = nextHour;
       if (darkMode.classList.contains("dark-mode-active") == true) {
         historicalButton.classList.remove("active-button-dark");
         predictionsButton.classList.add("active-button-dark");
@@ -79,6 +80,7 @@ function animationButtons() {
     if (historicalButton.classList.contains("active-button") == true) {
       return;
     } else {
+      fullSearchButton.style.display = "flex";
       historicalButton.classList.add("active-button");
       predictionsButton.classList.remove("active-button");
       date.value = "";
@@ -871,6 +873,26 @@ function searchOptions() {
             dayWeek
           );
           console.log(arrayQueryModel);
+
+          fetch(
+            "/query/" +
+              arrayQueryModel[0] +
+              "/" +
+              arrayQueryModel[1] +
+              "/" +
+              arrayQueryModel[2] +
+              "/" +
+              arrayQueryModel[3] +
+              "/" +
+              arrayQueryModel[4]
+          )
+            .then((response) => {
+              console.log(response);
+              return response.json();
+            })
+            .catch((err) => {
+              console.log("OOPS!", err);
+            });
         });
       }
     }
@@ -911,8 +933,6 @@ function searchOptions() {
           );
           chart.draw(elem, options);
         }
-
-        console.log(elem);
       });
     }
   });
@@ -970,11 +990,11 @@ function stationSearch() {
             b.innerHTML += " " + station.number;
             // Insert a input field that will hold the current array item's value:
             b.innerHTML +=
-              "<input type='hidden' value='" +
+              '<input type="hidden" value="' +
               station.address +
               " " +
               station.number +
-              "'>";
+              '">';
             b.addEventListener("click", function (e) {
               for (i = 0; i < data.length; i++) {
                 station = data[i];

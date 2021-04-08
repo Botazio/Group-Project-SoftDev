@@ -209,6 +209,10 @@ input[type="date"] {
   width: 180px;
 }
 
+#full-search-container {
+  display: none;
+}
+
 #station-search-container {
   background-color: white;
   border-radius: 10px;

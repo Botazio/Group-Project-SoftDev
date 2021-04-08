@@ -572,7 +572,7 @@ function stationSearch(self, data, destinationInput, availability) {
           "<strong>" + station.address.substr(0, val.length) + "</strong>";
         b.innerHTML += station.address.substr(val.length);
         // Insert a input field that will hold the current array item's value:
-        b.innerHTML += "<input type='hidden' value='" + station.address + "'>";
+        b.innerHTML += '<input type="hidden" value="' + station.address + '">';
         google.maps.event.addDomListener(b, "click", function (e) {
           for (i = 0; i < data.length; i++) {
             station = data[i];
@@ -585,7 +585,7 @@ function stationSearch(self, data, destinationInput, availability) {
               // Close the list of pacd values or any other open lists of pacd values
               closeAllLists(destinationInput);
               // Display the weather info under the search bar
-              displayWeatherInfo("display-weather");
+              displayWeatherInfo("weather-slides-container");
               // Display the station info under the search bar
               displayStationSearch(station, availability[i]);
               // Display graphs under the search bar
@@ -739,10 +739,13 @@ function displayStationSearch(station, availability) {
   displayStationSearch.innerHTML = contentStr;
 }
 
+// Global variable to control which is the current slide
+var slideIndexWeather = 1;
+
 // Sets a function to fetch and display the forecast weather
 function displayWeatherInfo(id) {
   const displayWeatherContainer = document.getElementById(id);
-  // Clear any old data
+
   if (displayWeatherContainer.innerHTML == "") {
     weatherPromise
       .then((data) => {
@@ -820,9 +823,6 @@ function displayWeatherInfo(id) {
     showSlidesWeather(slideIndexWeather);
   }
 }
-
-// Global variable to control which is the current slide
-var slideIndexWeather = 1;
 
 // Function that points to the prev or next slide
 function plusSlidesWeather(n) {

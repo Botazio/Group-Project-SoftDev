@@ -1,6 +1,3 @@
-changeMode();
-layoutType();
-
 function changeMode() {
   const navBar = document.getElementById("nav-bar");
   const fullWrapper = document.getElementById("full-wrapper");
@@ -51,12 +48,14 @@ function changeMode() {
 
     try {
       // Try and catch with these objects (they are not always present)
-      const dinamicStationInfo = document.getElementById("dinamic-station-info");
+      const dinamicStationInfo = document.getElementById(
+        "dinamic-station-info"
+      );
       const iconBikeDinamic = document.getElementById("icon-bike-dinamic");
       const iconStandDinamic = document.getElementById("icon-stand-dinamic");
-      const stationRankings = document.getElementsByClassName("station-rankings");
-
-
+      const stationRankings = document.getElementsByClassName(
+        "station-rankings"
+      );
 
       dinamicStationInfo.classList.toggle("dinamic-station-info-lightmode");
       dinamicStationInfo.classList.toggle("dinamic-station-info-darkmode");
@@ -127,3 +126,7 @@ function layoutType() {
     settings.classList.add("settings-container-layout3");
   });
 }
+
+// Init the functions
+changeMode();
+layoutType();

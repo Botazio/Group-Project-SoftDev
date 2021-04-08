@@ -3,6 +3,10 @@ from sqlalchemy import create_engine
 from datetime import datetime
 import json
 import pandas as pd
+import os
+import re
+import pickle
+import numpy as np
 
 app = Flask(__name__)
 
@@ -104,6 +108,56 @@ class getData():
         return results
 
 
+def get_Models_get_predictions(num, temp, hour, description, day):
+    Bikesfiles = {}
+    Standsfiles = {}
+
+    if hour < 11:
+        hours = list(range(hour, hour+12, 1))
+
+    else:
+        hours_left = 23 - hour
+        hours_start = list(range(hour, hour+hours_left+1, 1))
+        hours_to_add = 12 - hours_left
+        other_hours = list(range(hours_to_add))
+        hours = hours_start + other_hours
+
+    for file in os.listdir('static/MLModel/'):
+        if file.endswith("Bikes.pkl"):
+            regex = re.compile(r'\d+')
+            station = [int(x) for x in regex.findall(file)]
+            Bikesfiles[station[0]] = file
+
+        elif file.endswith("Stands.pkl"):
+            regex = re.compile(r'\d+')
+            station = [int(x) for x in regex.findall(file)]
+            Standsfiles[station[0]] = file
+
+    BikesModelName = Bikesfiles.get(num)
+    StandsModelName = Standsfiles.get(num)
+
+    with open('static/MLModel/' + BikesModelName, 'rb') as handle:
+        modelBikes = pickle.load(handle)
+
+    with open('static/MLModel/' + StandsModelName, 'rb') as handle:
+        modelStands = pickle.load(handle)
+    predictionsBikes = {}
+    for x in hours:
+        array = np.array([temp, x, description, day])
+        x_test = array.reshape(1, -1)
+        p = modelBikes.predict(x_test)
+        predictionsBikes[x] = p.astype(int)
+
+    predictionsStands = {}
+    for x in hours:
+        array = np.array([temp, x, description, day])
+        x_test = array.reshape(1, -1)
+        p = modelStands.predict(x_test)
+        predictionsStands[x] = p.astype(int)
+
+    return predictionsBikes
+
+
 @ app.route('/')
 def index():
     return render_template('index.html')
@@ -124,10 +178,15 @@ def about():
     return render_template(('about.html'))
 
 
-@ app.route('/query/<int:num>/<int:temp>/<int:hour>/<string:description>/<string:day>')
-def query_prediction_model():
-    stations = getData(engine).getStations()
-    return stations
+@ app.route('/query/<string:num>/<string:temp>/<int:hour>/<string:description>/<string:day>')
+def query_prediction_model(num, temp, hour, description, day):
+    num = int(num)
+    temp = float(temp)
+    hour = int(hour)
+    description = 3
+    query = get_Models_get_predictions(num, temp, hour, description, 2)
+
+    return {'hello': 42}
 
 
 @ app.route('/stations')
