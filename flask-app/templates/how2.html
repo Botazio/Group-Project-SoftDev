@@ -1,299 +1,196 @@
-<html>
-<head>
-    <meta charsets="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>How It Works</title>
-    <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='/styles/how2.css')}}">
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital@1&display=swap" rel="stylesheet">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+{% extends 'base.html' %}
 
-    <style>
-        *{
-    font-family: 'Source Serif Prof';
-        }
 
-.jumbotron{
-    background-image: url('/static/fixtures/dbikes1.jpg');
-    height: 30vh;
-    background-size: cover;
-    background-position: center;
-    color: #ffffff;
-    border-radius: 0px;
-        }
 
-.title{
-    margin: 20px;
-    margin-bottom: 20px;
-}
+{% block head %}
+<link rel="stylesheet" href="{{ url_for('static', filename='css/others.css') }}">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans:ital@1&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+<title>How it works</title>
+{% endblock %}
 
-h1 {
-  font-size: 30px;
-  margin: 0 0 12px 0;
-}
-
-h3 {
-    font-size:20px;
-}
-
-/* Pattern styles */
-.container {
-  display: flex;
-}
-
-.left-half, .right-half {
-  background-color: rgb(118, 175, 250);
-  flex: 1;
-  padding: 16px;
-  text-align: center;
-  
-}
-
-section{
-    width:100%;
-    background-color: white;
-    display:flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.container2{
-    width: 100%;
-    max-width: 1280px;
-    margin: 0 auto;
-    padding: 0 24px;
-}
-
-.accordion-item{
-    background-color: rgb(118, 175, 250);
-    border-radius: 6.4px;
-    margin-bottom: 1.6px;
-    padding: 16px;
-}
-
-.accordion-link{
-    font-size: 25px;
-    color: rgb(255, 255, 255);
-    text-decoration: none;
-    background-color: rgb(118, 175, 250);
-    width:100%;
-    display: flex;
-    align-items:center;
-    justify-content: space-between;
-    padding: 16px 0;
-
-}
-.answer{
-    max-height: 0;
-    overflow: hidden;
-    position: relative;
-    background-color: #ffffff;
-    transition: max-height 650ms;
-    
-}
-
-.answer::before{
-    content: "";
-    position: absolute;
-    width:20px;
-    height: 90%;
-    background-color: #882732;
-    top: 50%;
-    left:0;
-    transform: translateY(-50%);
-}
-
-.answer p{
-    color: #000000;
-    font-size:22px;
-    padding:30px;
-}
-
-.accordion-item:target .answer{
-    max-height: 320px;
-}
-
-    </style>
-
-</head>
-
+{% block body %}
 <body>
+    <div id="wrapper-how2">
+        
+        <div class="jumbotron text-center">
+            <div class="intro">
+                <button type="button" class="btn btn-outline-light"><h1>How It Works</h1></button>
+            </div>
 
-    <div class="jumbotron text-center">
-        <div class="intro">
-            <button type="button" class="btn btn-outline-light"><h1>How It Works</h1></button>
+
         </div>
-
-
-    </div>
-
-    <div class='title'>
-        <h1 style="text-align: center;">Rent a Bike</h1>
-    </div>
-
-        <section class='container'>
-            
-            <div class='left-half'>
-                <article>
-
-                    <h1> Open App </h1>
-                    <h3> The DublinBikes App is available for download on all iOS and Android devices.
-                        Once downloaded, users of the App will be able to sign up for short-term subscription packages,
-                        and explore available bike services/stations, helping you on your commute around the city!
-                    </h3>
-
-                </article>
-            </div>
-
-            <div class='right-half' style="background: white;">
-                <article>
-                    <img src="/static/fixtures/phone1.PNG" style="height: 200px;">
-                </article>
-            </div>
-        </section>
-        <section class='container'>
-            <div class='left-half' style="background: white;">
-                <article>
-
-                    <img src="/static/fixtures/markers.PNG" style="height: 210px;">
-                   
-
-                </article>
-            </div>
-
-            <div class='right-half'>
-                <article>
-                    <h1> Find a station </h1>
-                    <h3> Through are easy-to-use interactive user interfaces, it has never been easier to find available bikes for rent!
-                        Once downloaded, users will be able to display bike stations, which will provide information regarding the number of bikes and available bike stands at the desired station!             
-                        User will also be able to display routes, providing easy navigation to get you on your way!
-                    </h3>
-                </article>
-            </div>
-        </section>
-        <section class='container'>
-            <div class='left-half'>
-                <article>
-
-                    <h1> Select & Release </h1>
-                    <h3> There are 2 ways of choosing and releasing a bike. You can release a bike at a station terminal. 
-                        Select a bike from the terminal screen and release it by pressing the button on the bike stand as directed.
-                        Alternatively, you can do this via the dublinbikes App. Once release via the app, you then have 60 seconds to release the bike chosen by pressing the button on the bike stand.
-                    </h3>
-
-                </article>
-            </div>
-
-            <div class='right-half' style="background: white;">
-                <article>
-                    <img src="/static/fixtures/release.jpg" style="height: 220px;">
-            
-                </article>
-            </div>
-        </section>
-        <section class='container'>
-            <div class='left-half' style="background: white;">
-                <article>
-
-                    <img src="/static/fixtures/dublinbikes_route.jpg" style="height: 200px;">
-                    
-
-                </article>
-            </div>
-
-            <div class='right-half'>
-                <article>
-                    <h1> Limited Availabilty </h1>
-                    <h3> If the station you are looking at has no avaible bikes,
-                        You can view nearby stations and the number of available bikes at each station on the dublinbikes App or at a station terminal.
-                    </h3>
-                </article>
-            </div>
-        </section>
-        <section class='container'>
-            <div class='left-half'>
-                <article>
-
-                    <h1> Make Predictions </h1>
-                    <h3> Through are smart UI, users can make informed predictions and smarter decisions regarding the use of our products and services.
-                        Through the app, users are able to predict bike availabilty depending on the time of day. This enables users to plan ahead of time,
-                        making life that little bit easier!
-                    </h3>
-
-                </article>
-            </div>
-
-            <div class='right-half' style="background: white;">
-                <article>
-                    <img src="/static/fixtures/predictions.png" style="height: 200px;">
-
-                </article>
-            </div>
-        </section>
 
         <div class='title'>
-            <h1 style="text-align: center;">Frequently Asked Questions</h1>
+            <h1 style="text-align: center;">Rent a Bike</h1>
         </div>
-        <section>
 
-            <div class="container2">
-            
-                <div class="accordion">
-                    <div class="accordion-item" id="question1">
-                        <a class="accordion-link" href="#question1">
-                            Are Dublin Bikes Available 24 Hours Per Day?
-                            <ion-icon name="add-outline"></ion-icon>
-                        </a>
-                        <div class="answer"><p>DublinBikes are available to rent anytime from 5am to 12.30am daily, 
-                            seven days a week. While there is a fixed time frame for time rentals, bikes can be returned at any time 24/7.</p>
+            <section class='container'>
+                
+                <div class='left-half'>
+                    <article>
+
+                        <h2> Open App </h2>
+                        <p> The DublinBikes App is available for download on all iOS and Android devices.
+                            Once downloaded, users of the App will be able to sign up for short-term subscription packages,
+                            and explore available bike services/stations, helping you on your commute around the city!
+                        </p>
+
+                    </article>
+                </div>
+
+                <div class='right-half' style="background: white;">
+                    <article>
+                        <img src="/static/fixtures/phone1.PNG" style="height: 200px;">
+                    </article>
+                </div>
+            </section>
+            <section class='container'>
+                <div class='left-half' style="background: white;">
+                    <article>
+
+                        <img src="/static/fixtures/markers.PNG" style="height: 210px;">
+                    
+
+                    </article>
+                </div>
+
+                <div class='right-half'>
+                    <article>
+                        <h2> Find a station </h2>
+                        <p> Through are easy-to-use interactive user interfaces, it has never been easier to find available bikes for rent!
+                            Once downloaded, users will be able to display bike stations, which will provide information regarding the number of bikes and available bike stands at the desired station!             
+                            User will also be able to display routes, providing easy navigation to get you on your way!
+                        </p>
+                    </article>
+                </div>
+            </section>
+            <section class='container'>
+                <div class='left-half'>
+                    <article>
+
+                        <h2> Select & Release </h2>
+                        <p> There are 2 ways of choosing and releasing a bike. You can release a bike at a station terminal. 
+                            Select a bike from the terminal screen and release it by pressing the button on the bike stand as directed.
+                            Alternatively, you can do this via the dublinbikes App. Once release via the app, you then have 60 seconds to release the bike chosen by pressing the button on the bike stand.
+                        </p>
+
+                    </article>
+                </div>
+
+                <div class='right-half' style="background: white;">
+                    <article>
+                        <img src="/static/fixtures/release.jpg" style="height: 220px;">
+                
+                    </article>
+                </div>
+            </section>
+            <section class='container'>
+                <div class='left-half' style="background: white;">
+                    <article>
+
+                        <img src="/static/fixtures/dublinbikes_route.jpg" style="height: 200px;">
+                        
+
+                    </article>
+                </div>
+
+                <div class='right-half'>
+                    <article>
+                        <h2> Limited Availabilty </h2>
+                        <p> If the station you are looking at has no avaible bikes,
+                            You can view nearby stations and the number of available bikes at each station on the dublinbikes App or at a station terminal.
+                        </p>
+                    </article>
+                </div>
+            </section>
+            <section class='container'>
+                <div class='left-half'>
+                    <article>
+
+                        <h2> Make Predictions </h2>
+                        <p> Through are smart UI, users can make informed predictions and smarter decisions regarding the use of our products and services.
+                            Through the app, users are able to predict bike availabilty depending on the time of day. This enables users to plan ahead of time,
+                            making life that little bit easier!
+                        </p>
+
+                    </article>
+                </div>
+
+                <div class='right-half' style="background: white;">
+                    <article>
+                        <img src="/static/fixtures/predictions.png" style="height: 200px;">
+
+                    </article>
+                </div>
+            </section>
+
+            <div class='title'>
+                <h2 style="text-align: center;">Frequently Asked Questions</h2>
+            </div>
+            <section>
+
+                <div class="container2">
+                
+                    <div class="accordion">
+                        <div class="accordion-item" id="question1">
+                            <a class="accordion-link" href="#question1">
+                                Are Dublin Bikes Available 24 Hours Per Day?
+                                <ion-icon name="add-outline"></ion-icon>
+                            </a>
+                            <div class="answer"><p>DublinBikes are available to rent anytime from 5am to 12.30am daily, 
+                                seven days a week. While there is a fixed time frame for time rentals, bikes can be returned at any time 24/7.</p>
+                            </div>
+
+                        </div>
+                        <div class="accordion-item" id="question2">
+                            <a class="accordion-link" href="#question2">
+                                Can I return my bike to any station?
+                                <ion-icon name="add-outline"></ion-icon>
+                            
+                            </a>
+                            <div class="answer">
+                                <p>The bike must be returned to a free stand at a station. 
+                                    Find available bikes and stands at each station in real time on the official dublinbikes App.</p>
+                            </div>
+
+                        </div>
+                        <div class="accordion-item" id="question3">
+                            <a class="accordion-link" href="#question3">
+                                If I lose my bike am I liable?
+                                <ion-icon name="add-outline"></ion-icon>
+                            
+                            </a>
+                            <div class="answer">
+                                <p>Yes, users of the DublinBikes scheme will be liable to pay a 20% fee towards the overall cost of repairs if a bike is lost or damaged.</p>
+                            </div>
                         </div>
 
-                    </div>
-                    <div class="accordion-item" id="question2">
-                        <a class="accordion-link" href="#question2">
-                            Can I return my bike to any station?
-                            <ion-icon name="add-outline"></ion-icon>
-                          
-                        </a>
-                        <div class="answer">
-                            <p>The bike must be returned to a free stand at a station. 
-                                Find available bikes and stands at each station in real time on the official dublinbikes App.</p>
-                        </div>
+                        <div class="accordion-item" id="question4">
+                            <a class="accordion-link" href="#question4">
+                                What payment options are accepted through the Dublin Bikes App?
+                                <ion-icon name="add-outline"></ion-icon>
+                            </a>
+                            <div class="answer">
+                                <p>Once the app has been successfully downloaded, users will be able to pay for different subscription models available using any valid
+                                    debit or credit card. Leap cards and cash are not accepted with this service. </p>
+                            </div>
 
-                    </div>
-                    <div class="accordion-item" id="question3">
-                        <a class="accordion-link" href="#question3">
-                            If I lose my bike am I liable?
-                            <ion-icon name="add-outline"></ion-icon>
-                           
-                        </a>
-                        <div class="answer">
-                            <p>Yes, users of the DublinBikes scheme will be liable to pay a 20% fee towards the overall cost of repairs if a bike is lost or damaged.</p>
-                        </div>
-                    </div>
-
-                    <div class="accordion-item" id="question4">
-                        <a class="accordion-link" href="#question4">
-                            What payment options are accepted through the Dublin Bikes App?
-                            <ion-icon name="add-outline"></ion-icon>
-                        </a>
-                        <div class="answer">
-                            <p>Once the app has been successfully downloaded, users will be able to pay for different subscription models available using any valid
-                                debit or credit card. Leap cards and cash are not accepted with this service. </p>
                         </div>
 
                     </div>
 
                 </div>
+            
 
-            </div>
-         
+            </section>
 
-        </section>
+    </div>
 
-<script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
-<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script> -->
 
 </body>
-</html>
+{% endblock %}
+
+{% block scripts %}
+    <script src="https://unpkg.com/ionicons@5.4.0/dist/ionicons.js"></script>
+{% endblock %}

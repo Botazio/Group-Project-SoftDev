@@ -170,7 +170,7 @@ def predictions():
 
 @ app.route('/how_it_works')
 def howItWorks():
-    return "hello"
+    return render_template('how2.html')
 
 
 @ app.route('/about')

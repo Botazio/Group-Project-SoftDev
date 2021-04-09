@@ -19,11 +19,12 @@ body {
 
 .jumbotron {
   display: flex;
+  width: 100%;
   justify-content: center;
   align-items: center;
   background: linear-gradient(rgba(0, 0, 0, 0.3), rgba(0, 0, 0, 0.3)),
     url("/static/fixtures/dbikes1.jpg");
-  height: 30vh;
+  height: 250px;
   background-size: cover;
   background-position: center;
   color: #ffffff;
@@ -275,8 +276,18 @@ h2 {
 }
 
 /* Pattern styles */
+#wrapper-how2 {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 .container {
   display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
 }
 
 .left-half,
@@ -288,7 +299,8 @@ h2 {
 }
 
 section {
-  width: 100%;
+  min-width: 1000px;
+  width: 70%;
   background-color: white;
   display: flex;
   align-items: center;
@@ -302,16 +314,21 @@ section {
   padding: 0 24px;
 }
 
+.accordion {
+  margin-bottom: 30px;
+}
+
 .accordion-item {
   background-color: rgb(118, 175, 250);
   border-radius: 6.4px;
   margin-bottom: 1.6px;
   padding: 16px;
-  box-shadow: 8px 2px 8px rgba(0, 0, 0.1);
+  box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
+  margin: 10px 0px;
 }
 
 .accordion-link {
-  font-size: 25px;
+  font-size: 18px;
   color: rgb(255, 255, 255);
   text-decoration: none;
   background-color: rgb(118, 175, 250);
@@ -342,10 +359,70 @@ section {
 
 .answer p {
   color: #000000;
-  font-size: 22px;
+  font-size: 16px;
   padding: 30px;
 }
 
 .accordion-item:target .answer {
   max-height: 320px;
+}
+
+@media screen and (max-width: 1150px) {
+  section {
+    min-width: 800px;
+  }
+
+  .accordion-link {
+    font-size: 16px;
+  }
+
+  .answer p {
+    font-size: 14px;
+  }
+}
+
+@media screen and (max-width: 850px) {
+  section {
+    min-width: auto;
+    width: 100%;
+  }
+
+  .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: rgb(118, 175, 250);
+    padding: 10px 0px;
+    margin: 10px 0px;
+  }
+
+  .container img {
+    display: none;
+  }
+
+  .left-half,
+  .right-half {
+    padding: 0px;
+  }
+
+  article p {
+    padding: 0px 10px;
+  }
+
+  .container2 {
+    padding: 0px;
+  }
+
+  .accordion-item {
+    border-radius: 0px;
+  }
+
+  .accordion-link {
+    font-size: 15px;
+  }
+
+  .answer p {
+    font-size: 13px;
+  }
 }
