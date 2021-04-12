@@ -69,10 +69,10 @@ class getData():
 
     def getDailyOcuppancy(self, num, date):
         try:
-            sql = f"""SELECT number, DATE_FORMAT(last_update,'%d-%m-%Y-%H') as date, available_bikes,
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d-%H') as date, available_bikes,
             available_bikes_stands FROM dbikes.availability
-            WHERE number = { num } and DATE_FORMAT(last_update,'%d-%m-%Y') = '{ date }'
-            GROUP BY DATE_FORMAT(last_update,'%d-%m-%Y-%H');"""
+            WHERE number = { num } and DATE_FORMAT(last_update,'%Y-%m-%d') = '{ date }'
+            GROUP BY DATE_FORMAT(last_update,'%Y-%m-%d-%H');"""
             df = pd.read_sql_query(sql, self.engine)
             results = df.to_json(orient='records')
         except Exception as e:
@@ -80,11 +80,94 @@ class getData():
 
         return results
 
+    # Occupancy for all the stations at a certain hour
+    def getDailyHourlyOcuppancy(self, date, hour, type):
+        try:
+            dayTime = date + "-" + hour
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d-%H') as date, avg(available_bikes) as bikes,
+            avg(available_bikes_stands) as stands FROM dbikes.availability
+            WHERE  DATE_FORMAT(last_update,'%Y-%m-%d-%H') = '{ dayTime }'
+            GROUP BY number ORDER BY { type } desc;"""
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    # Occupancy for all the stations for a certain day
+    def getCompleteDailyOcuppancy(self, date, type):
+        try:
+            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as bikes,
+            avg(available_bikes_stands) as stands FROM dbikes.availability
+            WHERE  DATE_FORMAT(last_update,'%Y-%m-%d') = '{ date }'
+            GROUP BY number, date(last_update) ORDER BY { type } desc;"""
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    # Average occupancy for each station through time
     def getHistoricalAvgOcuppancy(self, type):
         try:
-            sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y')as date, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands FROM dbikes.availability
-            GROUP BY number, year(last_update)
+            sql = f"""SELECT number, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands FROM dbikes.availability
+            GROUP BY number
             ORDER BY { type } desc;"""
+
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    # Average occupancy for the sum of all the stations for each day
+    def getCompleteHistoricalAvgOcuppancy(self):
+        try:
+            sql = f"""SELECT DATE_FORMAT(last_update,'%Y-%m-%d')as date, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands
+            FROM dbikes.availability
+            GROUP BY DATE_FORMAT(last_update,'%Y-%m-%d')
+            ORDER BY date"""
+
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    # Average occupancy for the sum of all the station in all time
+    def getOcuppancyRelation(self):
+        try:
+            sql = f"""SELECT  avg(available_bikes) as bikes, avg(available_bikes_stands) as stands
+            FROM dbikes.availability"""
+
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    def getDailyHourlyWeather(self, date, hour):
+        try:
+            dayTime = date + "-" + hour
+            sql = f"""SELECT description, icon, temp, temp_min, temp_max, humidity, DATE_FORMAT(dt,'%Y-%m-%d-%H')as date 
+            FROM dbikes.weather WHERE DATE_FORMAT(dt,'%Y-%m-%d-%H') = '{ dayTime }' LIMIT 1;"""
+
+            df = pd.read_sql_query(sql, self.engine)
+            results = df.to_json(orient='records')
+        except Exception as e:
+            return e
+
+        return results
+
+    def getDailyWeather(self, date):
+        try:
+            sql = f"""SELECT description, icon, temp, temp_min, temp_max, humidity, DATE_FORMAT(dt,'%Y-%m-%d-%H-%i')as date 
+            FROM dbikes.weather WHERE DATE_FORMAT(dt,'%Y-%m-%d') = '{ date }';"""
 
             df = pd.read_sql_query(sql, self.engine)
             results = df.to_json(orient='records')
@@ -207,11 +290,24 @@ def get_occupancy(station_id):
     return occupancy
 
 
+@ app.route('/daily_hourly_occupancy/<string:date>/<string:hour>/<string:occupancy_type>')
+def get_daily_hourly_occupancy(date, hour, occupancy_type):
+    dailyHourlyOccupancy = getData(
+        engine).getDailyHourlyOcuppancy(date, hour, occupancy_type)
+    return dailyHourlyOccupancy
+
+
 @ app.route('/daily_occupancy/<int:station_id>/<string:date>')
 def get_daily_occupancy(station_id, date):
-    print(date)
     dailyOccupancy = getData(engine).getDailyOcuppancy(station_id, date)
     return dailyOccupancy
+
+
+@ app.route('/complete_daily_occupancy/<string:date>/<string:occupancy_type>')
+def get_complete_daily_occupancy(date, occupancy_type):
+    completeDailyOccupancy = getData(
+        engine).getCompleteDailyOcuppancy(date, occupancy_type)
+    return completeDailyOccupancy
 
 
 @ app.route('/historical_occupancy/<string:occupancy_type>')
@@ -219,6 +315,32 @@ def get_historical_occupancy(occupancy_type):
     historical_occupancy = getData(
         engine).getHistoricalAvgOcuppancy(occupancy_type)
     return historical_occupancy
+
+
+@ app.route('/complete_historical_occupancy')
+def get_complete_historical_occupancy():
+    complete_historical_occupancy = getData(
+        engine).getCompleteHistoricalAvgOcuppancy()
+    return complete_historical_occupancy
+
+
+@ app.route('/occupancy_relation')
+def get_occupancy_relation():
+    occupancy_relation = getData(
+        engine).getOcuppancyRelation()
+    return occupancy_relation
+
+
+@ app.route('/daily_weather/<string:date>/<string:hour>')
+def get_daily_hourly_weather(date, hour):
+    daily_hourly_weather = getData(engine).getDailyHourlyWeather(date, hour)
+    return daily_hourly_weather
+
+
+@ app.route('/daily_weather/<string:date>')
+def get_daily_weather(date):
+    daily_weather = getData(engine).getDailyWeather(date)
+    return daily_weather
 
 
 @ app.route('/historical_weather')

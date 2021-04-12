@@ -10,6 +10,7 @@ function animationButtons() {
   const stationSearchContainer = document.getElementById(
     "station-search-container"
   );
+  const calendarInput = document.getElementById("calendar-container");
   const stationInput = document.getElementById("station-input");
   const date = document.getElementById("calendar");
   const hour = document.getElementById("hour");
@@ -52,13 +53,16 @@ function animationButtons() {
     nextHour.addMinutes(60);
     nextHour.setMinutes(0, 0);
     nextHour = nextHour.toLocaleTimeString("en-GB");
-    hour.min = nextHour;
+    if (predictionsButton.classList.contains("active-button") == true) {
+      hour.min = nextHour;
+    }
   });
 
   predictionsButton.addEventListener("click", () => {
     if (predictionsButton.classList.contains("active-button") == true) {
       return;
     } else {
+      fullSearchButton.classList.remove("active-button");
       fullSearchButton.style.display = "none";
       historicalButton.classList.remove("active-button");
       predictionsButton.classList.add("active-button");
@@ -66,12 +70,19 @@ function animationButtons() {
       date.min = today;
       date.max = "2030-01-01";
       hour.min = nextHour;
+      stationButton.classList.add("active-button");
+      stationSearchContainer.style.display = "flex";
+      calendarInput.style.display = "flex";
       if (darkMode.classList.contains("dark-mode-active") == true) {
         historicalButton.classList.remove("active-button-dark");
         predictionsButton.classList.add("active-button-dark");
+        fullSearchButton.classList.remove("active-button-dark");
+        stationButton.classList.add("active-button-dark");
       } else {
         historicalButton.classList.remove("active-button-light");
         predictionsButton.classList.add("active-button-light");
+        fullSearchButton.classList.remove("active-button-light");
+        stationButton.classList.add("active-button-light");
       }
     }
   });
@@ -86,7 +97,8 @@ function animationButtons() {
       date.value = "";
       date.min = "2021-02-25";
       date.max = yesterday;
-      hour.min = "";
+      hour.min = null;
+      hour.value = "";
       if (darkMode.classList.contains("dark-mode-active") == true) {
         predictionsButton.classList.remove("active-button-dark");
         historicalButton.classList.add("active-button-dark");
@@ -104,6 +116,7 @@ function animationButtons() {
       stationButton.classList.add("active-button");
       fullSearchButton.classList.remove("active-button");
       stationSearchContainer.style.display = "flex";
+      calendarInput.style.display = "flex";
       if (darkMode.classList.contains("dark-mode-active") == true) {
         fullSearchButton.classList.remove("active-button-dark");
         stationButton.classList.add("active-button-dark");
@@ -121,6 +134,8 @@ function animationButtons() {
       fullSearchButton.classList.add("active-button");
       stationButton.classList.remove("active-button");
       stationSearchContainer.style.display = "none";
+      calendarInput.style.display = "none";
+
       if (darkMode.classList.contains("dark-mode-active") == true) {
         stationButton.classList.remove("active-button-dark");
         fullSearchButton.classList.add("active-button-dark");
@@ -137,11 +152,15 @@ function searchOptions() {
   const predictionsButton = document.getElementById("predictions-container");
   const historicalButton = document.getElementById("historical-container");
   const stationButton = document.getElementById("station-container");
+  const fullSearchButton = document.getElementById("full-search-container");
   const stationInput = document.getElementById("station-input");
   const hour = document.getElementById("hour");
   const date = document.getElementById("calendar");
   const searchButton = document.getElementById("search-button-container");
   const darkMode = document.getElementById("dark-mode-container");
+  const layout1 = document.getElementById("layout1");
+  const layout2 = document.getElementById("layout2");
+  const layout3 = document.getElementById("layout3");
 
   // Create const for the containers
   const container1 = document.getElementById("container1");
@@ -161,6 +180,10 @@ function searchOptions() {
     container4a.innerHTML = "";
     container4b.innerHTML = "";
     arraySearchElements = new Array();
+
+    // Restore the icons to initial configuration
+    document.getElementById("info-icon1").src = "static/fixtures/icon-info.png";
+    document.getElementById("info-icon2").src = "static/fixtures/icon-info.png";
 
     // Declare the search variables
     var searchHour;
@@ -272,7 +295,11 @@ function searchOptions() {
 
     // Check the different selections made by the user
     if (historicalButton.classList.contains("active-button")) {
-      searchHour = hour.value; // Could be an empty string
+      searchCompleteHour = hour.value; // Could be an empty string
+      // We only use the hour, no need for the minutes
+      searchHour = searchCompleteHour.split(":");
+      searchHour = searchHour[0];
+      // We take the date from the input date html element
       searchDate = date.value;
       if (stationButton.classList.contains("active-button")) {
         searchStationInput = stationInput.value.split(" ");
@@ -313,7 +340,7 @@ function searchOptions() {
               arraySearchElements.push(dataStands);
             })
             .catch((err) => {
-              console.log("OOPS! Can't display occupancy", err);
+              console.log(err);
             });
 
           fetchHistoricalWeather().then((weatherData) => {
@@ -343,13 +370,14 @@ function searchOptions() {
             .then((rankingAvailableBikes) => {
               fetchHistoricalOccupancy("stands").then(
                 (rankingAvailableStands) => {
-                  var position;
+                  var positionBikes;
+                  var positionStands;
                   var avgBikes;
                   var avgStands;
                   // Loop through the data until we find our station
                   for (i = 0; i < rankingAvailableBikes.length; i++) {
                     if (rankingAvailableBikes[i].number == stationNumber) {
-                      position = i + 1;
+                      positionBikes = i + 1;
                       avgBikes = rankingAvailableBikes[i].bikes;
                       break;
                     }
@@ -358,7 +386,7 @@ function searchOptions() {
                   // Loop through the data until we find our station
                   for (i = 0; i < rankingAvailableStands.length; i++) {
                     if (rankingAvailableStands[i].number == stationNumber) {
-                      position = i + 1;
+                      positionStands = i + 1;
                       avgStands = rankingAvailableStands[i].stands;
                       break;
                     }
@@ -381,7 +409,8 @@ function searchOptions() {
                     "<div class='" +
                     classNameTable +
                     "'><p>Ranking Availability Bikes</p><table>";
-                  for (i = 1; i < 4; i++) {
+                  for (i = 0; i < 3; i++) {
+                    var x = i + 1;
                     if (rankingAvailableBikes[i].number != stationNumber) {
                       contentStr +=
                         "<tr><th>Station Number</th>" +
@@ -394,7 +423,7 @@ function searchOptions() {
                         rankingAvailableBikes[i].bikes.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        i +
+                        x +
                         "</td>";
                     } else {
                       checker = true;
@@ -406,10 +435,10 @@ function searchOptions() {
                         stationNumber +
                         "</td>" +
                         "<td>" +
-                        stationHistoricalAvgBikes.toFixed(2) +
+                        avgBikes.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        position +
+                        positionBikes +
                         "</td>";
                     }
                   }
@@ -426,7 +455,7 @@ function searchOptions() {
                       avgBikes.toFixed(2) +
                       "</td>" +
                       "<td>" +
-                      position +
+                      positionBikes +
                       "</td>";
                   }
 
@@ -439,7 +468,8 @@ function searchOptions() {
                     "<div class='" +
                     classNameTable +
                     "'><p>Ranking Availability Stands</p><table>";
-                  for (i = 1; i < 4; i++) {
+                  for (i = 0; i < 3; i++) {
+                    var x = i + 1;
                     if (rankingAvailableStands[i].number != stationNumber) {
                       contentStr +=
                         "<tr><th>Station Number</th>" +
@@ -452,7 +482,7 @@ function searchOptions() {
                         rankingAvailableStands[i].stands.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        i +
+                        x +
                         "</td>";
                     } else {
                       checker = true;
@@ -464,10 +494,10 @@ function searchOptions() {
                         stationNumber +
                         "</td>" +
                         "<td>" +
-                        stationHistoricalAvgStands.toFixed(2) +
+                        avgStands.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        position +
+                        positionStands +
                         "</td>";
                     }
                   }
@@ -484,7 +514,7 @@ function searchOptions() {
                       avgStands.toFixed(2) +
                       "</td>" +
                       "<td>" +
-                      position +
+                      positionStands +
                       "</td>";
                   }
 
@@ -544,34 +574,44 @@ function searchOptions() {
               );
             })
             .catch((err) => {
-              console.log("OOPS! Can't display occupancy", err);
+              console.log(err);
             });
-        } else if (searchDate != "") {
+        } else if (searchDate != "" && searchHour == "") {
           // Display occupancy in container 4
-          fetchOccupancy()
+          fetchDailyOccupancy(stationNumber, searchDate)
             .then((jsonData) => {
               // Create our data table out of JSON data loaded from server.
               // Create table for bikes occupancy
               var dataBikes = new google.visualization.DataTable();
               dataBikes.addColumn("date", "Time");
-              dataBikes.addColumn("number", "Average Bikes");
+              dataBikes.addColumn("number", "Average Daily Bikes");
               // Create table for bike stands
               var dataStands = new google.visualization.DataTable();
               dataStands.addColumn("date", "Time");
-              dataStands.addColumn("number", "Average Stands");
+              dataStands.addColumn("number", "Average Daily Stands");
 
               jsonData.forEach((el) => {
                 var dateArray = el.date.split("-");
                 dataBikes.addRows([
                   [
-                    new Date(dateArray[0], dateArray[1] - 1, dateArray[2]),
-                    el.ocuppancy_bikes,
+                    new Date(
+                      dateArray[0],
+                      dateArray[1] - 1,
+                      dateArray[2],
+                      dateArray[3]
+                    ),
+                    el.available_bikes,
                   ],
                 ]);
                 dataStands.addRows([
                   [
-                    new Date(dateArray[0], dateArray[1] - 1, dateArray[2]),
-                    el.ocuppancy_stands,
+                    new Date(
+                      dateArray[0],
+                      dateArray[1] - 1,
+                      dateArray[2],
+                      dateArray[3]
+                    ),
+                    el.available_bikes_stands,
                   ],
                 ]);
               });
@@ -581,43 +621,50 @@ function searchOptions() {
               arraySearchElements.push(dataStands);
             })
             .catch((err) => {
-              console.log("OOPS! Can't display occupancy", err);
+              console.log(err);
             });
 
-          fetchHistoricalWeather().then((weatherData) => {
-            // Create table for historical weather
-            var historicalWeather = new google.visualization.DataTable();
-            historicalWeather.addColumn("date", "Time");
-            historicalWeather.addColumn("number", "Humidity");
-            historicalWeather.addColumn("number", "Temperature");
+          fetchDailyWeather(searchDate).then((weatherData) => {
+            // Create table for daily weather
+            var dailyWeather = new google.visualization.DataTable();
+            dailyWeather.addColumn("date", "Time");
+            dailyWeather.addColumn("number", "Daily Humidity");
+            dailyWeather.addColumn("number", "Daily Temperature");
 
-            weatherData.forEach((el) => {
-              var dateArray = el.date.split("-");
-              historicalWeather.addRows([
+            for (i = 0; i < weatherData.length; i += 5) {
+              var dateArray = weatherData[i].date.split("-");
+              dailyWeather.addRows([
                 [
-                  new Date(dateArray[0], dateArray[1] - 1, dateArray[2]),
-                  el.humidity,
-                  el.temp,
+                  new Date(
+                    dateArray[0],
+                    dateArray[1] - 1,
+                    dateArray[2],
+                    dateArray[3],
+                    dateArray[4]
+                  ),
+                  weatherData[i].humidity,
+                  weatherData[i].temp,
                 ],
               ]);
-            });
+            }
 
             // Insert the elements in the array
-            arraySearchElements.push(historicalWeather);
+            arraySearchElements.push(dailyWeather);
           });
 
           // Display ranking of the different stations
-          fetchHistoricalOccupancy("bikes")
+          fetchAllDailyOccupancy(searchDate, "bikes")
             .then((rankingAvailableBikes) => {
-              fetchHistoricalOccupancy("stands").then(
+              fetchAllDailyOccupancy(searchDate, "stands").then(
                 (rankingAvailableStands) => {
-                  var position;
+                  var positionBikes;
+                  var positionStands;
                   var avgBikes;
                   var avgStands;
                   // Loop through the data until we find our station
                   for (i = 0; i < rankingAvailableBikes.length; i++) {
                     if (rankingAvailableBikes[i].number == stationNumber) {
-                      position = i + 1;
+                      positionBikes = i + 1;
                       avgBikes = rankingAvailableBikes[i].bikes;
                       break;
                     }
@@ -626,7 +673,7 @@ function searchOptions() {
                   // Loop through the data until we find our station
                   for (i = 0; i < rankingAvailableStands.length; i++) {
                     if (rankingAvailableStands[i].number == stationNumber) {
-                      position = i + 1;
+                      positionStands = i + 1;
                       avgStands = rankingAvailableStands[i].stands;
                       break;
                     }
@@ -648,12 +695,15 @@ function searchOptions() {
                   var contentStr =
                     "<div class='" +
                     classNameTable +
-                    "'><p>Ranking Availability Bikes</p><table>";
-                  for (i = 1; i < 4; i++) {
+                    "'><p>" +
+                    searchDate +
+                    "Ranking Bikes</p><table>";
+                  for (i = 0; i < 3; i++) {
+                    var x = i + 1;
                     if (rankingAvailableBikes[i].number != stationNumber) {
                       contentStr +=
                         "<tr><th>Station Number</th>" +
-                        "<th>Historical Availability</th>" +
+                        "<th>Availability</th>" +
                         "<th>Position</th></tr>" +
                         "<tr><td>" +
                         rankingAvailableBikes[i].number +
@@ -662,22 +712,22 @@ function searchOptions() {
                         rankingAvailableBikes[i].bikes.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        i +
+                        x +
                         "</td>";
                     } else {
                       checker = true;
                       contentStr +=
                         "<tr class='station-target'><th>Station Number</th>" +
-                        "<th>Historical Availability</th>" +
+                        "<th>Availability</th>" +
                         "<th>Position</th></tr>" +
                         "<tr class='station-target'><td>" +
                         stationNumber +
                         "</td>" +
                         "<td>" +
-                        stationHistoricalAvgBikes.toFixed(2) +
+                        avgBikes.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        position +
+                        positionBikes +
                         "</td>";
                     }
                   }
@@ -685,7 +735,7 @@ function searchOptions() {
                   if (checker == false) {
                     contentStr +=
                       "<tr class='station-target'><th>Station Number</th>" +
-                      "<th>Historical Availability</th>" +
+                      "<th>Availability</th>" +
                       "<th>Position</th></tr>" +
                       "<tr class='station-target'><td>" +
                       stationNumber +
@@ -694,7 +744,7 @@ function searchOptions() {
                       avgBikes.toFixed(2) +
                       "</td>" +
                       "<td>" +
-                      position +
+                      positionBikes +
                       "</td>";
                   }
 
@@ -706,12 +756,15 @@ function searchOptions() {
                   contentStr +=
                     "<div class='" +
                     classNameTable +
-                    "'><p>Ranking Availability Stands</p><table>";
-                  for (i = 1; i < 4; i++) {
+                    "'><p>" +
+                    searchDate +
+                    "Ranking Stands</p><table>";
+                  for (i = 0; i < 3; i++) {
+                    var x = i + 1;
                     if (rankingAvailableStands[i].number != stationNumber) {
                       contentStr +=
                         "<tr><th>Station Number</th>" +
-                        "<th>Historical Availability</th>" +
+                        "<th>Availability</th>" +
                         "<th>Position</th></tr>" +
                         "<tr><td>" +
                         rankingAvailableStands[i].number +
@@ -720,22 +773,22 @@ function searchOptions() {
                         rankingAvailableStands[i].stands.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        i +
+                        x +
                         "</td>";
                     } else {
                       checker = true;
                       contentStr +=
                         "<tr class='station-target'><th>Station Number</th>" +
-                        "<th>Historical Availability</th>" +
+                        "<th>Availability</th>" +
                         "<th>Position</th></tr>" +
                         "<tr class='station-target'><td>" +
                         stationNumber +
                         "</td>" +
                         "<td>" +
-                        stationHistoricalAvgStands.toFixed(2) +
+                        avgStands.toFixed(2) +
                         "</td>" +
                         "<td>" +
-                        position +
+                        positionStands +
                         "</td>";
                     }
                   }
@@ -743,7 +796,7 @@ function searchOptions() {
                   if (checker == false) {
                     contentStr +=
                       "<tr class='station-target'><th>Station Number</th>" +
-                      "<th>Historical Availability</th>" +
+                      "<th>Availability</th>" +
                       "<th>Position</th></tr>" +
                       "<tr class='station-target'><td>" +
                       stationNumber +
@@ -752,7 +805,7 @@ function searchOptions() {
                       avgStands.toFixed(2) +
                       "</td>" +
                       "<td>" +
-                      position +
+                      positionStands +
                       "</td>";
                   }
 
@@ -789,7 +842,10 @@ function searchOptions() {
                     classNameDinamicInfo +
                     ">" +
                     "<div><b>" +
-                    "Historical Mean Availability</b></div>" +
+                    searchDate +
+                    "</p></div>" +
+                    "<div><p>" +
+                    "Daily Mean Availability</b></div>" +
                     "<p><b>" +
                     stationName +
                     "nº " +
@@ -812,9 +868,510 @@ function searchOptions() {
               );
             })
             .catch((err) => {
-              console.log("OOPS! Can't display occupancy", err);
+              console.log(err);
             });
+        } else if (searchDate != "" && searchHour != "") {
+          // Display occupancy in container 4
+          fetchDailyOccupancy(stationNumber, searchDate)
+            .then((jsonData) => {
+              // Create our data table out of JSON data loaded from server.
+              // Create table for bikes occupancy
+              var dataBikes = new google.visualization.DataTable();
+              dataBikes.addColumn("date", "Time");
+              dataBikes.addColumn("number", "Average Daily Bikes");
+              // Create table for bike stands
+              var dataStands = new google.visualization.DataTable();
+              dataStands.addColumn("date", "Time");
+              dataStands.addColumn("number", "Average Daily Stands");
+
+              jsonData.forEach((el) => {
+                var dateArray = el.date.split("-");
+                dataBikes.addRows([
+                  [
+                    new Date(
+                      dateArray[0],
+                      dateArray[1] - 1,
+                      dateArray[2],
+                      dateArray[3]
+                    ),
+                    el.available_bikes,
+                  ],
+                ]);
+                dataStands.addRows([
+                  [
+                    new Date(
+                      dateArray[0],
+                      dateArray[1] - 1,
+                      dateArray[2],
+                      dateArray[3]
+                    ),
+                    el.available_bikes_stands,
+                  ],
+                ]);
+              });
+
+              // Insert the elements in the array
+              arraySearchElements.push(dataBikes);
+              arraySearchElements.push(dataStands);
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          fetchDailyHourlyWeather(searchDate, searchHour)
+            .then((weatherData) => {
+              // Check if the view is set for dark mode
+              var className;
+              if (darkMode.classList.contains("dark-mode-active")) {
+                className = "weather-slide-darkmode";
+              } else {
+                className = "weather-slide-lightmode";
+              }
+
+              data = weatherData[0];
+              var contentStr;
+              //iterate through the data and display day, date, temp, description, icon and wind
+              var weatherIcon =
+                '<img class="icons2" height = "50px" width = "50px" src="http://openweathermap.org/img/w/' +
+                data.icon +
+                '.png"/>';
+              //create the containers to display weather
+              contentStr =
+                '<div id="weather-slide" class=' +
+                className +
+                '><div id="weather-header"><div><p>' +
+                searchCompleteHour +
+                "</p></div>" +
+                '<div id="weather-description"><p>' +
+                data.description +
+                "</p></div>" +
+                "<div><p>" +
+                searchDate +
+                "</p></div></div>" +
+                '<div id="weather-info">' +
+                '<div id="weather-temp" class="weather-items"><h1>' +
+                data.temp +
+                "ºC</h1></div>" +
+                '<div id="weather-icon" class="weather-items">' +
+                weatherIcon +
+                "</div>" +
+                '<div id="weather-temp-min" class="weather-items"><p>Min<br>' +
+                data.temp_min +
+                "</p></div>" +
+                '<div id="weather-temp-max" class="weather-items"><p>Max<br>' +
+                data.temp_max +
+                "</p></div>" +
+                '<div id="weather-temp-humidity" class="weather-items"><p>Humidity<br>' +
+                data.humidity +
+                "</p></div>" +
+                "</div></div>";
+
+              container3.innerHTML = contentStr;
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+
+          // Display ranking of the different stations
+          fetchDailyHourlyOccupancy(searchDate, searchHour, "bikes")
+            .then((rankingAvailableBikes) => {
+              fetchDailyHourlyOccupancy(searchDate, searchHour, "stands").then(
+                (rankingAvailableStands) => {
+                  var positionBikes;
+                  var positionStands;
+                  var avgBikes;
+                  var avgStands;
+                  // Loop through the data until we find our station
+                  for (i = 0; i < rankingAvailableBikes.length; i++) {
+                    if (rankingAvailableBikes[i].number == stationNumber) {
+                      positionBikes = i + 1;
+                      avgBikes = rankingAvailableBikes[i].bikes;
+                      break;
+                    }
+                  }
+
+                  // Loop through the data until we find our station
+                  for (i = 0; i < rankingAvailableStands.length; i++) {
+                    if (rankingAvailableStands[i].number == stationNumber) {
+                      positionStands = i + 1;
+                      avgStands = rankingAvailableStands[i].stands;
+                      break;
+                    }
+                  }
+
+                  // Check if the view is set for dark mode
+                  var classNameTable;
+                  if (darkMode.classList.contains("dark-mode-active")) {
+                    classNameTable =
+                      "station-rankings station-rankings-darkmode";
+                  } else {
+                    classNameTable =
+                      "station-rankings station-rankings-lightmode";
+                  }
+
+                  // Bikes
+                  // Display the first five values and the station
+                  var checker = false;
+                  var contentStr =
+                    "<div class='" +
+                    classNameTable +
+                    "'><p>" +
+                    searchDate +
+                    " " +
+                    searchCompleteHour +
+                    " " +
+                    "Ranking Bikes</p><table>";
+                  for (i = 0; i < 3; i++) {
+                    var x = i + 1;
+                    if (rankingAvailableBikes[i].number != stationNumber) {
+                      contentStr +=
+                        "<tr><th>Station Number</th>" +
+                        "<th>Availability</th>" +
+                        "<th>Position</th></tr>" +
+                        "<tr><td>" +
+                        rankingAvailableBikes[i].number +
+                        "</td>" +
+                        "<td>" +
+                        rankingAvailableBikes[i].bikes.toFixed(2) +
+                        "</td>" +
+                        "<td>" +
+                        x +
+                        "</td>";
+                    } else {
+                      checker = true;
+                      contentStr +=
+                        "<tr class='station-target'><th>Station Number</th>" +
+                        "<th>Availability</th>" +
+                        "<th>Position</th></tr>" +
+                        "<tr class='station-target'><td>" +
+                        stationNumber +
+                        "</td>" +
+                        "<td>" +
+                        avgBikes.toFixed(2) +
+                        "</td>" +
+                        "<td>" +
+                        positionBikes +
+                        "</td>";
+                    }
+                  }
+
+                  if (checker == false) {
+                    contentStr +=
+                      "<tr class='station-target'><th>Station Number</th>" +
+                      "<th>Availability</th>" +
+                      "<th>Position</th></tr>" +
+                      "<tr class='station-target'><td>" +
+                      stationNumber +
+                      "</td>" +
+                      "<td>" +
+                      avgBikes.toFixed(2) +
+                      "</td>" +
+                      "<td>" +
+                      positionBikes +
+                      "</td>";
+                  }
+
+                  contentStr += "</table></div>";
+
+                  // Stands
+                  // Display the first five values and the station
+                  checker = false;
+                  contentStr +=
+                    "<div class='" +
+                    classNameTable +
+                    "'><p>" +
+                    searchDate +
+                    " " +
+                    searchCompleteHour +
+                    " " +
+                    "Ranking Stands</p><table>";
+                  for (i = 0; i < 3; i++) {
+                    var x = i + 1;
+                    if (rankingAvailableStands[i].number != stationNumber) {
+                      contentStr +=
+                        "<tr><th>Station Number</th>" +
+                        "<th>Availability</th>" +
+                        "<th>Position</th></tr>" +
+                        "<tr><td>" +
+                        rankingAvailableStands[i].number +
+                        "</td>" +
+                        "<td>" +
+                        rankingAvailableStands[i].stands.toFixed(2) +
+                        "</td>" +
+                        "<td>" +
+                        x +
+                        "</td>";
+                    } else {
+                      checker = true;
+                      contentStr +=
+                        "<tr class='station-target'><th>Station Number</th>" +
+                        "<th>Availability</th>" +
+                        "<th>Position</th></tr>" +
+                        "<tr class='station-target'><td>" +
+                        stationNumber +
+                        "</td>" +
+                        "<td>" +
+                        avgStands.toFixed(2) +
+                        "</td>" +
+                        "<td>" +
+                        positionStands +
+                        "</td>";
+                    }
+                  }
+
+                  if (checker == false) {
+                    contentStr +=
+                      "<tr class='station-target'><th>Station Number</th>" +
+                      "<th>Availability</th>" +
+                      "<th>Position</th></tr>" +
+                      "<tr class='station-target'><td>" +
+                      stationNumber +
+                      "</td>" +
+                      "<td>" +
+                      avgStands.toFixed(2) +
+                      "</td>" +
+                      "<td>" +
+                      positionStands +
+                      "</td>";
+                  }
+
+                  contentStr += "</table></div>";
+
+                  container1.innerHTML = contentStr;
+
+                  // Push information about that station to container 2
+                  var iconBike;
+                  var iconParking;
+                  var classNameDinamicInfo;
+                  if (darkMode.classList.contains("dark-mode-active")) {
+                    iconBike =
+                      '<img id="icon-bike-dinamic" src="static/fixtures/icon-bike-darkmode.png" width="28" height="28" alt="Icon bike"/>';
+                    iconParking =
+                      '<img id="icon-stand-dinamic" src="static/fixtures/icon-parking-green.png" width="24" height="24" alt="Icon parking"/>';
+                    classNameDinamicInfo = "dinamic-station-info-darkmode";
+                  } else {
+                    iconBike =
+                      '<img id="icon-bike-dinamic" src="static/fixtures/icon-bike-blue.png" width="28" height="28" alt="Icon bike"/>';
+                    iconParking =
+                      '<img id="icon-stand-dinamic" src="static/fixtures/icon-parking.png" width="24" height="24" alt="Icon parking"/>';
+                    classNameDinamicInfo = "dinamic-station-info-lightmode";
+                  }
+
+                  // Join the first elements of the array to get the station name
+                  var stationName = "";
+                  for (i = 0; i < searchStationInput.length - 1; i++) {
+                    stationName += searchStationInput[i] + " ";
+                  }
+
+                  var contentStr =
+                    '<div id="dinamic-station-info" class=' +
+                    classNameDinamicInfo +
+                    ">" +
+                    "<div><b>" +
+                    searchDate +
+                    " " +
+                    searchCompleteHour +
+                    "</p></div>" +
+                    "<div><p>" +
+                    "Hourly Mean Availability</b></div>" +
+                    "<p><b>" +
+                    stationName +
+                    "nº " +
+                    stationNumber +
+                    "</b></p>" +
+                    '<div id="station-infowindow">' +
+                    "<div class='infowindow-subelement'>" +
+                    avgBikes.toFixed(2) +
+                    iconBike +
+                    "</div><div class='infowindow-subelement'>" +
+                    avgStands.toFixed(2) +
+                    iconParking +
+                    "</div></div></div>";
+
+                  container2.innerHTML = contentStr;
+
+                  // Call fucntion to display data
+                  updateSearch();
+                }
+              );
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        } // If statement for error handling
+        if (searchDate == "" && searchHour != "") {
+          const infoIcon1 = document.getElementById("info-icon1");
+          infoIcon1.src = "static/fixtures/icon-cross-red.png";
+        } // If statement for error handling
+        if (
+          (searchDate != "" || searchHour != "") &&
+          searchStationInput == ""
+        ) {
+          const infoIcon2 = document.getElementById("info-icon2");
+          infoIcon2.src = "static/fixtures/icon-cross-red.png";
         }
+      } else if (fullSearchButton.classList.contains("active-button")) {
+        // Display occupancy in container 4
+        fetchCompleteHistoricalOccupancy()
+          .then((jsonData) => {
+            // Create our data table out of JSON data loaded from server.
+            // Create table for bikes occupancy
+            var dataBikes = new google.visualization.DataTable();
+            dataBikes.addColumn("date", "Time");
+            dataBikes.addColumn("number", "Average Daily Bikes All Stations");
+            // Create table for bike stands
+            var dataStands = new google.visualization.DataTable();
+            dataStands.addColumn("date", "Time");
+            dataStands.addColumn("number", "Average Daily Stands All Stations");
+
+            jsonData.forEach((el) => {
+              var dateArray = el.date.split("-");
+              dataBikes.addRows([
+                [
+                  new Date(dateArray[0], dateArray[1] - 1, dateArray[2]),
+                  el.bikes,
+                ],
+              ]);
+              dataStands.addRows([
+                [
+                  new Date(dateArray[0], dateArray[1] - 1, dateArray[2]),
+                  el.stands,
+                ],
+              ]);
+            });
+            // Insert the elements in the array
+            arraySearchElements.push(dataBikes);
+            arraySearchElements.push(dataStands);
+
+            // Call function to display data
+            updateSearch();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        fetchHistoricalWeather()
+          .then((weatherData) => {
+            // Create table for historical weather
+            var historicalWeather = new google.visualization.DataTable();
+            historicalWeather.addColumn("date", "Time");
+            historicalWeather.addColumn("number", "Humidity");
+            historicalWeather.addColumn("number", "Temperature");
+
+            weatherData.forEach((el) => {
+              var dateArray = el.date.split("-");
+              historicalWeather.addRows([
+                [
+                  new Date(dateArray[0], dateArray[1] - 1, dateArray[2]),
+                  el.humidity,
+                  el.temp,
+                ],
+              ]);
+            });
+
+            // Insert the elements in the array
+            arraySearchElements.push(historicalWeather);
+
+            // Call function to display data
+            updateSearch();
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // Display a pie chart with the occupancy relation between stands and bikes
+        fetchOccupancyRelation()
+          .then((relationData) => {
+            var occupancyRelation = new google.visualization.arrayToDataTable([
+              ["Relation", "Occupancy Relation"],
+              ["Bikes", relationData[0].bikes],
+              ["Stands", relationData[0].stands],
+            ]);
+
+            // Insert the elements in the array
+            arraySearchElements.push(occupancyRelation);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+
+        // Display ranking of the different stations
+        fetchHistoricalOccupancy("bikes")
+          .then((rankingAvailableBikes) => {
+            fetchHistoricalOccupancy("stands").then(
+              (rankingAvailableStands) => {
+                // Check if the view is set for dark mode
+                var classNameTable;
+                if (darkMode.classList.contains("dark-mode-active")) {
+                  classNameTable = "station-rankings station-rankings-darkmode";
+                } else {
+                  classNameTable =
+                    "station-rankings station-rankings-lightmode";
+                }
+
+                // Bikes
+                // Display the first five values
+                var contentStr =
+                  "<div class='" +
+                  classNameTable +
+                  "'>" +
+                  "<p>Ranking Availability Bikes</p><table>";
+                for (i = 0; i < 4; i++) {
+                  var x = i + 1;
+                  contentStr +=
+                    "<tr><th>Station Number</th>" +
+                    "<th>Historical Availability</th>" +
+                    "<th>Position</th></tr>" +
+                    "<tr><td>" +
+                    rankingAvailableBikes[i].number +
+                    "</td>" +
+                    "<td>" +
+                    rankingAvailableBikes[i].bikes.toFixed(2) +
+                    "</td>" +
+                    "<td>" +
+                    x +
+                    "</td>";
+                }
+
+                contentStr += "</table></div>";
+
+                // Stands
+                // Display the first five values
+                contentStr +=
+                  "<div class='" +
+                  classNameTable +
+                  "'><p>Ranking Availability Stands</p><table>";
+                for (i = 0; i < 4; i++) {
+                  var x = i + 1;
+                  contentStr +=
+                    "<tr><th>Station Number</th>" +
+                    "<th>Historical Availability</th>" +
+                    "<th>Position</th></tr>" +
+                    "<tr><td>" +
+                    rankingAvailableStands[i].number +
+                    "</td>" +
+                    "<td>" +
+                    rankingAvailableStands[i].stands.toFixed(2) +
+                    "</td>" +
+                    "<td>" +
+                    x +
+                    "</td>";
+                }
+
+                contentStr += "</table></div>";
+
+                container1.innerHTML = contentStr;
+
+                // Push information about that station to container 2
+
+                // Call function to display data
+                updateSearch();
+              }
+            );
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       }
     } else if (predictionsButton.classList.contains("active-button")) {
       searchHour = hour.value;
@@ -824,7 +1381,7 @@ function searchOptions() {
         searchStationInput = stationInput.value;
         searchStationInput = searchStationInput.split(" ");
         searchStationInput = searchStationInput[searchStationInput.length - 1];
-        fetchWeather().then((data) => {
+        fetchForecastWeather().then((data) => {
           searchHour = searchHour.split(":");
           searchHour = searchHour[0];
 
@@ -897,7 +1454,54 @@ function searchOptions() {
       }
     }
 
+    // Accomodate the search to changes in the screen size or dark mode
     darkMode.addEventListener("click", updateSearch);
+
+    layout1.addEventListener("click", () => {
+      const dinamicStationInfo = document.getElementById(
+        "dinamic-station-info"
+      );
+      const weatherSlide = document.getElementById("weather-slide");
+      if (dinamicStationInfo == null) {
+        container2.innerHTML = "";
+      }
+      if (weatherSlide == null) {
+        container3.innerHTML = "";
+      }
+      container4a.innerHTML = "";
+      container4b.innerHTML = "";
+      updateSearch();
+    });
+    layout2.addEventListener("click", () => {
+      const dinamicStationInfo = document.getElementById(
+        "dinamic-station-info"
+      );
+      const weatherSlide = document.getElementById("weather-slide");
+      if (dinamicStationInfo == null) {
+        container2.innerHTML = "";
+      }
+      if (weatherSlide == null) {
+        container3.innerHTML = "";
+      }
+      container4a.innerHTML = "";
+      container4b.innerHTML = "";
+      updateSearch();
+    });
+    layout3.addEventListener("click", () => {
+      const dinamicStationInfo = document.getElementById(
+        "dinamic-station-info"
+      );
+      const weatherSlide = document.getElementById("weather-slide");
+      if (dinamicStationInfo == null) {
+        container2.innerHTML = "";
+      }
+      if (weatherSlide == null) {
+        container3.innerHTML = "";
+      }
+      container4a.innerHTML = "";
+      container4b.innerHTML = "";
+      updateSearch();
+    });
     window.addEventListener("resize", updateSearch);
 
     function updateSearch() {
@@ -908,30 +1512,83 @@ function searchOptions() {
       }
 
       arraySearchElements.forEach((elem) => {
-        if (elem.If[1].label == "Average Bikes") {
-          options.title = "Average Bikes nº " + stationNumber;
-          options.hAxis.title = "Months";
-          options.vAxis.title = "Bikes";
-          var chart = new google.visualization.LineChart(
-            document.getElementById("container4-a")
-          );
-          chart.draw(elem, options);
-        } else if (elem.If[1].label == "Average Stands") {
-          options.title = "Average Stands nº " + stationNumber;
-          options.hAxis.title = "Months";
-          options.vAxis.title = "Stands";
-          var chart = new google.visualization.LineChart(
-            document.getElementById("container4-b")
-          );
-          chart.draw(elem, options);
-        } else if (elem.If[1].label == "Humidity") {
-          options.title = "Historical Weather";
-          options.hAxis.title = "Months";
-          options.vAxis.title = "Temp, Humidity";
-          var chart = new google.visualization.LineChart(
-            document.getElementById("container3")
-          );
-          chart.draw(elem, options);
+        if (elem.If) {
+          if (elem.If[1].label == "Average Bikes") {
+            options.title = "Average Bikes nº " + stationNumber;
+            options.hAxis.title = "Months";
+            options.vAxis.title = "Bikes";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container4-a")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Average Stands") {
+            options.title = "Average Stands nº " + stationNumber;
+            options.hAxis.title = "Months";
+            options.vAxis.title = "Stands";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container4-b")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Average Daily Bikes") {
+            options.title =
+              searchDate + " " + "Average Bikes nº " + stationNumber;
+            options.hAxis.title = "Hours";
+            options.vAxis.title = "Bikes";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container4-a")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Average Daily Stands") {
+            options.title =
+              searchDate + " " + "Average Stands nº " + stationNumber;
+            options.hAxis.title = "Hours";
+            options.vAxis.title = "Stands";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container4-b")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Average Daily Bikes All Stations") {
+            options.title = "Average Bikes";
+            options.hAxis.title = "Months";
+            options.vAxis.title = "Bikes";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container4-a")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Average Daily Stands All Stations") {
+            options.title = "Average Stands";
+            options.hAxis.title = "Months";
+            options.vAxis.title = "Bikes";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container4-b")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Occupancy Relation") {
+            options.title = "Occupancy Relation";
+            var chart = new google.visualization.PieChart(
+              document.getElementById("container2")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Humidity") {
+            options.title = "Historical Weather";
+            options.hAxis.title = "Months";
+            options.vAxis.title = "Temp, Humidity";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container3")
+            );
+            chart.draw(elem, options);
+          } else if (elem.If[1].label == "Daily Humidity") {
+            options.title = searchDate + " " + "Weather";
+            options.hAxis.title = "Hours";
+            options.vAxis.title = "Temp, Humidity";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container3")
+            );
+          }
+          // Plot the graphs if everything has gone right
+          if (chart) {
+            chart.draw(elem, options);
+          }
         }
       });
     }
@@ -1086,7 +1743,7 @@ function removeActive(x) {
   }
 }
 
-// Fucntion to fetch the occupancy during time
+// Function to fetch the historic occupancy for a station
 async function fetchOccupancy(num) {
   return fetch("/occupancy/" + num)
     .then((response) => {
@@ -1097,7 +1754,40 @@ async function fetchOccupancy(num) {
     });
 }
 
-// Fucntion to fetch the occupancy during time
+// Fucntion to fetch the occupancy for a station in a certain day
+async function fetchDailyOccupancy(num, day) {
+  return fetch("/daily_occupancy/" + num + "/" + day)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
+// Fucntion to fetch the occupancy for all the stations in a certain day and hour
+async function fetchDailyHourlyOccupancy(day, hour, type) {
+  return fetch("/daily_hourly_occupancy/" + day + "/" + hour + "/" + type)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
+// Fucntion to fetch the occupancy for all the stations in a certain day
+async function fetchAllDailyOccupancy(day, type) {
+  return fetch("/complete_daily_occupancy/" + day + "/" + type)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
+// Fucntion to fetch the occupancy for all time for all the stations
 async function fetchHistoricalOccupancy(type) {
   return fetch("/historical_occupancy/" + type)
     .then((response) => {
@@ -1108,12 +1798,58 @@ async function fetchHistoricalOccupancy(type) {
     });
 }
 
+// Fucntion to fetch the occupancy for all time for all the stations
+async function fetchCompleteHistoricalOccupancy() {
+  return fetch("/complete_historical_occupancy")
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
+// Fucntion to fetch the occupancy for all time for all the stations
+async function fetchOccupancyRelation() {
+  return fetch("/occupancy_relation")
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
 // Function to fetch the weather data
-async function fetchWeather() {
+async function fetchForecastWeather() {
   // Fetch weather forecast info
   return fetch(
     "https://api.openweathermap.org/data/2.5/onecall?lat=53.350140&lon=-6.266155&exclude=currently,minuetely,hourly&units=metric&appid=f092bb2fdf927ba79511674732a39c36"
   )
+    .then(function (response) {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
+// Function to fetch the weather for a day and an hour
+async function fetchDailyHourlyWeather(date, hour) {
+  // Fetch weather forecast info
+  return fetch("/daily_weather/" + date + "/" + hour)
+    .then(function (response) {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
+}
+
+// Function to fetch the weather for one day
+async function fetchDailyWeather(date) {
+  // Fetch weather forecast info
+  return fetch("/daily_weather/" + date)
     .then(function (response) {
       return response.json();
     })

@@ -807,7 +807,7 @@ function displayWeatherInfo(id) {
             '<div id="weather-temp-max" class="weather-items"><p>Max<br>' +
             data[i].value["Temp"]["min"] +
             "</p></div>" +
-            '<div id="weather-temp-humidity" class="weather-items"><p>Wind<br>' +
+            '<div id="weather-temp-windy" class="weather-items"><p>Wind<br>' +
             data[i].value["Wind"] +
             "mph</p></div>" +
             "</div></div>";

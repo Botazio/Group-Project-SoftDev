@@ -74,6 +74,7 @@
 }
 
 #search-system {
+  min-height: 130px;
   padding: 10px;
   border-radius: 25px;
   box-shadow: 0 2px 5px 0 rgba(0, 0, 0, 0.16), 0 2px 10px 0 rgba(0, 0, 0, 0.12);
@@ -593,6 +594,54 @@ input[type="date"] {
   padding: 5px;
 }
 
+.station-target th {
+  border-top: 2px solid black;
+}
+
+.station-target td {
+  border-bottom: 2px solid black;
+}
+
+#weather-slide {
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.weather-slide-lightmode {
+  color: black;
+}
+
+.weather-slide-darkmode {
+  color: white;
+}
+
+#weather-header {
+  width: 90%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#weather-description {
+  text-transform: capitalize;
+}
+
+#weather-info {
+  width: 90%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.weather-items {
+  text-align: center;
+}
+
 @media screen and (max-width: 1260px) {
   .search-system-layout1 {
     width: auto;
@@ -794,6 +843,11 @@ input[type="date"] {
   }
 
   #dinamic-station-info {
+    font-size: 14px;
+  }
+
+  #weather-slide {
+    width: 325px;
     font-size: 14px;
   }
 

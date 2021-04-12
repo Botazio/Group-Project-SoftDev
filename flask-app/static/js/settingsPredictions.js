@@ -56,21 +56,27 @@ function changeMode() {
       const stationRankings = document.getElementsByClassName(
         "station-rankings"
       );
+      const weatherSlide = document.getElementById("weather-slide");
 
-      dinamicStationInfo.classList.toggle("dinamic-station-info-lightmode");
-      dinamicStationInfo.classList.toggle("dinamic-station-info-darkmode");
+      if (dinamicStationInfo != null) {
+        dinamicStationInfo.classList.toggle("dinamic-station-info-lightmode");
+        dinamicStationInfo.classList.toggle("dinamic-station-info-darkmode");
+        if (darkMode.classList.contains("dark-mode-active")) {
+          iconBikeDinamic.src = "static/fixtures/icon-bike-darkmode.png";
+          iconStandDinamic.src = "static/fixtures/icon-parking-green.png";
+        } else {
+          iconBikeDinamic.src = "static/fixtures/icon-bike-blue.png";
+          iconStandDinamic.src = "static/fixtures/icon-parking.png";
+        }
+      }
+      if (weatherSlide != null) {
+        weatherSlide.classList.toggle("weather-slide-lightmode");
+        weatherSlide.classList.toggle("weather-slide-darkmode");
+      }
 
       for (i = 0; i < stationRankings.length; i++) {
         stationRankings[i].classList.toggle("station-rankings-lightmode");
         stationRankings[i].classList.toggle("station-rankings-darkmode");
-      }
-
-      if (darkMode.classList.contains("dark-mode-active")) {
-        iconBikeDinamic.src = "static/fixtures/icon-bike-darkmode.png";
-        iconStandDinamic.src = "static/fixtures/icon-parking-green.png";
-      } else {
-        iconBikeDinamic.src = "static/fixtures/icon-bike-blue.png";
-        iconStandDinamic.src = "static/fixtures/icon-parking.png";
       }
     } catch (error) {
       console.log(error);
