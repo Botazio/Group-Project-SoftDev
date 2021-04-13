@@ -11,8 +11,11 @@
    
 {% block body %}
 <div style="display: none;">
-   <div id="full-container">
-      <div id="container-pac">
+   <div id="full-container" style="z-index: 2000000">
+      <div id="container-pac" class="container-pac-hide">
+         <div id="close-search-phone">
+            <img src="{{url_for('static', filename='fixtures/icon-close-white.png')}}" width='14', height='14' alt="Close directions"/>
+         </div>
          <div id="upper-wrapper">
             <img id="user-position" src="{{url_for('static', filename='fixtures/icon-position.png')}}" width='17', height='17' alt="User position"/>
             <div id="origin-container">
@@ -26,17 +29,17 @@
          </div>
          <div id="bottom-wrapper">
             <img id="refresh-search" src="{{url_for('static', filename='fixtures/icon-refresh.png')}}" width='17', height='17' alt="Refresh directions"/>
-            <div id="destination-container">
+            <div id="destination-container" class="destination-container-initial">
                <input
                id="destination-input"
-               class="controls"
+               class="controls destination-input-initial"
                type="text"
                placeholder="Enter a destination station"
                />
                <div id="search-direction">
                   <img id="search-icon" src="{{url_for('static', filename='fixtures/icon-direction.png')}}" width='25', height='25' alt="Open directions"/>
                </div>
-               <div id="pac-list" class="pac-items"></div>
+               <div id="pac-list" class="pac-items pac-list-initial"></div>
             </div>
          </div>
 

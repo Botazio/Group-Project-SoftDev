@@ -59,8 +59,8 @@ function initMap() {
               map.mapTypes.set("styled_map", styledMapType);
               map.setMapTypeId("styled_map");
 
-              stationMarkersInfoButtons(data, map, availability);
               new AutocompleteDirectionsHandler(map, data, availability);
+              stationMarkersInfoButtons(data, map, availability);
             });
         });
     })
@@ -208,7 +208,7 @@ function stationMarkersInfoButtons(data, map, availability) {
     bikePaths(map, bikeLayer);
   });
 
-  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+  map.controls[google.maps.ControlPosition.RIGHT_BOTTOM].push(
     stationMarkersInfoPhone
   );
 }
@@ -294,6 +294,7 @@ class AutocompleteDirectionsHandler {
     // Add event listeners
     this.setupPlaceChangedListener(originAutocomplete);
     this.setupCloseListener("close-search");
+    this.setupCloseListener("close-search-phone");
     this.setupOpenListener("search-direction");
     this.setupRefreshSearchListener("refresh-search");
     this.setupUserPositionListener("user-position");
@@ -338,11 +339,11 @@ class AutocompleteDirectionsHandler {
     const displayStationSearch = document.getElementById(
       "display-station-search"
     );
-    const displayWeather = document.getElementById("display-weather");
-    const displayOccupancy = document.getElementById("display-occupancy");
+    const displayContainerInfo = document.getElementById(
+      "display-container-info"
+    );
     displayStationSearch.innerHTML = "";
-    displayWeather.style.display = "none";
-    displayOccupancy.style.display = "none";
+    displayContainerInfo.style.display = "none";
     waitingSearch.style.display = "flex";
     waitingSearch.style.flexDirection = "column";
     waitingSearch.style.justifyContent = "space-around";
@@ -419,6 +420,7 @@ class AutocompleteDirectionsHandler {
   setupOpenListener(id) {
     const openSearch = document.getElementById(id);
     const closeSearch = document.getElementById("close-search");
+    const closeSearchPhone = document.getElementById("close-search-phone");
     const container = document.getElementById("container-pac");
     const upperWrapper = document.getElementById("upper-wrapper");
     const destinationInput = document.getElementById("destination-input");
@@ -432,26 +434,32 @@ class AutocompleteDirectionsHandler {
     const refreshSearch = document.getElementById("refresh-search");
     const displayWeather = document.getElementById("display-weather");
     openSearch.addEventListener("click", () => {
-      container.style.backgroundColor = "rgb(0, 115, 152)";
-      container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
-      container.style.justifyContent = "center";
-      container.style.height = "275px";
+      container.classList.remove("container-pac-hide");
+      container.classList.add("container-pac-display");
+      destinationContainer.classList.remove("destination-container-initial");
+      destinationContainer.classList.add("destination-container-search");
+      destinationInput.classList.remove("destination-input-initial");
+      destinationInput.classList.add("destination-input-search");
+      pacList.classList.remove("pac-list-initial");
+      pacList.classList.add("pac-list-search");
       fullContainer.style.marginTop = "0px";
       upperWrapper.style.display = "flex";
       upperWrapper.style.justifyContent = "center";
       upperWrapper.style.alignItems = "center";
       modeSelector.style.display = "block";
-      destinationInput.style.fontSize = "15px";
-      destinationInput.style.width = "250px";
-      destinationContainer.style.width = "250px";
-      destinationContainer.style.padding = "0 11px 0 13px";
-      pacList.style.width = "250px";
       openSearch.style.display = "none";
-      closeSearch.style.display = "flex";
-      stationExtrainfo.style.display = "block";
+
+      stationExtrainfo.style.display = "flex";
       fullContainer.style.height = "100%";
-      refreshSearch.style.visibility = "visible";
+      refreshSearch.style.display = "block";
       displayWeather.style.display = "block";
+
+      if (window.matchMedia("(max-width: 600px)").matches) {
+        // If media query matches
+        closeSearchPhone.style.display = "block";
+      } else {
+        closeSearch.style.display = "flex";
+      }
     });
   }
   // Sets a listener to close the search system
@@ -471,22 +479,21 @@ class AutocompleteDirectionsHandler {
     const refreshSearch = document.getElementById("refresh-search");
     closeSearch.addEventListener("click", () => {
       this.refreshSearchEvent();
-      container.style.backgroundColor = "transparent";
-      container.style.boxShadow = "none";
-      container.style.justifyContent = "normal";
-      container.style.height = "auto";
+      container.classList.add("container-pac-hide");
+      container.classList.remove("container-pac-display");
+      destinationContainer.classList.add("destination-container-initial");
+      destinationContainer.classList.remove("destination-container-search");
+      destinationInput.classList.add("destination-input-initial");
+      destinationInput.classList.remove("destination-input-search");
+      pacList.classList.add("pac-list-initial");
+      pacList.classList.remove("pac-list-search");
       fullContainer.style.marginTop = "30px";
       upperWrapper.style.display = "none";
       modeSelector.style.display = "none";
-      destinationInput.style.fontSize = "17px";
-      destinationInput.style.width = "230px";
-      destinationContainer.style.width = "275px";
-      destinationContainer.style.padding = "10px 11px 10px 13px";
-      pacList.style.width = "275px";
       closeSearch.style.display = "none";
       stationExtrainfo.style.display = "none";
       fullContainer.style.height = "auto";
-      refreshSearch.style.visibility = "hidden";
+      refreshSearch.style.display = "none";
       setTimeout(function () {
         openSearch.style.display = "inline";
         openSearch.style.verticalAlign = "-6px";
@@ -748,25 +755,30 @@ function displayStationSearch(station, availability) {
   const stationExtrainfo = document.getElementById("station-extrainfo");
   const fullContainer = document.getElementById("full-container");
   const closeSearch = document.getElementById("close-search");
+  const closeSearchPhone = document.getElementById("close-search-phone");
   const refreshSearch = document.getElementById("refresh-search");
   const displayStationSearch = document.getElementById(
     "display-station-search"
   );
   const waitingSearch = document.getElementById("waiting-search");
-  const displayOccupancy = document.getElementById("display-occupancy");
-  const displayWeather = document.getElementById("display-weather");
-  container.style.backgroundColor = "rgb(0, 115, 152)";
-  container.style.boxShadow = "0 2px 6px rgba(0, 0, 0, 0.3)";
-  container.style.justifyContent = "center";
-  container.style.height = "275px";
+  const displayContainerInfo = document.getElementById(
+    "display-container-info"
+  );
+  container.classList.remove("container-pac-hide");
+  container.classList.add("container-pac-display");
   fullContainer.style.marginTop = "0px";
-  stationExtrainfo.style.display = "block";
+  stationExtrainfo.style.display = "flex";
   fullContainer.style.height = "100%";
-  closeSearch.style.display = "flex";
   waitingSearch.style.display = "none";
-  refreshSearch.style.visibility = "visible";
-  displayOccupancy.style.display = "block";
-  displayWeather.style.display = "block";
+  refreshSearch.style.display = "block";
+  displayContainerInfo.style.display = "block";
+
+  if (window.matchMedia("(max-width: 600px)").matches) {
+    // If media query matches
+    closeSearchPhone.style.display = "block";
+  } else {
+    closeSearch.style.display = "flex";
+  }
 
   var iconBanking =
     '<img src="static/fixtures/icon-banking-false.png" style="opacity:0.2" width="24" height="24" alt="Banking false"/>';
@@ -985,7 +997,7 @@ class displaySlidesGraphs {
     var options = {
       curveType: "function",
       legend: { position: "bottom" },
-      width: 400,
+      width: "100%",
       height: 200,
       fontName: "Sans-serif",
       hAxis: {
@@ -1034,7 +1046,7 @@ class displaySlidesGraphs {
       slides[i].style.display = "none";
       this.displayOccupancy(slides[i].id);
     }
-    slides[this.slideIndex - 1].style.display = "block";
+    slides[this.slideIndex - 1].style.display = "flex";
     this.displayOccupancy(slides[this.slideIndex - 1].id);
   }
 }

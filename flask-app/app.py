@@ -36,6 +36,7 @@ class getData():
     def __init__(self, engine):
         self.engine = engine
 
+    # Gets the stations data
     def getStations(self):
         try:
             df = pd.read_sql_table('station', self.engine)
@@ -45,6 +46,7 @@ class getData():
 
         return results
 
+    # Gets the availability data
     def getAvailability(self):
         try:
             df = pd.read_sql_query(
@@ -55,6 +57,7 @@ class getData():
 
         return results
 
+    # Gets the historical occupancy for a station
     def getOcuppancy(self, num):
         try:
             sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as ocuppancy_bikes,
@@ -67,6 +70,7 @@ class getData():
 
         return results
 
+    # Gets the occupancy for a station for a single day
     def getDailyOcuppancy(self, num, date):
         try:
             sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d-%H') as date, available_bikes,
@@ -80,7 +84,7 @@ class getData():
 
         return results
 
-    # Occupancy for all the stations at a certain hour
+    # Gets the occupancy for all the stations at a certain hour
     def getDailyHourlyOcuppancy(self, date, hour, type):
         try:
             dayTime = date + "-" + hour
@@ -95,7 +99,7 @@ class getData():
 
         return results
 
-    # Occupancy for all the stations for a certain day
+    # Gets the occupancy for all the stations for a certain day
     def getCompleteDailyOcuppancy(self, date, type):
         try:
             sql = f"""SELECT number, DATE_FORMAT(last_update,'%Y-%m-%d') as date, avg(available_bikes) as bikes,
@@ -109,7 +113,7 @@ class getData():
 
         return results
 
-    # Average occupancy for each station through time
+    # Gets the average occupancy for each station through time
     def getHistoricalAvgOcuppancy(self, type):
         try:
             sql = f"""SELECT number, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands FROM dbikes.availability
@@ -123,7 +127,7 @@ class getData():
 
         return results
 
-    # Average occupancy for the sum of all the stations for each day
+    # Gets the average occupancy for the sum of all the stations for each day
     def getCompleteHistoricalAvgOcuppancy(self):
         try:
             sql = f"""SELECT DATE_FORMAT(last_update,'%Y-%m-%d')as date, avg(available_bikes) as bikes, avg(available_bikes_stands) as stands
@@ -138,7 +142,7 @@ class getData():
 
         return results
 
-    # Average occupancy for the sum of all the station in all time
+    # Gets the average occupancy for the sum of all the station in all time
     def getOcuppancyRelation(self):
         try:
             sql = f"""SELECT  avg(available_bikes) as bikes, avg(available_bikes_stands) as stands
@@ -151,6 +155,7 @@ class getData():
 
         return results
 
+    # Gets the weather for a certain day and hour
     def getDailyHourlyWeather(self, date, hour):
         try:
             dayTime = date + "-" + hour
@@ -164,6 +169,7 @@ class getData():
 
         return results
 
+    # Gets the weather for a certain day
     def getDailyWeather(self, date):
         try:
             sql = f"""SELECT description, icon, temp, temp_min, temp_max, humidity, DATE_FORMAT(dt,'%Y-%m-%d-%H-%i')as date 
@@ -176,6 +182,7 @@ class getData():
 
         return results
 
+    # Gets the historical weather
     def getHistoricalWeather(self):
         try:
             sql = f"""SELECT description, icon, temp, temp_min, temp_max, humidity, DATE_FORMAT(dt,'%Y-%m-%d')as date 
@@ -265,6 +272,8 @@ def get_Models_get_predictions(num, temp, hour, description, day):
 
     return json.dumps({"bikes": predictionsBikes, "stands": predictionsStands})
 
+# Routes for the different pages in the application
+
 
 @ app.route('/')
 def index():
@@ -284,6 +293,8 @@ def howItWorks():
 @ app.route('/about')
 def about():
     return render_template(('about.html'))
+
+# Routes for dinamic data that is fetch by JavaScript
 
 
 @ app.route('/query/<string:num>/<string:temp>/<string:hour>/<string:description>/<string:day>')

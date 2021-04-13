@@ -14,6 +14,10 @@ html {
   width: 100%;
 }
 
+.gm-style-cc {
+  display: none;
+}
+
 /* Styles for the search system */
 
 /* To take out google logo*/
@@ -38,6 +42,20 @@ html {
   width: 100%;
   max-height: 175px;
   transition-duration: 0.5s;
+}
+
+.container-pac-display {
+  background-color: rgb(0, 115, 152);
+  box-shadow: "0 2px 6px rgba(0, 0, 0, 0.3)";
+  justify-content: center;
+  height: 275px;
+}
+
+.container-pac-hide {
+  background-color: transparent;
+  box-shadow: none;
+  justify-content: normal;
+  height: auto;
 }
 
 #upper-wrapper {
@@ -74,8 +92,16 @@ html {
 #destination-container {
   position: relative;
   display: inline-block;
+}
+
+.destination-container-initial {
   width: 275px;
   padding: 10px 11px 10px 13px;
+}
+
+.destination-container-search {
+  width: 250px;
+  padding: 0px 11px 0px 13px;
 }
 
 #origin-input {
@@ -86,12 +112,20 @@ html {
   font-size: 15px;
 }
 
-#destination-input {
+.destination-input-initial {
   border: 0;
   width: 230px;
   border-radius: 25px;
   font-family: Roboto, sans-serif;
   font-size: 17px;
+}
+
+.destination-input-search {
+  font-size: 15px;
+  width: 250px;
+  border-radius: 25px;
+  border: 0;
+  font-family: Roboto, sans-serif;
 }
 
 #mode-selector {
@@ -104,6 +138,14 @@ html {
 #mode-selector label {
   font-family: Quicksand, verdana, sans-serif;
   font-size: 13px;
+}
+
+.pac-list-initial {
+  width: 275px;
+}
+
+.pac-list-search {
+  width: 250px;
 }
 
 .pac-items {
@@ -177,6 +219,11 @@ html {
   display: none;
 }
 
+#close-search-phone {
+  display: none;
+  cursor: pointer;
+}
+
 #search-direction {
   display: inline;
   vertical-align: -6px;
@@ -185,7 +232,7 @@ html {
 
 #refresh-search {
   cursor: pointer;
-  visibility: hidden;
+  display: none;
 }
 
 #user-position {
@@ -198,6 +245,7 @@ html {
   width: 400px;
   display: none;
   background-color: white;
+  flex-direction: column;
   align-items: center;
   z-index: -10;
   font-family: Roboto, sans-serif;
@@ -213,6 +261,11 @@ html {
 }
 
 #display-station-search {
+  width: 100%;
+}
+
+#display-container-info {
+  display: none;
   width: 100%;
 }
 
@@ -314,6 +367,8 @@ html {
 
 .myGraphs {
   display: none;
+  justify-content: center;
+  align-items: center;
 }
 
 /* Next & previous buttons */
@@ -492,6 +547,7 @@ html {
       0 2px 10px 0 rgba(0, 0, 0, 0.12);
     background-color: white;
     margin-right: 10px;
+    margin-bottom: 30px;
   }
 
   .station-markers-button-phone {
@@ -501,5 +557,86 @@ html {
     align-items: center;
     z-index: 0;
     cursor: pointer;
+  }
+}
+
+@media screen and (max-width: 600px) {
+  #full-container {
+    width: 100%;
+  }
+
+  #station-extrainfo {
+    width: 100%;
+  }
+
+  #container-footer {
+    display: none;
+  }
+
+  #close-search-phone {
+    display: none;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+  }
+}
+
+@media screen and (max-width: 500px) {
+  .container-pac-display {
+    height: 225px;
+  }
+
+  .destination-container-initial {
+    width: 240px;
+    padding: 6px 12px;
+  }
+
+  .destination-input-initial {
+    width: 200px;
+    font-size: 16px;
+  }
+
+  #origin-container {
+    width: 240px;
+  }
+
+  .destination-container-search {
+    width: 240px;
+  }
+
+  .destination-input-search {
+    width: 240px;
+  }
+
+  #search-direction img {
+    width: 22px;
+    height: 22px;
+  }
+
+  .gm-fullscreen-control {
+    display: none;
+  }
+
+  #weather-slides-container {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  #weather-header {
+    font-size: 13px;
+  }
+
+  #weather-description p {
+    font-size: 15px;
+  }
+  #weather-temp h1 {
+    font-size: 18px;
+  }
+
+  #dinamic-station-info {
+    font-size: 14px;
   }
 }
