@@ -1183,6 +1183,8 @@ class myMarker {
   setupMarkerEvents(station, availability) {
     const destinationInput = document.getElementById("destination-input");
     this.marker.addListener("click", () => {
+      this.map.setCenter(this.marker.position);
+      this.map.setZoom(14);
       displayStationSearch(station, availability);
       displayWeatherInfo("weather-slides-container");
       new displaySlidesGraphs(station.number);
