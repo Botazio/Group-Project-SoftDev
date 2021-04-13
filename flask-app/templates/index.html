@@ -125,6 +125,21 @@
       </div>
    </div>
 </div>
+
+<div style="display: none;">
+   <div id="station-markers-info-phone">
+      <div class="station-markers-button-phone button-active" id="display-available-bikes-phone">
+         <img src="{{url_for('static', filename='fixtures/icon-bike-blue.png')}}" width='24', height='24' alt="Blue bike"/>
+      </div>
+      <div class="station-markers-button-phone" id="display-available-bikes-stands-phone">
+         <img src="{{url_for('static', filename='fixtures/icon-parking.png')}}" width='24', height='24' alt="Icon parking"/>  
+      </div>
+      <div class="station-markers-button-phone" id="display-bike-paths-phone">
+         <img src="{{url_for('static', filename='fixtures/icon-bike-path.png')}}" width='24', height='24' alt="Icon bike paths"/>
+      </div>
+   </div>
+</div>
+
 <div id="map"></div>
 <div class="buttonbar"></div>
 {% endblock %}

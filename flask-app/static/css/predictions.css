@@ -456,7 +456,17 @@ input[type="date"] {
 #container1 {
   height: 100%;
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   grid-area: area2;
+}
+
+#container1a,
+#container1b {
+  height: 50%;
+  width: 100%;
 }
 
 #container2 {
@@ -491,30 +501,6 @@ input[type="date"] {
 #container4-b {
   width: 50%;
   height: 100%;
-}
-
-#waiting-background {
-  display: none;
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 250px;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  font-size: 18px;
-}
-
-.waiting-light-mode {
-  color: black;
-}
-
-.waiting-light-mode img {
-  content: url("static/fixtures/icon-waiting-green.png");
-}
-
-.waiting-dark-mode {
-  color: white;
 }
 
 #dinamic-station-info {
@@ -603,7 +589,7 @@ input[type="date"] {
 }
 
 #weather-slide {
-  width: 350px;
+  width: 400px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -806,11 +792,6 @@ input[type="date"] {
     height: 50%;
   }
 
-  #waiting-background {
-    position: relative;
-    top: 0;
-  }
-
   .dropdown-info1-content {
     right: 0px;
   }
@@ -825,21 +806,16 @@ input[type="date"] {
     width: 90%;
   }
 
+  #search-system {
+    min-height: 350px;
+  }
+
   .option-wrapper {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin: 5px;
-  }
-
-  #waiting-background {
-    font-size: 15px;
-  }
-
-  #waiting-background img {
-    width: 350px;
-    height: 350px;
   }
 
   #dinamic-station-info {
@@ -849,6 +825,10 @@ input[type="date"] {
   #weather-slide {
     width: 325px;
     font-size: 14px;
+  }
+
+  #weather-slide h1 {
+    font-size: 18px;
   }
 
   .station-rankings {
@@ -918,10 +898,5 @@ input[type="date"] {
   #container4 {
     height: 500px;
     width: 100%;
-  }
-
-  #waiting-background img {
-    width: 300px;
-    height: 300px;
   }
 }

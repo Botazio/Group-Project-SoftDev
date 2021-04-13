@@ -145,6 +145,72 @@ function stationMarkersInfoButtons(data, map, availability) {
   });
 
   map.controls[google.maps.ControlPosition.TOP_CENTER].push(stationMarkersInfo);
+
+  const stationMarkersInfoPhone = document.getElementById(
+    "station-markers-info-phone"
+  );
+  const displayAvailableBikesPhone = document.getElementById(
+    "display-available-bikes-phone"
+  );
+  const displayAvailableBikesStandsPhone = document.getElementById(
+    "display-available-bikes-stands-phone"
+  );
+  const displayBikePathsPhone = document.getElementById(
+    "display-bike-paths-phone"
+  );
+
+  // Append the elements to the container
+  stationMarkersInfoPhone.appendChild(displayAvailableBikesPhone);
+  stationMarkersInfoPhone.appendChild(displayAvailableBikesStandsPhone);
+  stationMarkersInfoPhone.appendChild(displayBikePathsPhone);
+
+  // Display markers
+  var markersInfo = "available_bikes";
+  displayMarkers(data, map, availability, markersInfo);
+
+  displayAvailableBikesPhone.addEventListener("click", () => {
+    displayAvailableBikesPhone.classList.add("button-active");
+    if (displayAvailableBikesStandsPhone.classList.contains("button-active")) {
+      displayAvailableBikesStandsPhone.classList.remove("button-active");
+    }
+    if (displayBikePathsPhone.classList.contains("button-active")) {
+      displayBikePathsPhone.classList.remove("button-active");
+    }
+    markersInfo = "available_bikes";
+    deleteMarkers();
+    displayMarkers(data, map, availability, markersInfo);
+    disableBikePaths(bikeLayer);
+  });
+
+  displayAvailableBikesStandsPhone.addEventListener("click", () => {
+    displayAvailableBikesStandsPhone.classList.add("button-active");
+    if (displayAvailableBikesPhone.classList.contains("button-active")) {
+      displayAvailableBikesPhone.classList.remove("button-active");
+    }
+    if (displayBikePathsPhone.classList.contains("button-active")) {
+      displayBikePathsPhone.classList.remove("button-active");
+    }
+    markersInfo = "available_bikes_stands";
+    deleteMarkers();
+    displayMarkers(data, map, availability, markersInfo);
+    disableBikePaths(bikeLayer);
+  });
+
+  displayBikePathsPhone.addEventListener("click", () => {
+    displayBikePathsPhone.classList.add("button-active");
+    if (displayAvailableBikesPhone.classList.contains("button-active")) {
+      displayAvailableBikesPhone.classList.remove("button-active");
+    }
+    if (displayAvailableBikesStandsPhone.classList.contains("button-active")) {
+      displayAvailableBikesStandsPhone.classList.remove("button-active");
+    }
+    deleteMarkers();
+    bikePaths(map, bikeLayer);
+  });
+
+  map.controls[google.maps.ControlPosition.RIGHT_TOP].push(
+    stationMarkersInfoPhone
+  );
 }
 
 // Function to display the map paths
@@ -802,10 +868,10 @@ function displayWeatherInfo(id) {
             weatherIcon +
             "</div>" +
             '<div id="weather-temp-min" class="weather-items"><p>Min<br>' +
-            data[i].value["Temp"]["max"] +
+            data[i].value["Temp"]["min"] +
             "</p></div>" +
             '<div id="weather-temp-max" class="weather-items"><p>Max<br>' +
-            data[i].value["Temp"]["min"] +
+            data[i].value["Temp"]["max"] +
             "</p></div>" +
             '<div id="weather-temp-windy" class="weather-items"><p>Wind<br>' +
             data[i].value["Wind"] +

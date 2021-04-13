@@ -1,5 +1,5 @@
 function callGoogleCharts() {
-  google.charts.load("current", { packages: ["corechart"] });
+  google.charts.load("49", { packages: ["corechart"] });
 }
 
 function animationButtons() {
@@ -15,48 +15,23 @@ function animationButtons() {
   const date = document.getElementById("calendar");
   const hour = document.getElementById("hour");
   const darkMode = document.getElementById("dark-mode-container");
-  const searchButton = document.getElementById("search-button-container");
 
   // Dates and hours for the calendar
   var today = new Date();
-  var nextHour = new Date();
-  nextHour.setSeconds(0, 0);
-  Date.prototype.addMinutes = function (m) {
-    this.setTime(this.getTime() + m * 60 * 1000);
-    return this;
-  };
-  nextHour.addMinutes(60);
-  nextHour.setMinutes(0, 0);
-  nextHour = nextHour.toLocaleTimeString("en-GB");
-
   today = today.toISOString().split("T")[0];
   var yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   yesterday = yesterday.toISOString().split("T")[0];
+  var nextWeek = new Date();
+  nextWeek.setDate(nextWeek.getDate() + 7);
+  nextWeek = nextWeek.toISOString().split("T")[0];
 
   // Set the initial values
   date.min = today;
-  date.max = "2030-01-01";
+  date.max = nextWeek;
   date.value = "";
-  hour.min = nextHour;
   hour.value = "";
   stationInput.value = "";
-
-  searchButton.addEventListener("click", () => {
-    // Refresh the hour for future searchs
-    nextHour = new Date();
-    nextHour.setSeconds(0, 0);
-    Date.prototype.addMinutes = function (m) {
-      this.setTime(this.getTime() + m * 60 * 1000);
-      return this;
-    };
-    nextHour.addMinutes(60);
-    nextHour.setMinutes(0, 0);
-    nextHour = nextHour.toLocaleTimeString("en-GB");
-    if (predictionsButton.classList.contains("active-button") == true) {
-      hour.min = nextHour;
-    }
-  });
 
   predictionsButton.addEventListener("click", () => {
     if (predictionsButton.classList.contains("active-button") == true) {
@@ -68,8 +43,9 @@ function animationButtons() {
       predictionsButton.classList.add("active-button");
       date.value = "";
       date.min = today;
-      date.max = "2030-01-01";
-      hour.min = nextHour;
+      date.max = nextWeek;
+      stationInput.value = "";
+      hour.value = "";
       stationButton.classList.add("active-button");
       stationSearchContainer.style.display = "flex";
       calendarInput.style.display = "flex";
@@ -97,8 +73,8 @@ function animationButtons() {
       date.value = "";
       date.min = "2021-02-25";
       date.max = yesterday;
-      hour.min = null;
       hour.value = "";
+      stationInput.value = "";
       if (darkMode.classList.contains("dark-mode-active") == true) {
         predictionsButton.classList.remove("active-button-dark");
         historicalButton.classList.add("active-button-dark");
@@ -161,11 +137,13 @@ function searchOptions() {
   const layout1 = document.getElementById("layout1");
   const layout2 = document.getElementById("layout2");
   const layout3 = document.getElementById("layout3");
+  const statsContainers = document.getElementsByClassName("stats-containers");
 
   // Create const for the containers
   const container1 = document.getElementById("container1");
   const container2 = document.getElementById("container2");
   const container3 = document.getElementById("container3");
+  const container4 = document.getElementById("container4");
   const container4a = document.getElementById("container4-a");
   const container4b = document.getElementById("container4-b");
 
@@ -179,6 +157,9 @@ function searchOptions() {
     container3.innerHTML = "";
     container4a.innerHTML = "";
     container4b.innerHTML = "";
+    container4.innerHTML = "";
+    container4.appendChild(container4a);
+    container4.appendChild(container4b);
     arraySearchElements = new Array();
 
     // Restore the icons to initial configuration
@@ -305,7 +286,7 @@ function searchOptions() {
         searchStationInput = stationInput.value.split(" ");
         stationNumber = searchStationInput[searchStationInput.length - 1];
         // If the user does not enter an hour display a search for the full day
-        if (searchHour == "" && searchDate == "") {
+        if (searchHour == "" && searchDate == "" && searchStationInput != "") {
           // Display occupancy in container 4
           fetchOccupancy(stationNumber)
             .then((jsonData) => {
@@ -576,7 +557,11 @@ function searchOptions() {
             .catch((err) => {
               console.log(err);
             });
-        } else if (searchDate != "" && searchHour == "") {
+        } else if (
+          searchDate != "" &&
+          searchHour == "" &&
+          searchStationInput != ""
+        ) {
           // Display occupancy in container 4
           fetchDailyOccupancy(stationNumber, searchDate)
             .then((jsonData) => {
@@ -870,7 +855,11 @@ function searchOptions() {
             .catch((err) => {
               console.log(err);
             });
-        } else if (searchDate != "" && searchHour != "") {
+        } else if (
+          searchDate != "" &&
+          searchHour != "" &&
+          searchStationInput != ""
+        ) {
           // Display occupancy in container 4
           fetchDailyOccupancy(stationNumber, searchDate)
             .then((jsonData) => {
@@ -1209,6 +1198,12 @@ function searchOptions() {
         ) {
           const infoIcon2 = document.getElementById("info-icon2");
           infoIcon2.src = "static/fixtures/icon-cross-red.png";
+        } // If statement for error handling
+        if (searchHour == "" && searchDate == "" && searchStationInput == "") {
+          document.getElementById("info-icon1").src =
+            "static/fixtures/icon-cross-red.png";
+          document.getElementById("info-icon2").src =
+            "static/fixtures/icon-cross-red.png";
         }
       } else if (fullSearchButton.classList.contains("active-button")) {
         // Display occupancy in container 4
@@ -1374,11 +1369,14 @@ function searchOptions() {
           });
       }
     } else if (predictionsButton.classList.contains("active-button")) {
+      // Get the values from the user
       searchHour = hour.value;
       searchDate = date.value;
-      if (stationButton.classList.contains("active-button")) {
+      searchStationInput = stationInput.value;
+
+      // Check that the user has inserted data
+      if (searchHour != "" && searchDate != "" && searchStationInput != "") {
         var arrayQueryModel = [];
-        searchStationInput = stationInput.value;
         searchStationInput = searchStationInput.split(" ");
         searchStationInput = searchStationInput[searchStationInput.length - 1];
         fetchForecastWeather().then((data) => {
@@ -1386,6 +1384,7 @@ function searchOptions() {
           searchHour = searchHour[0];
 
           searchDate = searchDate.split("-");
+          var searchOriginalDate = searchDate;
           searchDate = new Date(
             searchDate[0],
             searchDate[1] - 1,
@@ -1423,34 +1422,236 @@ function searchOptions() {
 
           // Push everything into the query array
           arrayQueryModel.push(
-            searchStationInput,
-            tempTarget,
-            searchHour,
+            searchStationInput.toString(),
+            tempTarget.toString(),
+            searchHour.toString(),
             descriptionTarget,
             dayWeek
           );
-          console.log(arrayQueryModel);
 
-          fetch(
-            "/query/" +
-              arrayQueryModel[0] +
-              "/" +
-              arrayQueryModel[1] +
-              "/" +
-              arrayQueryModel[2] +
-              "/" +
-              arrayQueryModel[3] +
-              "/" +
-              arrayQueryModel[4]
-          )
-            .then((response) => {
-              console.log(response);
-              return response.json();
+          fetchPredictions(arrayQueryModel)
+            .then((predictionsData) => {
+              // Bar Chart
+              var predictionsTable = new google.visualization.DataTable();
+              predictionsTable.addColumn("date", "Time");
+              predictionsTable.addColumn("number", "Predictions Bikes");
+              predictionsTable.addColumn("number", "Predictions Stands");
+
+              // Line Charts
+              var predictionsBikesTable = new google.visualization.DataTable();
+              predictionsBikesTable.addColumn("date", "Time");
+              predictionsBikesTable.addColumn(
+                "number",
+                "Predictions Solo Bikes"
+              );
+
+              var predictionsStandsTable = new google.visualization.DataTable();
+              predictionsStandsTable.addColumn("date", "Time");
+              predictionsStandsTable.addColumn(
+                "number",
+                "Predictions Solo Stands"
+              );
+
+              searchHour = parseInt(searchHour, 10);
+              var hours = [];
+              var hoursNextDay = [];
+              if (searchHour < 11) {
+                for (var i = searchHour; i < searchHour + 12; i++) {
+                  hours.push(i);
+                }
+              } else {
+                var hours_left = 23 - searchHour;
+                for (var i = searchHour; i < searchHour + hours_left + 1; i++) {
+                  hours.push(i);
+                }
+                hours_to_add = 11 - hours_left;
+                for (var i = 0; i < hours_to_add; i++) {
+                  hours.push(i);
+                  hoursNextDay.push(i);
+                }
+              }
+
+              for (var i = 0; i < predictionsData.bikes.length; i++) {
+                var day;
+                if (hoursNextDay.includes(hours[i])) {
+                  day = parseInt(searchOriginalDate[2], 10) + 1;
+                } else {
+                  day = searchOriginalDate[2];
+                }
+                predictionsTable.addRows([
+                  [
+                    new Date(
+                      searchOriginalDate[0],
+                      searchOriginalDate[1] - 1,
+                      day,
+                      hours[i]
+                    ),
+                    predictionsData.bikes[i],
+                    predictionsData.stands[i],
+                  ],
+                ]);
+
+                predictionsBikesTable.addRows([
+                  [
+                    new Date(
+                      searchOriginalDate[0],
+                      searchOriginalDate[1] - 1,
+                      day,
+                      hours[i]
+                    ),
+                    predictionsData.bikes[i],
+                  ],
+                ]);
+
+                predictionsStandsTable.addRows([
+                  [
+                    new Date(
+                      searchOriginalDate[0],
+                      searchOriginalDate[1] - 1,
+                      day,
+                      hours[i]
+                    ),
+                    predictionsData.stands[i],
+                  ],
+                ]);
+              }
+
+              // Create two extra containers in container1 to accomadate predictions
+              container1.innerHTML =
+                "<div id='container1a'></div><div id='container1b'></div>";
+
+              // Insert the elements in the array
+              arraySearchElements.push(predictionsTable);
+              arraySearchElements.push(predictionsBikesTable);
+              arraySearchElements.push(predictionsStandsTable);
+
+              // Push information about that station to container 2
+              var iconBike;
+              var iconParking;
+              var classNameDinamicInfo;
+              if (darkMode.classList.contains("dark-mode-active")) {
+                iconBike =
+                  '<img id="icon-bike-dinamic" src="static/fixtures/icon-bike-darkmode.png" width="28" height="28" alt="Icon bike"/>';
+                iconParking =
+                  '<img id="icon-stand-dinamic" src="static/fixtures/icon-parking-green.png" width="24" height="24" alt="Icon parking"/>';
+                classNameDinamicInfo = "dinamic-station-info-darkmode";
+              } else {
+                iconBike =
+                  '<img id="icon-bike-dinamic" src="static/fixtures/icon-bike-blue.png" width="28" height="28" alt="Icon bike"/>';
+                iconParking =
+                  '<img id="icon-stand-dinamic" src="static/fixtures/icon-parking.png" width="24" height="24" alt="Icon parking"/>';
+                classNameDinamicInfo = "dinamic-station-info-lightmode";
+              }
+
+              // Join the first elements of the array to get the station name
+              var stationName = "";
+              for (i = 0; i < searchStationInput.length - 1; i++) {
+                stationName += searchStationInput[i] + " ";
+              }
+
+              var contentStr =
+                '<div id="dinamic-station-info" class=' +
+                classNameDinamicInfo +
+                ">" +
+                "<div><p><b>" +
+                date.value +
+                " " +
+                hour.value +
+                "</b></p></div>" +
+                "<div><p><b>" +
+                "Predictions</b></p></div>" +
+                "<p><b>" +
+                stationInput.value +
+                "</b></p>" +
+                '<div id="station-infowindow">' +
+                "<div class='infowindow-subelement'>" +
+                predictionsData.bikes[0] +
+                iconBike +
+                "</div><div class='infowindow-subelement'>" +
+                predictionsData.stands[0] +
+                iconParking +
+                "</div></div></div>";
+
+              container2.innerHTML = contentStr;
+
+              // Display the info
+              updateSearch();
             })
             .catch((err) => {
               console.log("OOPS!", err);
             });
         });
+
+        fetchForecastWeather()
+          .then((weatherData) => {
+            // Select the correct day from the array
+            offsetDay = date.value.split("-")[2] - date.min.split("-")[2];
+            // Check if the view is set for dark mode
+            var className;
+            if (darkMode.classList.contains("dark-mode-active")) {
+              className = "weather-slide-darkmode";
+            } else {
+              className = "weather-slide-lightmode";
+            }
+
+            data = weatherData.daily[offsetDay];
+            var contentStr;
+
+            //iterate through the data and display day, date, temp, description, icon and wind
+            var weatherIcon =
+              '<img class="icons2" height = "50px" width = "50px" src="http://openweathermap.org/img/w/' +
+              data["weather"][0]["icon"] +
+              '.png"/>';
+            //create the containers to display weather
+            contentStr =
+              '<div id="weather-slide" class=' +
+              className +
+              '><div id="weather-header"><div><p>' +
+              hour.value +
+              "</p></div>" +
+              '<div id="weather-description"><p>' +
+              data["weather"][0]["description"] +
+              "</p></div>" +
+              "<div><p>" +
+              date.value +
+              "</p></div></div>" +
+              '<div id="weather-info">' +
+              '<div id="weather-temp" class="weather-items"><h1>' +
+              data["temp"]["day"] +
+              "ºC</h1></div>" +
+              '<div id="weather-icon" class="weather-items">' +
+              weatherIcon +
+              "</div>" +
+              '<div id="weather-temp-max" class="weather-items"><p>Max<br>' +
+              data["temp"]["max"] +
+              "</p></div>" +
+              '<div id="weather-temp-min" class="weather-items"><p>Min<br>' +
+              data["temp"]["min"] +
+              "</p></div>" +
+              '<div id="weather-temp-windy" class="weather-items"><p>Wind<br>' +
+              data["wind_speed"] +
+              "mph</p></div>" +
+              "</div></div>";
+
+            container3.innerHTML = contentStr;
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+      } // If statement for error handling
+      if (searchDate == "" && searchHour != "") {
+        const infoIcon1 = document.getElementById("info-icon1");
+        infoIcon1.src = "static/fixtures/icon-cross-red.png";
+      } // If statement for error handling
+      if ((searchDate != "" || searchHour != "") && searchStationInput == "") {
+        const infoIcon2 = document.getElementById("info-icon2");
+        infoIcon2.src = "static/fixtures/icon-cross-red.png";
+      } // If statement for error handling
+      if (searchHour == "" && searchDate == "" && searchStationInput == "") {
+        document.getElementById("info-icon1").src =
+          "static/fixtures/icon-cross-red.png";
+        document.getElementById("info-icon2").src =
+          "static/fixtures/icon-cross-red.png";
       }
     }
 
@@ -1504,6 +1705,7 @@ function searchOptions() {
     });
     window.addEventListener("resize", updateSearch);
 
+    // Function that displays the google graphs inserted in the array
     function updateSearch() {
       if (darkMode.classList.contains("dark-mode-active")) {
         options = optionsDark;
@@ -1583,6 +1785,34 @@ function searchOptions() {
             options.vAxis.title = "Temp, Humidity";
             var chart = new google.visualization.LineChart(
               document.getElementById("container3")
+            );
+          } else if (elem.If[1].label == "Predictions Bikes") {
+            options.title =
+              date.value +
+              " " +
+              hour.value +
+              " (next 12 hours) " +
+              "Predictions" +
+              " nº " +
+              searchStationInput;
+            options.hAxis.title = "Hours";
+            options.vAxis.title = "Availability";
+            var chart = new google.visualization.ColumnChart(
+              document.getElementById("container4")
+            );
+          } else if (elem.If[1].label == "Predictions Solo Bikes") {
+            options.title = "Predictions Bikes" + " nº " + searchStationInput;
+            options.hAxis.title = "Hours";
+            options.vAxis.title = "Availability";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container1a")
+            );
+          } else if (elem.If[1].label == "Predictions Solo Stands") {
+            options.title = "Predictions Stands" + " nº " + searchStationInput;
+            options.hAxis.title = "Hours";
+            options.vAxis.title = "Availability";
+            var chart = new google.visualization.LineChart(
+              document.getElementById("container1b")
             );
           }
           // Plot the graphs if everything has gone right
@@ -1741,6 +1971,28 @@ function removeActive(x) {
   for (var i = 0; i < x.length; i++) {
     x[i].classList.remove("pac-active");
   }
+}
+
+// Function to fetch the historic occupancy for a station
+async function fetchPredictions(arrayQueryModel) {
+  var query =
+    "/query/" +
+    arrayQueryModel[0] +
+    "/" +
+    arrayQueryModel[1] +
+    "/" +
+    arrayQueryModel[2] +
+    "/" +
+    arrayQueryModel[3] +
+    "/" +
+    arrayQueryModel[4];
+  return fetch(query)
+    .then((response) => {
+      return response.json();
+    })
+    .catch((err) => {
+      console.log("OOPS!", err);
+    });
 }
 
 // Function to fetch the historic occupancy for a station

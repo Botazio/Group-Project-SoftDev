@@ -8,8 +8,6 @@ function changeMode() {
   const settingContainer = document.getElementById("settings-container");
   const layoutContainer = document.getElementById("layout-type-container");
   const darkMode = document.getElementById("dark-mode-container");
-  const waitingBg = document.getElementById("waiting-background");
-  const waitingImage = document.getElementById("waiting-man");
   const footer = document.getElementById("container-footer");
 
   darkMode.addEventListener("click", () => {
@@ -38,13 +36,6 @@ function changeMode() {
     layoutContainer.classList.toggle("layout-dark");
     darkMode.classList.toggle("dark-mode-inactive");
     darkMode.classList.toggle("dark-mode-active");
-    waitingBg.classList.toggle("waiting-light-mode");
-    waitingBg.classList.toggle("waiting-dark-mode");
-    if (waitingBg.classList.contains("waiting-light-mode")) {
-      waitingImage.src = "static/fixtures/icon-waiting-blue.png";
-    } else {
-      waitingImage.src = "static/fixtures/icon-waiting-green.png";
-    }
 
     try {
       // Try and catch with these objects (they are not always present)

@@ -191,7 +191,32 @@ class getData():
         return results
 
 
+# Function to get predictions for a certain input
 def get_Models_get_predictions(num, temp, hour, description, day):
+    DayDict = {'Friday': 0,
+               'Wednesday': 6,
+               'Saturday': 2,
+               'Tuesday': 5,
+               'Thursday': 4,
+               'Monday': 1,
+               'Sunday': 3}
+
+    description_dict = {'light rain': 5,
+                        'broken clouds': 0,
+                        'clear sky': 1,
+                        'mist': 7,
+                        'few clouds': 2,
+                        'moderate rain': 8,
+                        'scattered clouds': 10,
+                        'overcast clouds': 9,
+                        'light intensity drizzle': 4,
+                        'light snow': 6,
+                        'heavy intensity rain': 3}
+
+    # encode categorical data to numeric for model
+    description_encoded = description_dict.get(description)
+    day_encoded = DayDict.get(day)
+
     Bikesfiles = {}
     Standsfiles = {}
 
@@ -201,7 +226,7 @@ def get_Models_get_predictions(num, temp, hour, description, day):
     else:
         hours_left = 23 - hour
         hours_start = list(range(hour, hour+hours_left+1, 1))
-        hours_to_add = 12 - hours_left
+        hours_to_add = 11 - hours_left
         other_hours = list(range(hours_to_add))
         hours = hours_start + other_hours
 
@@ -224,21 +249,21 @@ def get_Models_get_predictions(num, temp, hour, description, day):
 
     with open('static/MLModel/' + StandsModelName, 'rb') as handle:
         modelStands = pickle.load(handle)
-    predictionsBikes = {}
-    for x in hours:
-        array = np.array([temp, x, description, day])
+    predictionsBikes = []
+    for i in range(len(hours)):
+        array = np.array([temp, hours[i], description_encoded, day_encoded])
         x_test = array.reshape(1, -1)
         p = modelBikes.predict(x_test)
-        predictionsBikes[x] = p.astype(int)
+        predictionsBikes.append(int(p))
 
-    predictionsStands = {}
-    for x in hours:
-        array = np.array([temp, x, description, day])
+    predictionsStands = []
+    for i in range(len(hours)):
+        array = np.array([temp, hours[i], description_encoded, day_encoded])
         x_test = array.reshape(1, -1)
         p = modelStands.predict(x_test)
-        predictionsStands[x] = p.astype(int)
+        predictionsStands.append(int(p))
 
-    return predictionsBikes
+    return json.dumps({"bikes": predictionsBikes, "stands": predictionsStands})
 
 
 @ app.route('/')
@@ -261,15 +286,14 @@ def about():
     return render_template(('about.html'))
 
 
-@ app.route('/query/<string:num>/<string:temp>/<int:hour>/<string:description>/<string:day>')
+@ app.route('/query/<string:num>/<string:temp>/<string:hour>/<string:description>/<string:day>')
 def query_prediction_model(num, temp, hour, description, day):
     num = int(num)
     temp = float(temp)
     hour = int(hour)
-    description = 3
-    query = get_Models_get_predictions(num, temp, hour, description, 2)
-
-    return {'hello': 42}
+    query = get_Models_get_predictions(num, temp, hour, description, day)
+    print(query)
+    return query
 
 
 @ app.route('/stations')
