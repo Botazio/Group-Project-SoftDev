@@ -573,6 +573,10 @@ html {
     display: none;
   }
 
+  #map {
+    height: 90vh;
+  }
+
   #close-search-phone {
     display: none;
     position: absolute;

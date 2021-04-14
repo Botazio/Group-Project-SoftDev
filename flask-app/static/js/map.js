@@ -478,7 +478,10 @@ class AutocompleteDirectionsHandler {
     const fullContainer = document.getElementById("full-container");
     const refreshSearch = document.getElementById("refresh-search");
     closeSearch.addEventListener("click", () => {
-      this.refreshSearchEvent();
+      if (window.matchMedia("(min-width: 600px)").matches) {
+        // If media query matches
+        this.refreshSearchEvent();
+      }
       container.classList.add("container-pac-hide");
       container.classList.remove("container-pac-display");
       destinationContainer.classList.add("destination-container-initial");
