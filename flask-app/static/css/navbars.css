@@ -108,6 +108,7 @@ nav {
   position: absolute;
   z-index: 10000;
   height: 90vh;
+  height: calc(var(--vh, 1vh) * 90);
   width: 100%;
   top: 10vh;
   margin: 0;
