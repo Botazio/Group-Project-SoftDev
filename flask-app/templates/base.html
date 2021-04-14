@@ -10,13 +10,13 @@
 </head>
 <body>
    <div class="content">
-      <nav>
+      <nav id="nav-bar" class="nav-light-mode">
          <div>   
             <a class="logo">
                <img src="{{url_for('static', filename='fixtures/icon-bike-red.png')}}" width='35', height='35'/>
                <img src="{{url_for('static', filename='fixtures/icon-bike-yellow.png')}}" width='35', height='35' />
                <img src="{{url_for('static', filename='fixtures/icon-bike-green.png')}}" width='35', height='35' />
-               <h2>DBIKES</h2>
+               <h2 id="logo-navbar">DBIKES</h2>
             </a>
          </div>
          <ul class="nav-links">
@@ -33,7 +33,7 @@
       </nav>
       {% block body %}{% endblock %}
       <footer>
-         <div class="container-footer"> 
+         <div id="container-footer" class="footer-light-mode"> 
              <div class="rights">DBIKES | Copyright 2021 | All rights reserved</div>
              <ul class="footer-links">
                  <li><a href='/'>Map |</a></li>
@@ -45,5 +45,6 @@
      </footer>
    </div>
    <script src="{{url_for('static', filename='js/navbarAnimation.js')}}"></script>
+   {% block scripts %}{% endblock %}
 </body>
 </html>

@@ -3,16 +3,19 @@
 
 
 {% block head %}
-<link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='css/map.css') }}">
 <title>Dublin Bikes</title>
-<script type=text/javascript src="{{url_for('static', filename='js/main.js') }}"></script>
+<script type=text/javascript src="{{url_for('static', filename='js/map.js') }}"></script>
 {% endblock %}
 
    
 {% block body %}
 <div style="display: none;">
-   <div id="full-container">
-      <div id="container-pac">
+   <div id="full-container" style="z-index: 2000000">
+      <div id="container-pac" class="container-pac-hide">
+         <div id="close-search-phone">
+            <img src="{{url_for('static', filename='fixtures/icon-close-white.png')}}" width='14', height='14' alt="Close directions"/>
+         </div>
          <div id="upper-wrapper">
             <img id="user-position" src="{{url_for('static', filename='fixtures/icon-position.png')}}" width='17', height='17' alt="User position"/>
             <div id="origin-container">
@@ -26,17 +29,17 @@
          </div>
          <div id="bottom-wrapper">
             <img id="refresh-search" src="{{url_for('static', filename='fixtures/icon-refresh.png')}}" width='17', height='17' alt="Refresh directions"/>
-            <div id="destination-container">
+            <div id="destination-container" class="destination-container-initial">
                <input
                id="destination-input"
-               class="controls"
+               class="controls destination-input-initial"
                type="text"
                placeholder="Enter a destination station"
                />
                <div id="search-direction">
                   <img id="search-icon" src="{{url_for('static', filename='fixtures/icon-direction.png')}}" width='25', height='25' alt="Open directions"/>
                </div>
-               <div id="pac-list" class="pac-items"></div>
+               <div id="pac-list" class="pac-items pac-list-initial"></div>
             </div>
          </div>
 
@@ -60,11 +63,28 @@
       <div id="station-extrainfo">
          <div id="waiting-search">
             <h2>Select a station to display info</h2>
-            <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-big.png')}}" width='300', height='260' alt="Waiting directions"/>
+            <img id="waiting-icon" src="{{url_for('static', filename='fixtures/waiting-girl.png')}}" width='300', height='260' alt="Waiting directions"/>
          </div>
          <div id="display-container-info">
-            <div id="display-weather"></div>
-            <div id="display-station-search"></div> 
+            <div id="display-weather">
+               <a id="prev-weather" onclick="plusSlidesWeather(-1)">&#10094;</a>
+               <a id="next-weather" onclick="plusSlidesWeather(1)">&#10095;</a>
+               <div id="weather-slides-container"></div>
+            </div>
+            <div id="display-station-search"></div>
+            <div id="display-occupancy">
+               <div id="bikes" class="myGraphs fade">
+                 <div id="ocuppancy-bikes"></div>
+               </div>
+               
+               <div id="stands" class="myGraphs fade">
+                 <div id="ocuppancy-stands"></div>
+               </div>
+               
+               <a class="prev">&#10094;</a>
+               <a class="next">&#10095;</a>
+               
+               </div>
          </div>
       </div>
    </div>
@@ -108,8 +128,26 @@
       </div>
    </div>
 </div>
+
+<div style="display: none;">
+   <div id="station-markers-info-phone">
+      <div class="station-markers-button-phone button-active" id="display-available-bikes-phone">
+         <img src="{{url_for('static', filename='fixtures/icon-bike-blue.png')}}" width='24', height='24' alt="Blue bike"/>
+      </div>
+      <div class="station-markers-button-phone" id="display-available-bikes-stands-phone">
+         <img src="{{url_for('static', filename='fixtures/icon-parking.png')}}" width='24', height='24' alt="Icon parking"/>  
+      </div>
+      <div class="station-markers-button-phone" id="display-bike-paths-phone">
+         <img src="{{url_for('static', filename='fixtures/icon-bike-path.png')}}" width='24', height='24' alt="Icon bike paths"/>
+      </div>
+   </div>
+</div>
+
 <div id="map"></div>
 <div class="buttonbar"></div>
+{% endblock %}
+
+{% block scripts %}
 <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDZqN010nmbXBL9DtEkK1WOynTDyvSzUKo&libraries=places&callback=initMap"></script>
 {% endblock %}
 
