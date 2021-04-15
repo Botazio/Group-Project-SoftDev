@@ -5,3 +5,4 @@ webscraping/weather_data.csv
 webscraping/nohup.out
 flask-app/__pycache__
 
+flask-app/passwords.json
